@@ -10,6 +10,43 @@ data "aws_secretsmanager_secret_version" "wayfinder" {
   secret_id = data.aws_secretsmanager_secret.wayfinder.id
 }
 
+data "template_file" "wayfinder_idp" {
+  template = file("${path.module}/manifests/wayfinder-idp.yaml.tpl")
+  vars = {
+    claims        = "preferred_username,email,name,username"
+    client_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
+    client_scopes = "email,profile,offline_access"
+    client_secret = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
+    name          = "wayfinder-idp-live"
+    namespace     = "wayfinder"
+    server_url    = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"]
+  }
+}
+
+data "template_file" "wayfinder_namespace" {
+  template = file("${path.module}/manifests/wayfinder-namespace.yaml.tpl")
+  vars = {
+    namespace = "wayfinder"
+  }
+}
+
+resource "kubectl_manifest" "wayfinder_namespace" {
+  depends_on = [
+    module.eks,
+  ]
+
+  yaml_body        = data.template_file.wayfinder_namespace.rendered
+}
+
+resource "kubectl_manifest" "wayfinder_idp" {
+  depends_on = [
+    module.eks,
+  ]
+
+  sensitive_fields = ["stringData"]
+  yaml_body = data.template_file.wayfinder_idp.rendered
+}
+
 data "aws_iam_policy_document" "wayfinder_irsa_policy" {
   statement {
     actions = [
@@ -72,6 +109,7 @@ resource "helm_release" "wayfinder" {
     helm_release.external-dns,
     helm_release.ingress,
     kubectl_manifest.certmanager_clusterissuer,
+    kubectl_manifest.wayfinder_idp,
     module.eks,
     module.wayfinder_irsa_role,
   ]
@@ -79,7 +117,7 @@ resource "helm_release" "wayfinder" {
   name = "wayfinder"
 
   chart            = "https://storage.googleapis.com/${var.wayfinder_release_channel}/${var.wayfinder_version}/wayfinder-helm-chart.tgz"
-  create_namespace = true
+  create_namespace = false
   max_history      = 5
   namespace        = "wayfinder"
 
@@ -90,20 +128,5 @@ resource "helm_release" "wayfinder" {
   set_sensitive {
     name  = "licenseKey"
     value = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["licenseKey"]
-  }
-
-  set_sensitive {
-    name  = "idp.clientId"
-    value = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
-  }
-
-  set_sensitive {
-    name  = "idp.clientSecret"
-    value = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
-  }
-
-  set_sensitive {
-    name  = "idp.serverUrl"
-    value = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"]
   }
 }
