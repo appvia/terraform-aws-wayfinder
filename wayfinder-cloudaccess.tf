@@ -109,21 +109,16 @@ module "iam_policy_cloud_info" {
 EOF
 }
 
-data "template_file" "wayfinder_aws_admin_cloudaccessconfig" {
-  template = file("${path.module}/manifests/wayfinder-aws-admin-cloudaccessconfig.yml.tpl")
-  vars = {
-    region                    = data.aws_region.current.name
-    account_id                = data.aws_caller_identity.current.account_id
-    dns_zone_manager_role_arn = module.iam_assumable_role_dns_zone_manager.iam_role_arn
-    cloud_info_role_arn       = module.iam_assumable_role_cloud_info.iam_role_arn
-    identifier                = local.wayfinder_instance_id
-  }
-}
-
 resource "kubectl_manifest" "wayfinder_aws_admin_cloudaccessconfig" {
   depends_on = [
     helm_release.wayfinder,
   ]
 
-  yaml_body = data.template_file.wayfinder_aws_admin_cloudaccessconfig.rendered
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-admin-cloudaccessconfig.yml.tpl", {
+    region                    = data.aws_region.current.name
+    account_id                = data.aws_caller_identity.current.account_id
+    dns_zone_manager_role_arn = module.iam_assumable_role_dns_zone_manager.iam_role_arn
+    cloud_info_role_arn       = module.iam_assumable_role_cloud_info.iam_role_arn
+    identifier                = local.wayfinder_instance_id
+  })
 }

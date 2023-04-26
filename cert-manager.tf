@@ -59,19 +59,14 @@ resource "helm_release" "certmanager" {
   }
 }
 
-data "template_file" "certmanager_clusterissuer" {
-  template = file("${path.module}/manifests/certmanager-clusterissuer.yml.tpl")
-  vars = {
-    email  = var.clusterissuer_email
-    region = data.aws_region.current.name
-  }
-}
-
 resource "kubectl_manifest" "certmanager_clusterissuer" {
   depends_on = [
     module.eks,
     helm_release.certmanager,
   ]
 
-  yaml_body = data.template_file.certmanager_clusterissuer.rendered
+  yaml_body = templatefile("${path.module}/manifests/certmanager-clusterissuer.yml.tpl", {
+    email  = var.clusterissuer_email
+    region = data.aws_region.current.name
+  })
 }

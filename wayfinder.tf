@@ -10,32 +10,14 @@ data "aws_secretsmanager_secret_version" "wayfinder" {
   secret_id = data.aws_secretsmanager_secret.wayfinder.id
 }
 
-data "template_file" "wayfinder_idp" {
-  template = file("${path.module}/manifests/wayfinder-idp.yaml.tpl")
-  vars = {
-    claims        = "preferred_username,email,name,username"
-    client_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
-    client_scopes = "email,profile,offline_access"
-    client_secret = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
-    name          = "wayfinder-idp-live"
-    namespace     = "wayfinder"
-    server_url    = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"]
-  }
-}
-
-data "template_file" "wayfinder_namespace" {
-  template = file("${path.module}/manifests/wayfinder-namespace.yaml.tpl")
-  vars = {
-    namespace = "wayfinder"
-  }
-}
-
 resource "kubectl_manifest" "wayfinder_namespace" {
   depends_on = [
     module.eks,
   ]
 
-  yaml_body = data.template_file.wayfinder_namespace.rendered
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-namespace.yml.tpl", {
+    namespace = "wayfinder"
+  })
 }
 
 resource "kubectl_manifest" "wayfinder_idp" {
@@ -44,8 +26,15 @@ resource "kubectl_manifest" "wayfinder_idp" {
     module.eks,
   ]
 
-  sensitive_fields = ["stringData"]
-  yaml_body        = data.template_file.wayfinder_idp.rendered
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-idp.yml.tpl", {
+    claims        = "preferred_username,email,name,username"
+    client_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
+    client_scopes = "email,profile,offline_access"
+    client_secret = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
+    name          = "wayfinder-idp-live"
+    namespace     = "wayfinder"
+    server_url    = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"]
+  })
 }
 
 data "aws_iam_policy_document" "wayfinder_irsa_policy" {
@@ -94,16 +83,6 @@ module "wayfinder_irsa_role" {
   }
 }
 
-data "template_file" "wayfinder_values" {
-  template = file("${path.module}/manifests/wayfinder-values.yml.tpl")
-  vars = {
-    api_hostname                  = var.wayfinder_domain_name_api
-    ui_hostname                   = var.wayfinder_domain_name_ui
-    wayfinder_instance_identifier = local.wayfinder_instance_id
-    wayfinder_iam_identity        = module.wayfinder_irsa_role.iam_role_arn
-  }
-}
-
 resource "helm_release" "wayfinder" {
   depends_on = [
     helm_release.certmanager,
@@ -123,7 +102,12 @@ resource "helm_release" "wayfinder" {
   namespace        = "wayfinder"
 
   values = [
-    "${data.template_file.wayfinder_values.rendered}"
+    "${templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
+      api_hostname                  = var.wayfinder_domain_name_api
+      ui_hostname                   = var.wayfinder_domain_name_ui
+      wayfinder_instance_identifier = local.wayfinder_instance_id
+      wayfinder_iam_identity        = module.wayfinder_irsa_role.iam_role_arn
+    })}"
   ]
 
   set_sensitive {
