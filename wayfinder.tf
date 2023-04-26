@@ -26,6 +26,8 @@ resource "kubectl_manifest" "wayfinder_idp" {
     module.eks,
   ]
 
+  sensitive_fields = ["stringData"]
+
   yaml_body = templatefile("${path.module}/manifests/wayfinder-idp.yml.tpl", {
     claims        = "preferred_username,email,name,username"
     client_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
