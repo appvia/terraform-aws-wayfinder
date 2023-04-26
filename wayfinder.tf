@@ -35,16 +35,17 @@ resource "kubectl_manifest" "wayfinder_namespace" {
     module.eks,
   ]
 
-  yaml_body        = data.template_file.wayfinder_namespace.rendered
+  yaml_body = data.template_file.wayfinder_namespace.rendered
 }
 
 resource "kubectl_manifest" "wayfinder_idp" {
   depends_on = [
+    kubectl_manifest.wayfinder_namespace,
     module.eks,
   ]
 
   sensitive_fields = ["stringData"]
-  yaml_body = data.template_file.wayfinder_idp.rendered
+  yaml_body        = data.template_file.wayfinder_idp.rendered
 }
 
 data "aws_iam_policy_document" "wayfinder_irsa_policy" {
