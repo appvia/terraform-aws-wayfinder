@@ -105,3 +105,27 @@ variable "wayfinder_version" {
   type        = string
   default     = "v2.0.2"
 }
+
+variable "aws_ebs_csi_driver_addon_version" {
+  description = "The version to use for the AWS EBS CSI driver"
+  type        = string
+  default     = "v1.18.0-eksbuild.1"
+}
+
+variable "coredns_addon_version" {
+  description = "CoreDNS Addon version to use"
+  type        = string
+  default     = "v1.8.7-eksbuild.3"
+}
+
+variable "kube_proxy_addon_version" {
+  description = "Kube Proxy Addon version to use"
+  type        = string
+  default     = "v1.24.7-eksbuild.2"
+}
+
+variable "aws_vpc_cni_addon_version" {
+  description = "AWS VPC CNI Addon version to use"
+  type        = string
+  default     = "v1.11.4-eksbuild.1"
+}

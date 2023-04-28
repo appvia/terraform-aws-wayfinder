@@ -14,15 +14,19 @@ module "eks" {
 
   cluster_addons = {
     coredns = {
+      addon_version     = var.coredns_addon_version
       resolve_conflicts = "OVERWRITE"
     }
     kube-proxy = {
+      addon_version     = var.kube_proxy_addon_version
       resolve_conflicts = "NONE"
     }
     vpc-cni = {
+      addon_version     = var.aws_vpc_cni_addon_version
       resolve_conflicts = "OVERWRITE"
     }
     aws-ebs-csi-driver = {
+      addon_version            = var.aws_ebs_csi_driver_addon_version
       resolve_conflicts        = "OVERWRITE"
       service_account_role_arn = module.irsa-ebs-csi-driver.iam_role_arn
     }
