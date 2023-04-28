@@ -70,5 +70,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="output_cluster_endpoint"></a> [cluster\_endpoint](#output\_cluster\_endpoint) | The endpoint for the Wayfinder EKS Kubernetes API |
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | The name of the Wayfinder EKS cluster |
 | <a name="output_wayfinder_api_url"></a> [wayfinder\_api\_url](#output\_wayfinder\_api\_url) | The URL for the Wayfinder API |
+| <a name="output_wayfinder_iam_role_arn"></a> [wayfinder\_iam\_role\_arn](#output\_wayfinder\_iam\_role\_arn) | The ARN of the IAM role used by Wayfinder |
+| <a name="output_wayfinder_instance_identifier"></a> [wayfinder\_instance\_identifier](#output\_wayfinder\_instance\_identifier) | The unique identifier for the Wayfinder instance |
 | <a name="output_wayfinder_ui_url"></a> [wayfinder\_ui\_url](#output\_wayfinder\_ui\_url) | The URL for the Wayfinder UI |
 <!-- END_TF_DOCS -->

@@ -22,3 +22,13 @@ output "wayfinder_ui_url" {
   description = "The URL for the Wayfinder UI"
   value       = "https://${var.wayfinder_domain_name_ui}"
 }
+
+output "wayfinder_instance_identifier" {
+  description = "The unique identifier for the Wayfinder instance"
+  value       = local.wayfinder_instance_id
+}
+
+output "wayfinder_iam_role_arn" {
+  description = "The ARN of the IAM role used by Wayfinder"
+  value       = module.wayfinder_irsa_role.iam_role_arn
+}
