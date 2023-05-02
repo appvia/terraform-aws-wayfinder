@@ -6,11 +6,12 @@ module "eks" {
   cluster_version = "1.24"
   tags            = local.tags
 
-  cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = !var.disable_internet_access
-  kms_key_administrators          = var.kms_key_administrators
-  subnet_ids                      = data.aws_subnets.private.ids
-  vpc_id                          = data.aws_vpc.selected.id
+  cluster_endpoint_private_access      = true
+  cluster_endpoint_public_access       = !var.disable_internet_access
+  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
+  kms_key_administrators               = var.kms_key_administrators
+  subnet_ids                           = data.aws_subnets.private.ids
+  vpc_id                               = data.aws_vpc.selected.id
 
   cluster_addons = {
     coredns = {
