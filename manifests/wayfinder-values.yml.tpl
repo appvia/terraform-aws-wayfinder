@@ -16,6 +16,9 @@ api:
     className: "nginx"
   wayfinderInstanceIdentifier: "${wayfinder_instance_identifier}"
   wfManagedWfCluster: true
+mysql:
+  pvc:
+    storageClass: "${storage_class}"
 ui:
   enabled: true
   endpoint:
