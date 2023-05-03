@@ -32,6 +32,12 @@ variable "dns_zone_name" {
   type        = string
 }
 
+variable "ebs_csi_kms_cmk_ids" {
+  description = "List of KMS CMKs to allow EBS CSI to manage encrypted volumes. This is required if EBS encryption is set at the account level with a default KMS CMK."
+  type        = list(string)
+  default     = []
+}
+
 variable "eks_ng_capacity_type" {
   description = "The capacity type to use for the EKS managed node group"
   type        = string
