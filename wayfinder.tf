@@ -10,6 +10,16 @@ data "aws_secretsmanager_secret_version" "wayfinder" {
   secret_id = data.aws_secretsmanager_secret.wayfinder.id
 }
 
+resource "kubectl_manifest" "storageclass_encrypted" {
+  depends_on = [
+    module.eks,
+  ]
+
+  yaml_body = templatefile("${path.module}/manifests/storageclass-encrypted.yml.tpl", {
+    name = "gp2-encrypted"
+  })
+}
+
 resource "kubectl_manifest" "wayfinder_namespace" {
   depends_on = [
     module.eks,
@@ -91,6 +101,7 @@ resource "helm_release" "wayfinder" {
     helm_release.external-dns,
     helm_release.ingress,
     kubectl_manifest.certmanager_clusterissuer,
+    kubectl_manifest.storageclass_encrypted,
     kubectl_manifest.wayfinder_idp,
     module.eks,
     module.wayfinder_irsa_role,
@@ -106,9 +117,10 @@ resource "helm_release" "wayfinder" {
   values = [
     "${templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
       api_hostname                  = var.wayfinder_domain_name_api
+      storage_class                 = "gp2-encrypted"
       ui_hostname                   = var.wayfinder_domain_name_ui
-      wayfinder_instance_identifier = local.wayfinder_instance_id
       wayfinder_iam_identity        = module.wayfinder_irsa_role.iam_role_arn
+      wayfinder_instance_identifier = local.wayfinder_instance_id
     })}"
   ]
 
