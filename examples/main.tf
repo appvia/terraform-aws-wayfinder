@@ -11,16 +11,10 @@ module "wayfinder" {
   eks_ng_minimum_size                     = 2
   environment                             = "prod"
   kms_key_administrators                  = ["arn:aws:iam::111222333444:root"]
+  subnet_ids                              = ["subnet-123", "subnet-456", "subnet-789"]
+  vpc_id                                  = "vpc-1a2b3c4d5e"
   wayfinder_domain_name_api               = "api.wayfinder.example.com"
   wayfinder_domain_name_ui                = "portal.wayfinder.example.com"
-
-  vpc_tags                                = {
-    "Name" = "wayfinder-prod"
-  }
-
-  subnet_tags                             = {
-    "Tier" = "Private"
-  }
 
   cluster_security_group_additional_rules = {
     allow_access_from_vpn = {

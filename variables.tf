@@ -80,20 +80,14 @@ variable "node_security_group_additional_rules" {
   default     = {}
 }
 
-variable "subnet_tags" {
-  description = "The tags to use for subnet selection"
-  type        = map(string)
-  default = {
-    Tier = "Private"
-  }
+variable "subnet_ids" {
+  description = "A list of private Subnet IDs to launch the Wayfinder EKS Nodes onto"
+  type        = list(string)
 }
 
-variable "vpc_tags" {
-  description = "The tags to use for VPC selection"
-  type        = map(string)
-  default = {
-    Name = "wayfinder"
-  }
+variable "vpc_id" {
+  description = "The VPC ID for the Wayfinder EKS Cluster to be built within"
+  type        = string
 }
 
 variable "wayfinder_domain_name_api" {
