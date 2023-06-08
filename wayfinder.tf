@@ -10,6 +10,16 @@ data "aws_secretsmanager_secret_version" "wayfinder" {
   secret_id = data.aws_secretsmanager_secret.wayfinder.id
 }
 
+resource "kubectl_manifest" "storageclass" {
+  depends_on = [
+    module.eks,
+  ]
+
+  yaml_body = templatefile("${path.module}/manifests/storageclass.yml.tpl", {
+    name = "gp2"
+  })
+}
+
 resource "kubectl_manifest" "storageclass_encrypted" {
   depends_on = [
     module.eks,
