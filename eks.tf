@@ -10,8 +10,8 @@ module "eks" {
   cluster_endpoint_public_access       = !var.disable_internet_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
   kms_key_administrators               = var.kms_key_administrators
-  subnet_ids                           = data.aws_subnets.private.ids
-  vpc_id                               = data.aws_vpc.selected.id
+  subnet_ids                           = var.subnet_ids
+  vpc_id                               = var.vpc_id
 
   cluster_addons = {
     coredns = {

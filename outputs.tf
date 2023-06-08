@@ -13,6 +13,11 @@ output "cluster_name" {
   value       = module.eks.cluster_name
 }
 
+output "cluster_oidc_provider_arn" {
+  description = "The ARN of the OIDC provider for the Wayfinder EKS cluster"
+  value       = module.eks.oidc_provider_arn
+}
+
 output "wayfinder_api_url" {
   description = "The URL for the Wayfinder API"
   value       = "https://${var.wayfinder_domain_name_api}"
