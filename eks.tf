@@ -3,7 +3,7 @@ module "eks" {
   version = "19.13.0"
 
   cluster_name    = local.name
-  cluster_version = "1.24"
+  cluster_version = var.cluster_version
   tags            = local.tags
 
   cluster_endpoint_private_access      = true

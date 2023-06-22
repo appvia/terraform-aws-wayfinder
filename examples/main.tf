@@ -1,20 +1,20 @@
 module "wayfinder" {
   source = "../"
 
-  aws_secretsmanager_name                 = "wayfinder-prod-secrets"
-  clusterissuer_email                     = "certmanager-notifications@example.com"
-  disable_internet_access                 = true
-  dns_zone_name                           = "wayfinder.example.com"
-  eks_ng_capacity_type                    = "ON_DEMAND"
-  eks_ng_desired_size                     = 2
-  eks_ng_instance_types                   = ["t3.xlarge"]
-  eks_ng_minimum_size                     = 2
-  environment                             = "prod"
-  kms_key_administrators                  = ["arn:aws:iam::111222333444:root"]
-  subnet_ids                              = ["subnet-123", "subnet-456", "subnet-789"]
-  vpc_id                                  = "vpc-1a2b3c4d5e"
-  wayfinder_domain_name_api               = "api.wayfinder.example.com"
-  wayfinder_domain_name_ui                = "portal.wayfinder.example.com"
+  aws_secretsmanager_name   = "wayfinder-prod-secrets"
+  clusterissuer_email       = "certmanager-notifications@example.com"
+  disable_internet_access   = true
+  dns_zone_name             = "wayfinder.example.com"
+  eks_ng_capacity_type      = "ON_DEMAND"
+  eks_ng_desired_size       = 2
+  eks_ng_instance_types     = ["t3.xlarge"]
+  eks_ng_minimum_size       = 2
+  environment               = "prod"
+  kms_key_administrators    = ["arn:aws:iam::111222333444:root"]
+  subnet_ids                = ["subnet-123", "subnet-456", "subnet-789"]
+  vpc_id                    = "vpc-1a2b3c4d5e"
+  wayfinder_domain_name_api = "api.wayfinder.example.com"
+  wayfinder_domain_name_ui  = "portal.wayfinder.example.com"
 
   cluster_security_group_additional_rules = {
     allow_access_from_vpn = {
