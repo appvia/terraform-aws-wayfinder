@@ -74,6 +74,17 @@ variable "environment" {
   default     = "production"
 }
 
+variable "idp_provider" {
+  description = "The Identity Provider type to configure for Wayfinder (supported: generic, aad)"
+  type        = string
+  default     = "generic"
+
+  validation {
+    condition     = contains(["generic", "aad"], var.idp_provider)
+    error_message = "idp_provider must be one of: generic, aad"
+  }
+}
+
 variable "kms_key_administrators" {
   description = "A list of IAM ARNs for EKS key administrators. If no value is provided, the current caller identity is used to ensure at least one key admin is available"
   type        = list(string)
