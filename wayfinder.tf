@@ -41,6 +41,8 @@ resource "kubectl_manifest" "wayfinder_namespace" {
 }
 
 resource "kubectl_manifest" "wayfinder_idp" {
+  count = var.idp_provider == "generic" ? 1 : 0
+
   depends_on = [
     kubectl_manifest.wayfinder_namespace,
     module.eks,
@@ -56,6 +58,28 @@ resource "kubectl_manifest" "wayfinder_idp" {
     name          = "wayfinder-idp-live"
     namespace     = "wayfinder"
     server_url    = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"]
+  })
+}
+
+resource "kubectl_manifest" "wayfinder_idp_aad" {
+  count = var.idp_provider == "aad" ? 1 : 0
+
+  depends_on = [
+    kubectl_manifest.wayfinder_namespace,
+    module.eks,
+  ]
+
+  sensitive_fields = ["stringData"]
+
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-idp-aad.yml.tpl", {
+    claims          = "preferred_username,email,name,username"
+    client_id       = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
+    client_scopes   = "email,profile,offline_access"
+    client_secret   = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
+    name            = "wayfinder-idp-live"
+    namespace       = "wayfinder"
+    provider        = "azure"
+    tenant_id       = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"]
   })
 }
 
@@ -112,9 +136,10 @@ resource "helm_release" "wayfinder" {
     helm_release.ingress,
     kubectl_manifest.certmanager_clusterissuer,
     kubectl_manifest.storageclass_encrypted,
-    kubectl_manifest.wayfinder_idp,
     module.eks,
     module.wayfinder_irsa_role,
+    kubectl_manifest.wayfinder_idp,
+    kubectl_manifest.wayfinder_idp_aad,
   ]
 
   name = "wayfinder"
