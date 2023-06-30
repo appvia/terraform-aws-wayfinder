@@ -65,7 +65,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment name we are provisioning | `string` | `"production"` | no |
 | <a name="input_idp_provider"></a> [idp\_provider](#input\_idp\_provider) | The Identity Provider type to configure for Wayfinder (supported: generic, aad) | `string` | `"generic"` | no |
 | <a name="input_kms_key_administrators"></a> [kms\_key\_administrators](#input\_kms\_key\_administrators) | A list of IAM ARNs for EKS key administrators. If no value is provided, the current caller identity is used to ensure at least one key admin is available | `list(string)` | `[]` | no |
-| <a name="input_kube_proxy_addon_version"></a> [kube\_proxy\_addon\_version](#input\_kube\_proxy\_addon\_version) | Kube Proxy Addon version to use | `string` | `"v1.25.9-eksbuild.1"` | no |
+| <a name="input_kube_proxy_addon_version"></a> [kube\_proxy\_addon\_version](#input\_kube\_proxy\_addon\_version) | Kube Proxy Addon version to use | `string` | `"v1.25.11-eksbuild.1"` | no |
 | <a name="input_node_security_group_additional_rules"></a> [node\_security\_group\_additional\_rules](#input\_node\_security\_group\_additional\_rules) | List of additional security group rules to add to the node security group created. Set `source_cluster_security_group = true` inside rules to set the `cluster_security_group` as source | `any` | `{}` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | A list of private Subnet IDs to launch the Wayfinder EKS Nodes onto | `list(string)` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The VPC ID for the Wayfinder EKS Cluster to be built within | `string` | n/a | yes |

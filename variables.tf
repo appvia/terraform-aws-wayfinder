@@ -144,7 +144,7 @@ variable "coredns_addon_version" {
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use"
   type        = string
-  default     = "v1.25.9-eksbuild.1"
+  default     = "v1.25.11-eksbuild.1"
 }
 
 variable "aws_vpc_cni_addon_version" {
