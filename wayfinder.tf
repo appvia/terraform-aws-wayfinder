@@ -72,14 +72,14 @@ resource "kubectl_manifest" "wayfinder_idp_aad" {
   sensitive_fields = ["stringData"]
 
   yaml_body = templatefile("${path.module}/manifests/wayfinder-idp-aad.yml.tpl", {
-    claims          = "preferred_username,email,name,username"
-    client_id       = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
-    client_scopes   = "email,profile,offline_access"
-    client_secret   = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
-    name            = "wayfinder-idp-live"
-    namespace       = "wayfinder"
-    provider        = "azure"
-    tenant_id       = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"]
+    claims        = "preferred_username,email,name,username"
+    client_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
+    client_scopes = "email,profile,offline_access"
+    client_secret = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
+    name          = "wayfinder-idp-live"
+    namespace     = "wayfinder"
+    provider      = "azure"
+    tenant_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"]
   })
 }
 
