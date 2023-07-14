@@ -110,6 +110,8 @@ EOF
 }
 
 resource "kubectl_manifest" "wayfinder_aws_admin_cloudaccessconfig" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     helm_release.wayfinder,
   ]

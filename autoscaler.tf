@@ -15,6 +15,8 @@ module "autoscaler_irsa_role" {
 }
 
 resource "helm_release" "metrics_server" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
@@ -30,6 +32,8 @@ resource "helm_release" "metrics_server" {
 }
 
 resource "helm_release" "cluster_autoscaler" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]

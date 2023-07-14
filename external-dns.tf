@@ -15,6 +15,8 @@ module "externaldns_irsa_role" {
 }
 
 resource "helm_release" "external-dns" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]

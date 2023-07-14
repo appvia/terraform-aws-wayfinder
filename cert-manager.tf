@@ -20,6 +20,8 @@ module "certmanager_irsa_role" {
 }
 
 resource "helm_release" "certmanager" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
@@ -60,6 +62,8 @@ resource "helm_release" "certmanager" {
 }
 
 resource "kubectl_manifest" "certmanager_clusterissuer" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
     helm_release.certmanager,
