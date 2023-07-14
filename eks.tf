@@ -123,6 +123,7 @@ module "irsa-ebs-csi-driver" {
   role_name             = "${local.name}-ebs-csi-driver-irsa"
   attach_ebs_csi_policy = true
   ebs_csi_kms_cmk_ids   = var.ebs_csi_kms_cmk_ids
+  tags                  = local.tags
 
   oidc_providers = {
     main = {
@@ -130,6 +131,4 @@ module "irsa-ebs-csi-driver" {
       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
     }
   }
-
-  tags = local.tags
 }

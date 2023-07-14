@@ -115,6 +115,7 @@ resource "aws_iam_policy" "wayfinder_irsa_policy" {
   name   = "${local.name}-irsa"
   path   = "/"
   policy = data.aws_iam_policy_document.wayfinder_irsa_policy.json
+  tags   = local.tags
 }
 
 module "wayfinder_irsa_role" {
@@ -123,6 +124,8 @@ module "wayfinder_irsa_role" {
 
   cert_manager_hosted_zone_arns = [data.aws_route53_zone.selected.arn]
   role_name                     = "${local.name}-irsa"
+  tags                          = local.tags
+
   role_policy_arns = {
     policy = aws_iam_policy.wayfinder_irsa_policy.arn
   }

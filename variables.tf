@@ -108,6 +108,12 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
+variable "tags" {
+  description = "A map of tags to add to all resources created"
+  type        = map(string)
+  default     = {}
+}
+
 variable "vpc_id" {
   description = "The VPC ID for the Wayfinder EKS Cluster to be built within"
   type        = string
