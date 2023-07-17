@@ -10,6 +10,7 @@ module "certmanager_irsa_role" {
   attach_cert_manager_policy    = true
   cert_manager_hosted_zone_arns = [data.aws_route53_zone.selected.arn]
   role_name                     = "${local.name}-cert-manager"
+  tags                          = local.tags
 
   oidc_providers = {
     main = {
@@ -20,6 +21,8 @@ module "certmanager_irsa_role" {
 }
 
 resource "helm_release" "certmanager" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
@@ -60,6 +63,8 @@ resource "helm_release" "certmanager" {
 }
 
 resource "kubectl_manifest" "certmanager_clusterissuer" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
     helm_release.certmanager,

@@ -6,6 +6,7 @@ module "eks" {
   cluster_version = var.cluster_version
   tags            = local.tags
 
+  cluster_enabled_log_types            = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cluster_endpoint_private_access      = true
   cluster_endpoint_public_access       = !var.disable_internet_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
@@ -123,6 +124,7 @@ module "irsa-ebs-csi-driver" {
   role_name             = "${local.name}-ebs-csi-driver-irsa"
   attach_ebs_csi_policy = true
   ebs_csi_kms_cmk_ids   = var.ebs_csi_kms_cmk_ids
+  tags                  = local.tags
 
   oidc_providers = {
     main = {
@@ -130,6 +132,4 @@ module "irsa-ebs-csi-driver" {
       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
     }
   }
-
-  tags = local.tags
 }

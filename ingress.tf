@@ -1,4 +1,6 @@
 resource "helm_release" "ingress" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]

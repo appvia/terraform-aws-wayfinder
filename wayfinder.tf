@@ -1,5 +1,5 @@
 locals {
-  wayfinder_instance_id = substr(md5(format("aws-%s-%s-%s", data.aws_caller_identity.current.account_id, data.aws_region.current.name, var.environment)), 0, 12)
+  wayfinder_instance_id = var.wayfinder_instance_id != "" ? var.wayfinder_instance_id : substr(md5(format("aws-%s-%s-%s", data.aws_caller_identity.current.account_id, data.aws_region.current.name, var.environment)), 0, 12)
 }
 
 data "aws_secretsmanager_secret" "wayfinder" {
@@ -11,6 +11,8 @@ data "aws_secretsmanager_secret_version" "wayfinder" {
 }
 
 resource "kubectl_manifest" "storageclass" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
@@ -21,6 +23,8 @@ resource "kubectl_manifest" "storageclass" {
 }
 
 resource "kubectl_manifest" "storageclass_encrypted" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
@@ -31,6 +35,8 @@ resource "kubectl_manifest" "storageclass_encrypted" {
 }
 
 resource "kubectl_manifest" "wayfinder_namespace" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
@@ -41,7 +47,7 @@ resource "kubectl_manifest" "wayfinder_namespace" {
 }
 
 resource "kubectl_manifest" "wayfinder_idp" {
-  count = var.idp_provider == "generic" ? 1 : 0
+  count = (var.enable_k8s_resources && var.idp_provider == "generic") ? 1 : 0
 
   depends_on = [
     kubectl_manifest.wayfinder_namespace,
@@ -62,7 +68,7 @@ resource "kubectl_manifest" "wayfinder_idp" {
 }
 
 resource "kubectl_manifest" "wayfinder_idp_aad" {
-  count = var.idp_provider == "aad" ? 1 : 0
+  count = (var.enable_k8s_resources && var.idp_provider == "aad") ? 1 : 0
 
   depends_on = [
     kubectl_manifest.wayfinder_namespace,
@@ -109,6 +115,7 @@ resource "aws_iam_policy" "wayfinder_irsa_policy" {
   name   = "${local.name}-irsa"
   path   = "/"
   policy = data.aws_iam_policy_document.wayfinder_irsa_policy.json
+  tags   = local.tags
 }
 
 module "wayfinder_irsa_role" {
@@ -117,6 +124,8 @@ module "wayfinder_irsa_role" {
 
   cert_manager_hosted_zone_arns = [data.aws_route53_zone.selected.arn]
   role_name                     = "${local.name}-irsa"
+  tags                          = local.tags
+
   role_policy_arns = {
     policy = aws_iam_policy.wayfinder_irsa_policy.arn
   }
@@ -130,6 +139,8 @@ module "wayfinder_irsa_role" {
 }
 
 resource "helm_release" "wayfinder" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     helm_release.certmanager,
     helm_release.external-dns,
@@ -150,13 +161,13 @@ resource "helm_release" "wayfinder" {
   namespace        = "wayfinder"
 
   values = [
-    "${templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
+    templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
       api_hostname                  = var.wayfinder_domain_name_api
       storage_class                 = "gp2-encrypted"
       ui_hostname                   = var.wayfinder_domain_name_ui
       wayfinder_iam_identity        = module.wayfinder_irsa_role.iam_role_arn
       wayfinder_instance_identifier = local.wayfinder_instance_id
-    })}"
+    })
   ]
 
   set_sensitive {

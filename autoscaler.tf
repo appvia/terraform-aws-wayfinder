@@ -5,6 +5,7 @@ module "autoscaler_irsa_role" {
   attach_cluster_autoscaler_policy = true
   cluster_autoscaler_cluster_ids   = [module.eks.cluster_name]
   role_name                        = "${local.name}-cluster-autoscaler"
+  tags                             = local.tags
 
   oidc_providers = {
     main = {
@@ -15,6 +16,8 @@ module "autoscaler_irsa_role" {
 }
 
 resource "helm_release" "metrics_server" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
@@ -30,6 +33,8 @@ resource "helm_release" "metrics_server" {
 }
 
 resource "helm_release" "cluster_autoscaler" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]

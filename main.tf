@@ -4,9 +4,8 @@ data "aws_region" "current" {}
 locals {
   name = format("wayfinder-%s", var.environment)
 
-  tags = {
-    Terraform       = "true"
-    TerraformModule = "https://github.com/appvia/tf-wayfinder-aws"
-    Environment     = var.environment
-  }
+  tags = merge({
+    Provisioner = "Terraform"
+    Environment = var.environment
+  }, var.tags)
 }

@@ -8,6 +8,7 @@ module "iam_assumable_role_dns_zone_manager" {
   role_requires_mfa       = false
   custom_role_policy_arns = [module.iam_policy_dns_zone_manager.arn]
   trusted_role_arns       = [module.wayfinder_irsa_role.iam_role_arn]
+  tags                    = local.tags
 }
 
 module "iam_policy_dns_zone_manager" {
@@ -16,6 +17,7 @@ module "iam_policy_dns_zone_manager" {
 
   name        = "wf-DNSZoneManager-${local.wayfinder_instance_id}"
   description = "Create and manage Route 53 DNS Zones for automated DNS management"
+  tags        = local.tags
 
   policy = <<EOF
 {
@@ -70,6 +72,7 @@ module "iam_assumable_role_cloud_info" {
   role_requires_mfa       = false
   custom_role_policy_arns = [module.iam_policy_cloud_info.arn]
   trusted_role_arns       = [module.wayfinder_irsa_role.iam_role_arn]
+  tags                    = local.tags
 }
 
 module "iam_policy_cloud_info" {
@@ -78,6 +81,7 @@ module "iam_policy_cloud_info" {
 
   name        = "wf-CloudInfo-${local.wayfinder_instance_id}"
   description = "Retrieve pricing information for AWS cloud resources"
+  tags        = local.tags
 
   policy = <<EOF
 {
@@ -110,6 +114,8 @@ EOF
 }
 
 resource "kubectl_manifest" "wayfinder_aws_admin_cloudaccessconfig" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     helm_release.wayfinder,
   ]

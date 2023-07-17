@@ -5,6 +5,7 @@ module "externaldns_irsa_role" {
   attach_external_dns_policy    = true
   cert_manager_hosted_zone_arns = [data.aws_route53_zone.selected.arn]
   role_name                     = "${local.name}-external-dns"
+  tags                          = local.tags
 
   oidc_providers = {
     main = {
@@ -15,6 +16,8 @@ module "externaldns_irsa_role" {
 }
 
 resource "helm_release" "external-dns" {
+  count = var.enable_k8s_resources ? 1 : 0
+
   depends_on = [
     module.eks,
   ]
