@@ -161,13 +161,13 @@ resource "helm_release" "wayfinder" {
   namespace        = "wayfinder"
 
   values = [
-    "${templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
+    templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
       api_hostname                  = var.wayfinder_domain_name_api
       storage_class                 = "gp2-encrypted"
       ui_hostname                   = var.wayfinder_domain_name_ui
       wayfinder_iam_identity        = module.wayfinder_irsa_role.iam_role_arn
       wayfinder_instance_identifier = local.wayfinder_instance_id
-    })}"
+    })
   ]
 
   set_sensitive {

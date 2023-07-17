@@ -6,6 +6,7 @@ module "eks" {
   cluster_version = var.cluster_version
   tags            = local.tags
 
+  cluster_enabled_log_types            = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cluster_endpoint_private_access      = true
   cluster_endpoint_public_access       = !var.disable_internet_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
