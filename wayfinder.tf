@@ -122,9 +122,8 @@ module "wayfinder_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.17.0"
 
-  cert_manager_hosted_zone_arns = [data.aws_route53_zone.selected.arn]
-  role_name                     = "${local.name}-irsa"
-  tags                          = local.tags
+  role_name = "${local.name}-irsa"
+  tags      = local.tags
 
   role_policy_arns = {
     policy = aws_iam_policy.wayfinder_irsa_policy.arn

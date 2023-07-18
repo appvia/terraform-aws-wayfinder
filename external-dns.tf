@@ -3,7 +3,6 @@ module "externaldns_irsa_role" {
   version = "5.17.0"
 
   attach_external_dns_policy    = true
-  cert_manager_hosted_zone_arns = [data.aws_route53_zone.selected.arn]
   role_name                     = "${local.name}-external-dns"
   tags                          = local.tags
 

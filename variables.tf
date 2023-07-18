@@ -39,8 +39,8 @@ variable "disable_internet_access" {
   default     = false
 }
 
-variable "dns_zone_name" {
-  description = "The local DNS zone to use (e.g. wayfinder.example.com)"
+variable "dns_zone_arn" {
+  description = "The AWS Route53 DNS Zone ARN to use (e.g. arn:aws:route53:::hostedzone/ABCDEFG1234567)"
   type        = string
 }
 
