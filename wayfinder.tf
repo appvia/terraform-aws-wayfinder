@@ -2,14 +2,6 @@ locals {
   wayfinder_instance_id = var.wayfinder_instance_id != "" ? var.wayfinder_instance_id : substr(md5(format("aws-%s-%s-%s", data.aws_caller_identity.current.account_id, data.aws_region.current.name, var.environment)), 0, 12)
 }
 
-data "aws_secretsmanager_secret" "wayfinder" {
-  name = var.aws_secretsmanager_name
-}
-
-data "aws_secretsmanager_secret_version" "wayfinder" {
-  secret_id = data.aws_secretsmanager_secret.wayfinder.id
-}
-
 resource "kubectl_manifest" "storageclass" {
   count = var.enable_k8s_resources ? 1 : 0
 
@@ -47,7 +39,7 @@ resource "kubectl_manifest" "wayfinder_namespace" {
 }
 
 resource "kubectl_manifest" "wayfinder_idp" {
-  count = (var.enable_k8s_resources && var.idp_provider == "generic") ? 1 : 0
+  count = (var.enable_k8s_resources && var.wayfinder_idp_details["type"] == "generic") ? 1 : 0
 
   depends_on = [
     kubectl_manifest.wayfinder_namespace,
@@ -58,17 +50,17 @@ resource "kubectl_manifest" "wayfinder_idp" {
 
   yaml_body = templatefile("${path.module}/manifests/wayfinder-idp.yml.tpl", {
     claims        = "preferred_username,email,name,username"
-    client_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
+    client_id     = var.wayfinder_idp_details["clientId"]
     client_scopes = "email,profile,offline_access"
-    client_secret = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
+    client_secret = var.wayfinder_idp_details["clientSecret"]
     name          = "wayfinder-idp-live"
     namespace     = "wayfinder"
-    server_url    = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"]
+    server_url    = var.wayfinder_idp_details["serverUrl"]
   })
 }
 
 resource "kubectl_manifest" "wayfinder_idp_aad" {
-  count = (var.enable_k8s_resources && var.idp_provider == "aad") ? 1 : 0
+  count = (var.enable_k8s_resources && var.wayfinder_idp_details["type"] == "aad") ? 1 : 0
 
   depends_on = [
     kubectl_manifest.wayfinder_namespace,
@@ -79,13 +71,13 @@ resource "kubectl_manifest" "wayfinder_idp_aad" {
 
   yaml_body = templatefile("${path.module}/manifests/wayfinder-idp-aad.yml.tpl", {
     claims        = "preferred_username,email,name,username"
-    client_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
+    client_id     = var.wayfinder_idp_details["clientId"]
     client_scopes = "email,profile,offline_access"
-    client_secret = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
+    client_secret = var.wayfinder_idp_details["clientSecret"]
     name          = "wayfinder-idp-live"
     namespace     = "wayfinder"
     provider      = "azure"
-    tenant_id     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"]
+    tenant_id     = var.wayfinder_idp_details["azureTenantId"]
   })
 }
 
@@ -171,6 +163,6 @@ resource "helm_release" "wayfinder" {
 
   set_sensitive {
     name  = "licenseKey"
-    value = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["licenseKey"]
+    value = var.wayfinder_license_key
   }
 }

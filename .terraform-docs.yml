@@ -7,30 +7,44 @@ content: |-
 
   To run this module, you will need the following:
   1. Product license key: Contact sales@appvia.io for more information.
-  2. IDP App configuration details: Wayfinder integrates with an IDP for managing user access. You will need a valid Server URL, Client ID and Client Secret for initial configuration.
+  2. IDP App configuration details: Wayfinder integrates with an IDP for managing user access. You will need a valid Client ID, Client Secret and Server URL (or Azure Tenant ID) for initial configuration.
   3. A public Route53 DNS Zone: This module will create DNS records for the Wayfinder API and UI endpoints, and performs a DNS01 challenge via the LetsEncrypt Issuer for valid domain certificates.
   4. Existing VPC and Subnets: This module will deploy an EKS Cluster and so requires an existing VPC with outbound internet connectivity. Public ingress is not required, both EKS and Wayfinder ingress can be configured with an internal endpoint.
-  5. Network Resource Tags: Tags are required to select the correct networking resources:
-      1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
-      2. Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
+  5. Network Resource Tags:
+    {{ "  " }}1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
+    {{ "  " }}2. Network Resource Tags: Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
 
-  ### Wayfinder License and IDP Secret
+  ### Connecting to an Identity Provider
 
-  An AWS Secrets Manager secret should be present in the AWS account with the following structure:
-  ```json
-  {
-    "licenseKey": "wayfinder-product-license-key",
-    "idpClientId": "idp-client-id",
-    "idpClientSecret": "idp-client-secret",
-    "idpServerUrl": "https://example.okta.com"
-  }
-  ```
+  Wayfinder integrates with an IDP for managing user access. You will need a valid Client ID, Client Secret and Server URL (or Azure Tenant ID) for initial configuration.
 
   The Authorized Redirect URI for the IDP Application should be set to: `https://${wayfinder_domain_name_api}/oauth/callback`
 
   **Note:** If you are using Azure Active Directory, you must:
-  1. Set `idpAzureTenantId` in the above AWS Secret to your Azure Tenant ID (`idpServerUrl` is not required)
-  2. Set the Terraform variable `var.idp_provider` to `aad`
+  1. Set `azureTenantId` to your Azure Tenant ID (`serverUrl` is not required)
+  2. Set the IDP type to `aad`
+
+  #### Example: Generic IDP Configuration
+
+  ```hcl
+  wayfinder_idp_details = {
+    {{ "  " }}type         = "generic"
+    {{ "  " }}clientId     = "IDP-APP-CLIENT-ID"
+    {{ "  " }}clientSecret = "IDP-APP-CLIENT-SECRET"
+    {{ "  " }}serverUrl    = "https://example.okta.com" # Or "https://example.auth0.com/"
+  })
+  ```
+
+  #### Example: Azure AD IDP Configuration
+
+  ```hcl
+  wayfinder_idp_details = {
+    {{ "  " }}type          = "aad"
+    {{ "  " }}clientId      = "IDP-APP-CLIENT-ID"
+    {{ "  " }}clientSecret  = "IDP-APP-CLIENT-SECRET"
+    {{ "  " }}azureTenantId = "12345678-1234-1234-1234-123456789012"
+  })
+  ```
 
   ## Deployment
 
