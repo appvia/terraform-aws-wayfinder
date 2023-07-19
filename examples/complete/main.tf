@@ -1,29 +1,34 @@
 module "wayfinder" {
-  source = "../"
+  source = "../../"
 
-  aws_secretsmanager_name   = "wayfinder-prod-secrets"
-  clusterissuer_email       = "certmanager-notifications@example.com"
-  disable_internet_access   = true
-  dns_zone_name             = "wayfinder.example.com"
-  eks_ng_capacity_type      = "ON_DEMAND"
-  eks_ng_desired_size       = 2
-  eks_ng_instance_types     = ["t3.xlarge"]
-  eks_ng_minimum_size       = 2
-  environment               = "prod"
-  kms_key_administrators    = ["arn:aws:iam::111222333444:root"]
-  subnet_ids                = ["subnet-123", "subnet-456", "subnet-789"]
-  vpc_id                    = "vpc-1a2b3c4d5e"
-  wayfinder_domain_name_api = "api.wayfinder.example.com"
-  wayfinder_domain_name_ui  = "portal.wayfinder.example.com"
+  clusterissuer_email       = var.clusterissuer_email
+  disable_internet_access   = var.disable_internet_access
+  dns_zone_arn              = data.aws_route53_zone.selected.arn
+  environment               = var.environment
+  kms_key_administrators    = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+  subnet_ids                = module.vpc.private_subnets
+  tags                      = var.tags
+  vpc_id                    = module.vpc.vpc_id
+  wayfinder_domain_name_api = "api.${var.dns_zone_name}"
+  wayfinder_domain_name_ui  = "portal.${var.dns_zone_name}"
+  wayfinder_license_key     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["licenseKey"]
+
+  wayfinder_idp_details = {
+    type          = var.idp_provider
+    clientId      = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
+    clientSecret  = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
+    serverUrl     = var.idp_provider == "generic" ? jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"] : ""
+    azureTenantId = var.idp_provider == "aad" ? jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"] : ""
+  }
 
   cluster_security_group_additional_rules = {
     allow_access_from_vpn = {
-      description = "Allow access to the Wayfinder API from the Example Org VPN"
+      description = "Allow access to the Wayfinder API from within My Organisation's internal network"
       protocol    = "tcp"
       from_port   = 443
       to_port     = 443
       type        = "ingress"
-      cidr_blocks = ["10.0.0.0/16"]
+      cidr_blocks = ["10.0.0.0/8"]
     }
   }
 }

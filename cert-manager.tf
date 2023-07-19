@@ -1,14 +1,9 @@
-data "aws_route53_zone" "selected" {
-  name         = var.dns_zone_name
-  private_zone = false
-}
-
 module "certmanager_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.17.0"
 
   attach_cert_manager_policy    = true
-  cert_manager_hosted_zone_arns = [data.aws_route53_zone.selected.arn]
+  cert_manager_hosted_zone_arns = [var.dns_zone_arn]
   role_name                     = "${local.name}-cert-manager"
   tags                          = local.tags
 
