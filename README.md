@@ -32,7 +32,7 @@ wayfinder_idp_details = {
   clientId     = "IDP-APP-CLIENT-ID"
   clientSecret = "IDP-APP-CLIENT-SECRET"
   serverUrl    = "https://example.okta.com" # Or "https://example.auth0.com/"
-})
+}
 ```
 
 #### Example: Azure AD IDP Configuration
@@ -43,7 +43,7 @@ wayfinder_idp_details = {
   clientId      = "IDP-APP-CLIENT-ID"
   clientSecret  = "IDP-APP-CLIENT-SECRET"
   azureTenantId = "12345678-1234-1234-1234-123456789012"
-})
+}
 ```
 
 ## Deployment
