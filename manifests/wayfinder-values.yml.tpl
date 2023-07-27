@@ -8,7 +8,7 @@ api:
     enabled: true
     hostname: "${api_hostname}"
     tlsEnabled: true
-    tlsSecret: "wayfinder-api-tls"
+    tlsSecret: "wayfinder-ingress-api-tls"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -27,7 +27,7 @@ ui:
     enabled: true
     hostname: "${ui_hostname}"
     tlsEnabled: true
-    tlsSecret: "wayfinder-ui-tls"
+    tlsSecret: "wayfinder-ingress-ui-tls"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
