@@ -12,6 +12,8 @@ module "externaldns_irsa_role" {
       namespace_service_accounts = ["external-dns:external-dns"]
     }
   }
+  role_permissions_boundary_arn = var.permissions_boundary_policy_arn
+
 }
 
 resource "helm_release" "external-dns" {

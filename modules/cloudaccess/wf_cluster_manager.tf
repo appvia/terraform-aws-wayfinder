@@ -4,12 +4,13 @@ module "iam_role_cluster_manager" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.17.0"
 
-  create_role             = true
-  role_name               = "wf-ClusterManager${local.resource_suffix}"
-  role_description        = "Create and manage EKS Kubernetes clusters"
-  role_requires_mfa       = false
-  custom_role_policy_arns = [module.iam_policy_cluster_manager[0].arn]
-  trusted_role_arns       = [var.wayfinder_iam_role_arn]
+  create_role                   = true
+  role_name                     = "wf-ClusterManager${local.resource_suffix}"
+  role_description              = "Create and manage EKS Kubernetes clusters"
+  role_requires_mfa             = false
+  custom_role_policy_arns       = [module.iam_policy_cluster_manager[0].arn]
+  trusted_role_arns             = [var.wayfinder_iam_role_arn]
+  role_permissions_boundary_arn = var.permissions_boundary_policy_arn
 }
 
 module "iam_policy_cluster_manager" {

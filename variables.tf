@@ -182,3 +182,9 @@ variable "aws_vpc_cni_addon_version" {
   type        = string
   default     = "v1.12.6-eksbuild.2"
 }
+
+variable "permissions_boundary_policy_arn" {
+  description = "ARN of the AWS permissions boundary policy to apply to IAM roles"
+  type        = string
+  default     = ""
+}
