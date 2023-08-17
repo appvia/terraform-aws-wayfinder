@@ -32,6 +32,7 @@ module "iam_policy_cluster_manager" {
         "ec2:CreateLaunchTemplateVersion",
         "ec2:CreateTags",
         "ec2:DeleteLaunchTemplate",
+        "ec2:DescribeKeyPairs",
         "ec2:DescribeLaunchTemplates",
         "ec2:DescribeLaunchTemplateVersions",
         "ec2:DescribeSecurityGroups",
@@ -49,7 +50,17 @@ module "iam_policy_cluster_manager" {
         "eks:UpdateClusterConfig",
         "eks:UpdateClusterVersion",
         "eks:UpdateNodegroupConfig",
-        "eks:UpdateNodegroupVersion"
+        "eks:UpdateNodegroupVersion",
+        "kms:CreateAlias",
+        "kms:CreateKey",
+        "kms:DeleteAlias",
+        "kms:DescribeKey",
+        "kms:ListAliases",
+        "kms:ListKeys",
+        "kms:ListResourceTags",
+        "kms:ScheduleKeyDeletion",
+        "kms:TagResource",
+        "kms:UpdateAlias"
       ],
       "Effect": "Allow",
       "Resource": "*"

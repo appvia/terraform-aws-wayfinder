@@ -13,6 +13,6 @@ tags = {
   Environment         = "Production"
   Owner               = "SupportTeam"
   Project             = "Operations"
-  Repository          = "<Your Repository URL>"
+  Repository          = "Your Repository URL"
   Provisioner         = "Terraform"
 }

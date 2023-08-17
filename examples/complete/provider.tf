@@ -1,11 +1,9 @@
 provider "aws" {}
 
-provider "kubernetes" {}
-
 provider "helm" {
   kubernetes {
-    host                   = module.wayfinder.cluster_endpoint
     cluster_ca_certificate = base64decode(module.wayfinder.cluster_certificate_authority_data)
+    host                   = module.wayfinder.cluster_endpoint
 
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
@@ -16,8 +14,9 @@ provider "helm" {
 }
 
 provider "kubectl" {
-  host                   = module.wayfinder.cluster_endpoint
   cluster_ca_certificate = base64decode(module.wayfinder.cluster_certificate_authority_data)
+  host                   = module.wayfinder.cluster_endpoint
+  load_config_file       = false
 
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
