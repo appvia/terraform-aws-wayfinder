@@ -1,0 +1,31 @@
+content: |-
+  # Example: No IDP (initialised with a localadmin user)
+
+  ## Deployment
+
+  1. Create a DNS Zone in AWS Route53 and ensure the domain is delegated to the AWS nameservers.
+  2. Create an AWS Secrets Manager Secret with your Product License Key:
+  ```sh
+  $ aws secretsmanager create-secret --name wayfinder-secrets
+
+  $ cat secret.json
+  {
+  {{ "  " }}"licenseKey": "LICENSE-KEY"
+  }
+
+  $ aws secretsmanager put-secret-value --secret-id wf-secret-test --secret-string file://secret.json
+  ```
+  3. Copy the `terraform.tfvars.example` file to `terraform.tfvars` and update with your values.
+  4. Run `terraform init -upgrade -backend-config="bucket=BUCKET-NAME" -backend-config="key=STATE-FILE.tfstate" -backend-config="encrypt=true" -backend-config="dynamodb_table=TABLE-NAME" -backend-config="region=AWS-REGION"`
+  5. Run `terraform apply`
+
+  ## Updating Docs
+
+  The `terraform-docs` utility is used to generate this README. Follow the below steps to update:
+  1. Make changes to the `.terraform-docs.yml` file
+  2. Fetch the `terraform-docs` binary (https://terraform-docs.io/user-guide/installation/)
+  3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
