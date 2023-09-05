@@ -150,6 +150,8 @@ resource "helm_release" "wayfinder" {
   create_namespace = false
   max_history      = 5
   namespace        = "wayfinder"
+  wait             = true
+  wait_for_jobs    = true
 
   values = [
     templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
