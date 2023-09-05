@@ -21,6 +21,12 @@ variable "cluster_version" {
   default     = "1.25"
 }
 
+variable "create_localadmin_user" {
+  description = "Whether to create a localadmin user for access to the Wayfinder Portal and API"
+  type        = bool
+  default     = true
+}
+
 variable "enable_k8s_resources" {
   description = "Whether to enable the creation of Kubernetes resources for Wayfinder (helm and kubectl manifest deployments)"
   type        = bool
@@ -116,8 +122,8 @@ variable "wayfinder_idp_details" {
   description = "The IDP details to use for Wayfinder to enable SSO"
   type = object({
     type          = string
-    clientId      = string
-    clientSecret  = string
+    clientId      = optional(string)
+    clientSecret  = optional(string)
     serverUrl     = optional(string)
     azureTenantId = optional(string)
   })
@@ -125,13 +131,21 @@ variable "wayfinder_idp_details" {
   sensitive = true
 
   validation {
-    condition     = contains(["generic", "aad"], var.wayfinder_idp_details["type"])
-    error_message = "wayfinder_idp_details[\"type\"] must be one of: generic, aad"
+    condition     = contains(["generic", "aad", "none"], var.wayfinder_idp_details["type"])
+    error_message = "wayfinder_idp_details[\"type\"] must be one of: generic, aad, none"
   }
 
   validation {
-    condition     = (var.wayfinder_idp_details["type"] == "generic" && length(var.wayfinder_idp_details["serverUrl"]) > 0) || (var.wayfinder_idp_details["type"] == "aad" && length(var.wayfinder_idp_details["azureTenantId"]) > 0)
+    condition     = var.wayfinder_idp_details["type"] == "none" || (var.wayfinder_idp_details["type"] == "generic" && length(var.wayfinder_idp_details["serverUrl"]) > 0) || (var.wayfinder_idp_details["type"] == "aad" && length(var.wayfinder_idp_details["azureTenantId"]) > 0)
     error_message = "serverUrl must be set if IDP type is generic, azureTenantId must be set if IDP type is aad"
+  }
+
+  default = {
+    type          = "none"
+    clientId      = null
+    clientSecret  = null
+    serverUrl     = ""
+    azureTenantId = ""
   }
 }
 

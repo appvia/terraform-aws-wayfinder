@@ -156,6 +156,7 @@ resource "helm_release" "wayfinder" {
   values = [
     templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
       api_hostname                  = var.wayfinder_domain_name_api
+      enable_localadmin_user        = var.create_localadmin_user
       storage_class                 = "gp2-encrypted"
       ui_hostname                   = var.wayfinder_domain_name_ui
       wayfinder_iam_identity        = module.wayfinder_irsa_role.iam_role_arn
@@ -166,5 +167,16 @@ resource "helm_release" "wayfinder" {
   set_sensitive {
     name  = "licenseKey"
     value = var.wayfinder_license_key
+  }
+}
+
+data "kubernetes_secret" "localadmin_password" {
+  count = var.enable_k8s_resources && var.create_localadmin_user ? 1 : 0
+
+  depends_on = [helm_release.wayfinder]
+
+  metadata {
+    name      = "wayfinder-localadmin-initpw"
+    namespace = "wayfinder"
   }
 }

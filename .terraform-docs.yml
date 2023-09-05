@@ -7,16 +7,22 @@ content: |-
 
   To run this module, you will need the following:
   1. Product license key: Contact sales@appvia.io for more information.
-  2. IDP App configuration details: Wayfinder integrates with an IDP for managing user access. You will need a valid Client ID, Client Secret and Server URL (or Azure Tenant ID) for initial configuration.
+  2. (Optional) IDP App configuration details: Wayfinder integrates with an IDP for managing user access. You will need a valid Client ID, Client Secret and Server URL (or Azure Tenant ID) for setup. This does not need to be defined initially within Terraform, and can also be setup within the product. Wayfinder can provision a `localadmin` user for initial access if no IDP details are provided.
   3. A public Route53 DNS Zone: This module will create DNS records for the Wayfinder API and UI endpoints, and performs a DNS01 challenge via the LetsEncrypt Issuer for valid domain certificates.
   4. Existing VPC and Subnets: This module will deploy an EKS Cluster and so requires an existing VPC with outbound internet connectivity. Public ingress is not required, both EKS and Wayfinder ingress can be configured with an internal endpoint.
   5. Network Resource Tags:
     {{ "  " }}1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
     {{ "  " }}2. Network Resource Tags: Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
 
-  ### Connecting to an Identity Provider
+  ## Deployment
 
-  Wayfinder integrates with an IDP for managing user access. You will need a valid Client ID, Client Secret and Server URL (or Azure Tenant ID) for initial configuration.
+  Please see the [examples](./examples) directory to see how to deploy this module. To get up and running quickly with minimal pre-requisites, use the [`no-idp`](./examples/no-idp) example.
+
+  ### (Optional) Connecting to an Identity Provider
+
+  Wayfinder integrates with an IDP for managing user access. You will need a valid Client ID, Client Secret and Server URL (or Azure Tenant ID).
+
+  This configuration is optional within Terraform, and can also be setup within the product. Please view the documentation for more information: https://docs.appvia.io/wayfinder/admin/auth
 
   The Authorized Redirect URI for the IDP Application should be set to: `https://${wayfinder_domain_name_api}/oauth/callback`
 
@@ -45,10 +51,6 @@ content: |-
     {{ "  " }}azureTenantId = "12345678-1234-1234-1234-123456789012"
   }
   ```
-
-  ## Deployment
-
-  Please see the [examples](./examples) directory to see how to deploy this module.
 
   ## Updating Docs
 
