@@ -1,6 +1,7 @@
 aws_secretsmanager_name = "wayfinder-secrets"
 availability_zones      = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
-clusterissuer_email     = "my.email@example.com"
+clusterissuer_email     = "example@appvia.io"
+create_localadmin_user  = false
 disable_internet_access = false
 dns_zone_name           = "wf.example.com"
 environment             = "prod"
