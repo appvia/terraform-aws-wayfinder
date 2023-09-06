@@ -14,12 +14,6 @@ variable "clusterissuer_email" {
   type        = string
 }
 
-variable "create_localadmin_user" {
-  description = "Whether to create a localadmin user for access to the Wayfinder Portal and API"
-  type        = bool
-  default     = false
-}
-
 variable "disable_internet_access" {
   description = "Whether to disable internet access for EKS and the Wayfinder ingress controller"
   type        = bool
@@ -35,17 +29,6 @@ variable "environment" {
   description = "The environment name we are provisioning"
   type        = string
   default     = "production"
-}
-
-variable "idp_provider" {
-  description = "The Identity Provider type to configure for Wayfinder (supported: generic, aad)"
-  type        = string
-  default     = "generic"
-
-  validation {
-    condition     = contains(["generic", "aad"], var.idp_provider)
-    error_message = "idp_provider must be one of: generic, aad"
-  }
 }
 
 variable "tags" {

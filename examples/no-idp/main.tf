@@ -2,7 +2,7 @@ module "wayfinder" {
   source = "../../"
 
   clusterissuer_email       = var.clusterissuer_email
-  create_localadmin_user    = var.create_localadmin_user
+  create_localadmin_user    = true
   disable_internet_access   = var.disable_internet_access
   dns_zone_arn              = data.aws_route53_zone.selected.arn
   environment               = var.environment
@@ -13,14 +13,6 @@ module "wayfinder" {
   wayfinder_domain_name_api = "api.${var.dns_zone_name}"
   wayfinder_domain_name_ui  = "portal.${var.dns_zone_name}"
   wayfinder_license_key     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["licenseKey"]
-
-  wayfinder_idp_details = {
-    type          = var.idp_provider
-    clientId      = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientId"]
-    clientSecret  = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpClientSecret"]
-    serverUrl     = var.idp_provider == "generic" ? jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"] : ""
-    azureTenantId = var.idp_provider == "aad" ? jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"] : ""
-  }
 
   # cluster_security_group_additional_rules = {
   #   allow_access_from_vpn = {

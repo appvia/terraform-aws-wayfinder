@@ -1,20 +1,16 @@
 content: |-
-  # Example: Complete (includes pre-configured Wayfinder SSO)
+  # Example: No IDP (initialised with a localadmin user)
 
   ## Deployment
 
   1. Create a DNS Zone in AWS Route53 and ensure the domain is delegated to the AWS nameservers.
-  2. Create an AWS Secrets Manager Secret with your Product License Key and IDP details:
+  2. Create an AWS Secrets Manager Secret with your Product License Key:
   ```sh
   $ aws secretsmanager create-secret --name wayfinder-secrets
 
   $ cat secret.json
   {
-  {{ "  " }}"licenseKey": "LICENSE-KEY",
-  {{ "  " }}"idpClientId": "CLIENT-ID",
-  {{ "  " }}"idpClientSecret": "CLIENT-SECRET",
-  {{ "  " }}"idpServerUrl": "IDP-SERVER-URL",
-  {{ "  " }}"idpAzureTenantId": ""
+  {{ "  " }}"licenseKey": "LICENSE-KEY"
   }
 
   $ aws secretsmanager put-secret-value --secret-id wf-secret-test --secret-string file://secret.json
