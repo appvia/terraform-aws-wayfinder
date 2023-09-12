@@ -11,8 +11,8 @@ content: |-
   3. A public Route53 DNS Zone: This module will create DNS records for the Wayfinder API and UI endpoints, and performs a DNS01 challenge via the LetsEncrypt Issuer for valid domain certificates.
   4. Existing VPC and Subnets: This module will deploy an EKS Cluster and so requires an existing VPC with outbound internet connectivity. Public ingress is not required, both EKS and Wayfinder ingress can be configured with an internal endpoint.
   5. Network Resource Tags:
-    {{ "  " }}1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
-    {{ "  " }}2. Network Resource Tags: Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
+    {{ "    " }}1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
+    {{ "    " }}2. Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
 
   ## Deployment
 
