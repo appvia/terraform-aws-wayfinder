@@ -17,7 +17,7 @@ content: |-
   {{ "  " }}"idpAzureTenantId": ""
   }
 
-  $ aws secretsmanager put-secret-value --secret-id wf-secret-test --secret-string file://secret.json
+  $ aws secretsmanager put-secret-value --secret-id wayfinder-secrets --secret-string file://secret.json
   ```
   3. Copy the `terraform.tfvars.example` file to `terraform.tfvars` and update with your values.
   4. Run `terraform init -upgrade -backend-config="bucket=BUCKET-NAME" -backend-config="key=STATE-FILE.tfstate" -backend-config="encrypt=true" -backend-config="dynamodb_table=TABLE-NAME" -backend-config="region=AWS-REGION"`
