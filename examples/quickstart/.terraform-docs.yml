@@ -1,0 +1,27 @@
+content: |-
+  # Example: Quickstart
+
+  **Notes:**
+  * Wayfinder will start up with an initial local administrator user (not configured to use an IDP).
+  * Terraform is not configured to use S3 as a backend, and so state will be written locally.
+  * Any sensitive values (e.g. licence key) are passed directly as a variable to the module.
+
+  This example should be used for product testing and evaluation only. For a more production-ready deployment, please see the [complete example](../complete).
+
+  ## Deployment
+
+  1. Create a DNS Zone in AWS Route53 and ensure the domain is delegated to the AWS nameservers.
+  2. Copy the `terraform.tfvars.example` file to `terraform.tfvars` and update with your values.
+  3. Run `terraform init -upgrade`
+  4. Run `terraform apply`
+
+  ## Updating Docs
+
+  The `terraform-docs` utility is used to generate this README. Follow the below steps to update:
+  1. Make changes to the `.terraform-docs.yml` file
+  2. Fetch the `terraform-docs` binary (https://terraform-docs.io/user-guide/installation/)
+  3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}

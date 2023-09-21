@@ -1,9 +1,3 @@
-variable "aws_secretsmanager_name" {
-  description = "The name of the AWS Secrets Manager secret to fetch, which contains IDP configuration."
-  type        = string
-  default     = "wayfinder-secrets"
-}
-
 variable "availability_zones" {
   description = "List of availability zones to deploy into."
   type        = list(string)
@@ -13,12 +7,6 @@ variable "availability_zones" {
 variable "clusterissuer_email" {
   description = "The email address to use for the cert-manager cluster issuer."
   type        = string
-}
-
-variable "create_localadmin_user" {
-  description = "Whether to create a localadmin user for access to the Wayfinder Portal and API."
-  type        = bool
-  default     = false
 }
 
 variable "disable_internet_access" {
@@ -38,20 +26,15 @@ variable "environment" {
   default     = "production"
 }
 
-variable "idp_provider" {
-  description = "The Identity Provider type to configure for Wayfinder (supported: generic, aad)."
-  type        = string
-  default     = "generic"
-
-  validation {
-    condition     = contains(["generic", "aad"], var.idp_provider)
-    error_message = "idp_provider must be one of: generic, aad"
-  }
-}
-
 variable "wayfinder_instance_id" {
   description = "The instance ID to use for Wayfinder."
   type        = string
+}
+
+variable "wayfinder_licence_key" {
+  description = "The licence key to use for Wayfinder."
+  type        = string
+  sensitive   = true
 }
 
 variable "tags" {

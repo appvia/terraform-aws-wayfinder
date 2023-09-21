@@ -1,7 +1,7 @@
 clusterissuer_email   = "example@appvia.io"
 dns_zone_name         = "wf.example.com"
-idp_provider          = "generic"
 wayfinder_instance_id = "your-wayfinder-instance-id"
+wayfinder_licence_key = "your-wayfinder-licence-key"
 tags = {
   Repository  = "Your Repository URL"
   Provisioner = "Terraform"
