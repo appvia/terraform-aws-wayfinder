@@ -32,3 +32,9 @@ variable "workspace_id" {
   description = "A Wayfinder workspace ID if Roles are to be kept unique to a workspace"
   type        = string
 }
+
+variable "permissions_boundary_policy_arn" {
+  description = "ARN of the AWS permissions boundary policy to apply to IAM roles"
+  type        = string
+  default     = ""
+}

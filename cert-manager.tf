@@ -13,6 +13,7 @@ module "certmanager_irsa_role" {
       namespace_service_accounts = ["cert-manager:cert-manager"]
     }
   }
+  role_permissions_boundary_arn = var.permissions_boundary_policy_arn
 }
 
 resource "helm_release" "certmanager" {

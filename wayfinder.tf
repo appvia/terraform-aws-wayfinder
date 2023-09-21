@@ -127,6 +127,7 @@ module "wayfinder_irsa_role" {
       namespace_service_accounts = ["wayfinder:wayfinder-admin"]
     }
   }
+  role_permissions_boundary_arn = var.permissions_boundary_policy_arn
 }
 
 resource "helm_release" "wayfinder" {
