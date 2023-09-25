@@ -12,16 +12,6 @@ module "wayfinder" {
   vpc_id                    = module.vpc.vpc_id
   wayfinder_domain_name_api = "api.${var.dns_zone_name}"
   wayfinder_domain_name_ui  = "portal.${var.dns_zone_name}"
-  wayfinder_license_key     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["licenseKey"]
-
-  # cluster_security_group_additional_rules = {
-  #   allow_access_from_vpn = {
-  #     description = "Allow access to the Wayfinder API from within My Organisation's internal network"
-  #     protocol    = "tcp"
-  #     from_port   = 443
-  #     to_port     = 443
-  #     type        = "ingress"
-  #     cidr_blocks = ["10.0.0.0/8"]
-  #   }
-  # }
+  wayfinder_instance_id     = var.wayfinder_instance_id
+  wayfinder_licence_key     = var.wayfinder_licence_key
 }

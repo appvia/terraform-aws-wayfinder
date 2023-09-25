@@ -12,7 +12,8 @@ module "wayfinder" {
   vpc_id                    = module.vpc.vpc_id
   wayfinder_domain_name_api = "api.${var.dns_zone_name}"
   wayfinder_domain_name_ui  = "portal.${var.dns_zone_name}"
-  wayfinder_license_key     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["licenseKey"]
+  wayfinder_instance_id     = var.wayfinder_instance_id
+  wayfinder_licence_key     = jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["licenceKey"]
 
   wayfinder_idp_details = {
     type          = var.idp_provider
