@@ -4,6 +4,7 @@ module "wayfinder" {
   clusterissuer_email       = var.clusterissuer_email
   create_localadmin_user    = var.create_localadmin_user
   disable_internet_access   = var.disable_internet_access
+  disable_local_login       = var.disable_local_login
   dns_zone_arn              = data.aws_route53_zone.selected.arn
   environment               = var.environment
   kms_key_administrators    = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]

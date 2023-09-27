@@ -27,14 +27,14 @@ variable "create_localadmin_user" {
   default     = true
 }
 
-variable "enable_k8s_resources" {
-  description = "Whether to enable the creation of Kubernetes resources for Wayfinder (helm and kubectl manifest deployments)."
-  type        = bool
-  default     = true
-}
-
 variable "disable_internet_access" {
   description = "Whether to disable internet access for EKS and the Wayfinder ingress controller."
+  type        = bool
+  default     = false
+}
+
+variable "disable_local_login" {
+  description = "Whether to disable local login for Wayfinder. Note: An IDP must be configured within Wayfinder, otherwise you will not be able to log in."
   type        = bool
   default     = false
 }
@@ -72,6 +72,12 @@ variable "eks_ng_minimum_size" {
   description = "The minimum size to use for the EKS managed node group."
   type        = number
   default     = 2
+}
+
+variable "enable_k8s_resources" {
+  description = "Whether to enable the creation of Kubernetes resources for Wayfinder (helm and kubectl manifest deployments)."
+  type        = bool
+  default     = true
 }
 
 variable "environment" {

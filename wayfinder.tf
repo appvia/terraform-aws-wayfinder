@@ -125,6 +125,12 @@ module "wayfinder_irsa_role" {
   }
 }
 
+resource "random_password" "wayfinder_localadmin" {
+  count   = var.create_localadmin_user ? 1 : 0
+  length  = 20
+  special = false
+}
+
 resource "helm_release" "wayfinder" {
   count = var.enable_k8s_resources ? 1 : 0
 
@@ -134,10 +140,11 @@ resource "helm_release" "wayfinder" {
     helm_release.ingress,
     kubectl_manifest.certmanager_clusterissuer,
     kubectl_manifest.storageclass_encrypted,
+    kubectl_manifest.wayfinder_idp_aad,
+    kubectl_manifest.wayfinder_idp,
+    kubectl_manifest.wayfinder_namespace,
     module.eks,
     module.wayfinder_irsa_role,
-    kubectl_manifest.wayfinder_idp,
-    kubectl_manifest.wayfinder_idp_aad,
   ]
 
   name = "wayfinder"
@@ -152,6 +159,7 @@ resource "helm_release" "wayfinder" {
   values = [
     templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
       api_hostname                  = var.wayfinder_domain_name_api
+      disable_local_login           = var.disable_local_login
       enable_localadmin_user        = var.create_localadmin_user
       storage_class                 = "gp2-encrypted"
       ui_hostname                   = var.wayfinder_domain_name_ui
@@ -164,15 +172,9 @@ resource "helm_release" "wayfinder" {
     name  = "licenseKey"
     value = var.wayfinder_licence_key
   }
-}
 
-data "kubernetes_secret" "localadmin_password" {
-  count = var.enable_k8s_resources && var.create_localadmin_user ? 1 : 0
-
-  depends_on = [helm_release.wayfinder]
-
-  metadata {
-    name      = "wayfinder-localadmin-initpw"
-    namespace = "wayfinder"
+  set_sensitive {
+    name  = "localAdminPassword"
+    value = var.create_localadmin_user ? random_password.wayfinder_localadmin[0].result : ""
   }
 }
