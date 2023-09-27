@@ -1,4 +1,5 @@
 clusterissuer_email   = "example@appvia.io"
+disable_local_login   = true
 dns_zone_name         = "wf.example.com"
 idp_provider          = "generic"
 wayfinder_instance_id = "your-wayfinder-instance-id"
