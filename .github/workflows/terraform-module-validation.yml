@@ -9,5 +9,7 @@ on:
 
 jobs:
   terraform:
-      uses: appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@main
+      uses: appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@infracost
       name: Terraform Module Validation
+      secrets:
+        infracost-api-key: ${{ secrets.ORG_INFRACOST_API_KEY }}
