@@ -115,6 +115,9 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }, var.node_security_group_additional_rules)
+
+  manage_aws_auth_configmap = true
+  aws_auth_roles            = var.eks_aws_auth_roles
 }
 
 module "irsa-ebs-csi-driver" {

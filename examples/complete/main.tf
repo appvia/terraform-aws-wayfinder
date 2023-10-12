@@ -24,6 +24,14 @@ module "wayfinder" {
     azureTenantId = var.idp_provider == "aad" ? jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"] : ""
   }
 
+  eks_aws_auth_roles = [
+    {
+      rolearn  = var.terraform_plan_role_arn
+      username = "terraform-identity-plan"
+      groups   = ["system:masters"]
+    }
+  ]
+
   # cluster_security_group_additional_rules = {
   #   allow_access_from_vpn = {
   #     description = "Allow access to the Wayfinder API from within My Organisation's internal network"

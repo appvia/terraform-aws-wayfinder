@@ -3,6 +3,7 @@ disable_local_login   = true
 dns_zone_name         = "wf.example.com"
 idp_provider          = "generic"
 wayfinder_instance_id = "your-wayfinder-instance-id"
+terraform_plan_role_arn  = "arn:aws:iam::123456789012:role/terraform-plan-role"
 tags = {
   Repository  = "Your Repository URL"
   Provisioner = "Terraform"

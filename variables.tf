@@ -50,6 +50,16 @@ variable "ebs_csi_kms_cmk_ids" {
   default     = []
 }
 
+variable "eks_aws_auth_roles" {
+  description = "List of IAM Role maps to add to the aws-auth configmap. This is required if you use a different IAM Role for Terraform Plan actions."
+  default     = []
+  type = list(object({
+    rolearn  = string
+    username = string
+    groups   = list(string)
+  }))
+}
+
 variable "eks_ng_capacity_type" {
   description = "The capacity type to use for the EKS managed node group."
   type        = string
