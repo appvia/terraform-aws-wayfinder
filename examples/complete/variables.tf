@@ -66,6 +66,11 @@ variable "tags" {
   default     = {}
 }
 
+variable "terraform_plan_role_arn" {
+  description = "The ARN of the IAM role used for Terraform plan operations."
+  type        = string
+}
+
 variable "vpc_cidr" {
   description = "CIDR block for the Wayfinder VPC."
   type        = string
