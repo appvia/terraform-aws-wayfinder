@@ -72,7 +72,8 @@ module "iam_policy_network_manager" {
         "eks:DescribeCluster",
         "elasticloadbalancing:DeleteLoadBalancer",
         "elasticloadbalancing:DescribeLoadBalancers",
-        "elasticloadbalancing:DescribeTags"
+        "elasticloadbalancing:DescribeTags",
+        "iam:CreateServiceLinkedRole"
       ],
       "Effect": "Allow",
       "Resource": "*"
