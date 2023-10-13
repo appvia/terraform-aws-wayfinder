@@ -1,4 +1,5 @@
 module "iam_assumable_role_dns_zone_manager" {
+  count   = var.enable_wf_cloudaccess ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.17.0"
 
@@ -6,12 +7,13 @@ module "iam_assumable_role_dns_zone_manager" {
   role_name               = "wf-DNSZoneManager-${var.wayfinder_instance_id}"
   role_description        = "Create and manage Route 53 DNS Zones for automated DNS management"
   role_requires_mfa       = false
-  custom_role_policy_arns = [module.iam_policy_dns_zone_manager.arn]
+  custom_role_policy_arns = [module.iam_policy_dns_zone_manager[0].arn]
   trusted_role_arns       = [module.wayfinder_irsa_role.iam_role_arn]
   tags                    = local.tags
 }
 
 module "iam_policy_dns_zone_manager" {
+  count   = var.enable_wf_cloudaccess ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.17.0"
 
@@ -63,6 +65,7 @@ EOF
 }
 
 module "iam_assumable_role_cloud_info" {
+  count   = var.enable_wf_cloudaccess ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.17.0"
 
@@ -70,12 +73,13 @@ module "iam_assumable_role_cloud_info" {
   role_name               = "wf-CloudInfo-${var.wayfinder_instance_id}"
   role_description        = "Retrieve pricing information for AWS cloud resources"
   role_requires_mfa       = false
-  custom_role_policy_arns = [module.iam_policy_cloud_info.arn]
+  custom_role_policy_arns = [module.iam_policy_cloud_info[0].arn]
   trusted_role_arns       = [module.wayfinder_irsa_role.iam_role_arn]
   tags                    = local.tags
 }
 
 module "iam_policy_cloud_info" {
+  count   = var.enable_wf_cloudaccess ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.17.0"
 
@@ -113,18 +117,43 @@ module "iam_policy_cloud_info" {
 EOF
 }
 
-resource "kubectl_manifest" "wayfinder_aws_admin_cloudaccessconfig" {
-  count = var.enable_k8s_resources ? 1 : 0
+resource "kubectl_manifest" "wayfinder_cloud_identity_main" {
+  count      = var.enable_k8s_resources && var.enable_wf_cloudaccess ? 1 : 0
+  depends_on = [helm_release.wayfinder]
+
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-cloud-identity.yml.tpl", {
+    name        = "cloudidentity-aws"
+    description = "Cloud managed identity"
+    role_arn    = module.wayfinder_irsa_role.iam_role_arn
+  })
+}
+
+resource "kubectl_manifest" "wayfinder_aws_cloudinfo_cloudaccessconfig" {
+  count = var.enable_k8s_resources && var.enable_wf_cloudaccess ? 1 : 0
 
   depends_on = [
     helm_release.wayfinder,
   ]
 
-  yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-admin-cloudaccessconfig.yml.tpl", {
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-cloudinfo-cloudaccessconfig.yml.tpl", {
+    region              = data.aws_region.current.name
+    account_id          = data.aws_caller_identity.current.account_id
+    identity            = "cloudidentity-aws"
+    cloud_info_role_arn = module.iam_assumable_role_cloud_info[0].iam_role_arn
+  })
+}
+
+resource "kubectl_manifest" "wayfinder_aws_dnszonemanager_cloudaccessconfig" {
+  count = var.enable_k8s_resources && var.enable_wf_cloudaccess ? 1 : 0
+
+  depends_on = [
+    helm_release.wayfinder,
+  ]
+
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-dnszonemanager-cloudaccessconfig.yml.tpl", {
     region                    = data.aws_region.current.name
     account_id                = data.aws_caller_identity.current.account_id
-    dns_zone_manager_role_arn = module.iam_assumable_role_dns_zone_manager.iam_role_arn
-    cloud_info_role_arn       = module.iam_assumable_role_cloud_info.iam_role_arn
-    identifier                = var.wayfinder_instance_id
+    identity            = "cloudidentity-aws"
+    dns_zone_manager_role_arn = module.iam_assumable_role_dns_zone_manager[0].iam_role_arn
   })
 }

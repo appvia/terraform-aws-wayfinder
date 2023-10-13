@@ -90,6 +90,12 @@ variable "enable_k8s_resources" {
   default     = true
 }
 
+variable "enable_wf_cloudaccess" {
+  description = "Whether to configure CloudIdentity and admin CloudAccessConfig resources in Wayfinder once installed (requires enable_k8s_resources)"
+  type        = bool
+  default     = true
+}
+
 variable "environment" {
   description = "The environment name we are provisioning."
   type        = string
