@@ -153,7 +153,7 @@ resource "kubectl_manifest" "wayfinder_aws_dnszonemanager_cloudaccessconfig" {
   yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-dnszonemanager-cloudaccessconfig.yml.tpl", {
     region                    = data.aws_region.current.name
     account_id                = data.aws_caller_identity.current.account_id
-    identity            = "cloudidentity-aws"
+    identity                  = "cloudidentity-aws"
     dns_zone_manager_role_arn = module.iam_assumable_role_dns_zone_manager[0].iam_role_arn
   })
 }
