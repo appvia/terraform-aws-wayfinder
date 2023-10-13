@@ -6,7 +6,7 @@ metadata:
 spec:
   cloud: aws
   aws:
-    account: ${account_id}
+    account: "${account_id}"
     defaultRegion: ${region}
   description: Platform cloud metadata access, created by Wayfinder install
   type: CostEstimates
