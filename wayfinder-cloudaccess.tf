@@ -150,7 +150,7 @@ resource "kubectl_manifest" "wayfinder_aws_dnszonemanager_cloudaccessconfig" {
     helm_release.wayfinder,
   ]
 
-  yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-dnszonemanager-cloudaccessconfig.yml.tpl", {
+  yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-dnszonemanagement-cloudaccessconfig.yml.tpl", {
     region                    = data.aws_region.current.name
     account_id                = data.aws_caller_identity.current.account_id
     identity                  = "cloudidentity-aws"
