@@ -1,0 +1,46 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "iam:SimulatePrincipalPolicy"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "route53:ChangeResourceRecordSets",
+                "route53:ChangeTagsForResource",
+                "route53:CreateHostedZone",
+                "route53:DeleteHostedZone",
+                "route53:GetHostedZone",
+                "route53:ListHostedZones",
+                "route53:ListResourceRecordSets",
+                "route53:ListTagsForResource"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+            "sts:GetCallerIdentity"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "iam:CreateRole",
+                "iam:DeleteRolePolicy",
+                "iam:GetRole",
+                "iam:PutRolePolicy",
+                "iam:TagRole",
+                "iam:UpdateAssumeRolePolicy",
+                "iam:UpdateRoleDescription"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}

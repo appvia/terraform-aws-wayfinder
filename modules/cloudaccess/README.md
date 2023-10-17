@@ -23,21 +23,24 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_create_cluster_manager_role"></a> [create\_cluster\_manager\_role](#input\_create\_cluster\_manager\_role) | Whether to create the Cluster Manager IAM Role | `bool` | `true` | no |
-| <a name="input_create_dns_zone_manager_role"></a> [create\_dns\_zone\_manager\_role](#input\_create\_dns\_zone\_manager\_role) | Whether to create the DNS Zone Manager IAM Role | `bool` | `true` | no |
-| <a name="input_create_network_manager_role"></a> [create\_network\_manager\_role](#input\_create\_network\_manager\_role) | Whether to create the Network Manager IAM Role | `bool` | `true` | no |
-| <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | A Wayfinder instance ID if roles are to be kept unique to an instance | `string` | `""` | no |
-| <a name="input_wayfinder_iam_role_arn"></a> [wayfinder\_iam\_role\_arn](#input\_wayfinder\_iam\_role\_arn) | The ARN of Wayfinder's IAM role to allow in trust policies | `string` | n/a | yes |
-| <a name="input_workspace_id"></a> [workspace\_id](#input\_workspace\_id) | A Wayfinder workspace ID if Roles are to be kept unique to a workspace | `string` | `""` | no |
+| <a name="input_enable_cloud_info"></a> [enable\_cloud\_info](#input\_enable\_cloud\_info) | Whether to create the Cloud Info IAM Role | `bool` | `false` | no |
+| <a name="input_enable_cluster_manager"></a> [enable\_cluster\_manager](#input\_enable\_cluster\_manager) | Whether to create the Cluster Manager IAM Role | `bool` | `true` | no |
+| <a name="input_enable_dns_zone_manager"></a> [enable\_dns\_zone\_manager](#input\_enable\_dns\_zone\_manager) | Whether to create the DNS Zone Manager IAM Role | `bool` | `true` | no |
+| <a name="input_enable_network_manager"></a> [enable\_network\_manager](#input\_enable\_network\_manager) | Whether to create the Network Manager IAM Role | `bool` | `true` | no |
+| <a name="input_provision_oidc_trust"></a> [provision\_oidc\_trust](#input\_provision\_oidc\_trust) | Provisions an AWS OIDC Provider reference for Azure tenant ID. Set to false if you are managing OIDC provider trusts elsewhere. | `bool` | `true` | no |
+| <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | Suffix to apply to all generated resources. We recommend using workspace key + stage. | `string` | `""` | no |
+| <a name="input_wayfinder_identity_aws_role_arn"></a> [wayfinder\_identity\_aws\_role\_arn](#input\_wayfinder\_identity\_aws\_role\_arn) | ARN of Wayfinder's identity to give access to. Populate when Wayfinder is running on AWS with IRSA, or with the user ARN when using a credential-based AWS identity. | `string` | `""` | no |
+| <a name="input_wayfinder_identity_azure_client_id"></a> [wayfinder\_identity\_azure\_client\_id](#input\_wayfinder\_identity\_azure\_client\_id) | Client ID of Wayfinder's Azure AD managed identity to give access to. Populate when Wayfinder is running on Azure with AzureAD Workload Identity. | `string` | `""` | no |
+| <a name="input_wayfinder_identity_azure_tenant_id"></a> [wayfinder\_identity\_azure\_tenant\_id](#input\_wayfinder\_identity\_azure\_tenant\_id) | Tenant ID of Wayfinder's Azure AD managed identity to give access to. Populate when Wayfinder is running on Azure with AzureAD Workload Identity. | `string` | `""` | no |
+| <a name="input_wayfinder_identity_gcp_service_account"></a> [wayfinder\_identity\_gcp\_service\_account](#input\_wayfinder\_identity\_gcp\_service\_account) | Email address of Wayfinder's GCP service account to give access to. Populate when Wayfinder is running on GCP with Workload Identity. | `string` | `""` | no |
+| <a name="input_wayfinder_identity_gcp_service_account_id"></a> [wayfinder\_identity\_gcp\_service\_account\_id](#input\_wayfinder\_identity\_gcp\_service\_account\_id) | Numerical ID  of Wayfinder's GCP service account to give access to. Populate when Wayfinder is running on GCP with Workload Identity. | `string` | `""` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_cluster_manager_role_arn"></a> [cluster\_manager\_role\_arn](#output\_cluster\_manager\_role\_arn) | The ARN of the Cluster Manager IAM Role |
-| <a name="output_cluster_manager_role_name"></a> [cluster\_manager\_role\_name](#output\_cluster\_manager\_role\_name) | The name of the Cluster Manager IAM Role |
-| <a name="output_dns_zone_manager_role_arn"></a> [dns\_zone\_manager\_role\_arn](#output\_dns\_zone\_manager\_role\_arn) | The ARN of the DNS Zone Manager IAM Role |
-| <a name="output_dns_zone_manager_role_name"></a> [dns\_zone\_manager\_role\_name](#output\_dns\_zone\_manager\_role\_name) | The name of the DNS Zone Manager IAM Role |
-| <a name="output_network_manager_role_arn"></a> [network\_manager\_role\_arn](#output\_network\_manager\_role\_arn) | The ARN of the Network Manager IAM Role |
-| <a name="output_network_manager_role_name"></a> [network\_manager\_role\_name](#output\_network\_manager\_role\_name) | The name of the Network Manager IAM Role |
+| <a name="output_cloud_info_role_arn"></a> [cloud\_info\_role\_arn](#output\_cloud\_info\_role\_arn) | ARN of Cloud Info IAM role to use as spec.permissions[].awsRole on the CloudInfo permission of your cloud access config |
+| <a name="output_cluster_manager_role_arn"></a> [cluster\_manager\_role\_arn](#output\_cluster\_manager\_role\_arn) | ARN of Cluster Manager IAM role to use as spec.permissions[].awsRole on the ClusterManager permission of your cloud access config |
+| <a name="output_dns_zone_manager_role_arn"></a> [dns\_zone\_manager\_role\_arn](#output\_dns\_zone\_manager\_role\_arn) | ARN of DNS Zone Manager IAM role to use as spec.permissions[].awsRole on the DNSZoneManager permission of your cloud access config |
+| <a name="output_network_manager_role_arn"></a> [network\_manager\_role\_arn](#output\_network\_manager\_role\_arn) | ARN of Network Manager IAM role to use as spec.permissions[].awsRole on the NetworkManager permission of your cloud access config |
 <!-- END_TF_DOCS -->
