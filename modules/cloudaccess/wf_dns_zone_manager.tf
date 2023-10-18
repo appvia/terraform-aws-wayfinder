@@ -1,5 +1,5 @@
 module "iam_role_dns_zone_manager" {
-  count = var.create_dns_zone_manager_role ? 1 : 0
+  count = var.enable_dns_zone_manager && (var.wayfinder_identity_aws_role_arn != "") ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.17.0"
@@ -9,11 +9,42 @@ module "iam_role_dns_zone_manager" {
   role_description        = "Create and manage Route 53 DNS Zones for automated DNS management"
   role_requires_mfa       = false
   custom_role_policy_arns = [module.iam_policy_dns_zone_manager[0].arn]
-  trusted_role_arns       = [var.wayfinder_iam_role_arn]
+  trusted_role_arns       = [var.wayfinder_identity_aws_role_arn]
+}
+
+module "iam_role_dns_zone_manager_azure_oidc" {
+  count = var.enable_dns_zone_manager && local.create_azure_trust ? 1 : 0
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version = "5.17.0"
+
+  create_role                    = true
+  role_name                      = "wf-DNSZoneManager-azure${local.resource_suffix}"
+  role_description               = "Create and manage Route 53 DNS Zones for automated DNS management"
+  role_policy_arns               = [module.iam_policy_dns_zone_manager[0].arn]
+  provider_url                   = local.azure_oidc_issuer
+  oidc_fully_qualified_audiences = [var.wayfinder_identity_azure_client_id]
+}
+
+module "iam_role_dns_zone_manager_google_oidc" {
+  count = var.enable_dns_zone_manager && local.create_google_trust ? 1 : 0
+
+  source = "./iam-google-oidc-role"
+
+  create                        = true
+  name                          = "wf-DNSZoneManager-gcp${local.resource_suffix}"
+  description                   = "Create and manage Route 53 DNS Zones for automated DNS management"
+  role_policy_arns              = [module.iam_policy_dns_zone_manager[0].arn]
+  google_service_account_ids    = [var.wayfinder_identity_gcp_service_account_id]
+  google_service_account_emails = [var.wayfinder_identity_gcp_service_account]
+}
+
+data "local_file" "wf_dns_zone_manager_policy" {
+  filename = "${path.module}/wf_dns_zone_manager_policy.json"
 }
 
 module "iam_policy_dns_zone_manager" {
-  count = var.create_dns_zone_manager_role ? 1 : 0
+  count = var.enable_dns_zone_manager ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.17.0"
@@ -21,45 +52,5 @@ module "iam_policy_dns_zone_manager" {
   name        = "wf-DNSZoneManager${local.resource_suffix}"
   description = "Create and manage Route 53 DNS Zones for automated DNS management"
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "route53:ChangeResourceRecordSets",
-        "route53:ChangeTagsForResource",
-        "route53:CreateHostedZone",
-        "route53:DeleteHostedZone",
-        "route53:GetHostedZone",
-        "route53:ListHostedZones",
-        "route53:ListResourceRecordSets",
-        "route53:ListTagsForResource"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    },
-    {
-      "Action": [
-        "sts:GetCallerIdentity"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    },
-    {
-      "Action": [
-        "iam:CreateRole",
-        "iam:DeleteRolePolicy",
-        "iam:GetRole",
-        "iam:PutRolePolicy",
-        "iam:TagRole",
-        "iam:UpdateAssumeRolePolicy",
-        "iam:UpdateRoleDescription"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+  policy = data.local_file.wf_dns_zone_manager_policy.content
 }

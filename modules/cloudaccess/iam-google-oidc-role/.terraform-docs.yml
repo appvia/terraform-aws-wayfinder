@@ -1,0 +1,36 @@
+content: |-
+  # IAM Google OIDC Role
+
+  Currently a copy of https://github.com/terraform-aws-modules/terraform-aws-iam
+  PR has been raised to add this module to the upstream repo.
+
+  Creates an IAM role that trust the IAM Google OIDC built in provider.
+  - AWS IAM role reference: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create
+
+  ## Usage
+
+  ### Google
+
+  The defaults provided by the module are suitable for testing with any Google service account.
+
+  ```hcl
+  module "iam_google_oidc_role" {
+    source    = "terraform-aws-modules/iam/aws//modules/iam-google-oidc-role"
+
+    # This should be updated to suit your organization, repository, references/branches, etc.
+    google_service_account_ids = ["123456789101112131415"]
+    google_service_account_emails = ["aws-role-access@project-acme.iam.gserviceaccount.com"]
+
+    policies = {
+      S3ReadOnly = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+    }
+
+    tags = {
+      Environment = "test"
+    }
+  }
+  ```
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
