@@ -1,0 +1,7 @@
+content: |-
+  # Terraform Module:
+  This Terraform Module can be used to provision a cloud identity for wayfinder on aws
+
+  {{ .Inputs }}
+  
+  {{ .Outputs }}
