@@ -4,7 +4,7 @@ data "http" "openid-configuration" {
 
   lifecycle {
     precondition {
-      condition     = var.wayfinder_identity_azure_tenant_id == "" || var.wayfinder_identity_azure_client_id == ""
+      condition     = var.wayfinder_identity_azure_tenant_id != "" || var.wayfinder_identity_azure_client_id != ""
       error_message = "Must specify wayfinder_identity_azure_tenant_id and wayfinder_identity_azure_client_id to enable cross-cloud trust from Azure to AWS"
     }
   }
@@ -34,7 +34,7 @@ resource "aws_iam_openid_connect_provider" "wf-trust" {
 
   lifecycle {
     precondition {
-      condition     = var.wayfinder_identity_azure_tenant_id == "" || var.wayfinder_identity_azure_client_id == ""
+      condition     = var.wayfinder_identity_azure_tenant_id != "" || var.wayfinder_identity_azure_client_id != ""
       error_message = "Must specify wayfinder_identity_azure_tenant_id and wayfinder_identity_azure_client_id to enable cross-cloud trust from Azure to AWS"
     }
   }
