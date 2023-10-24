@@ -43,3 +43,9 @@ output "cloud_info_role_arns" {
   description = "ARNs of Cloud Info IAM role to use for the CloudInfo spec.permissions[].awsRole in your CloudAccessConfig"
   value       = local.cloud_info_role_arns
 }
+
+output "peering_acceptor_role_arn" {
+  description = "ARN of Peering Acceptor IAM role to use as spec.permissions[].awsRole on the PeeringAcceptor permission of your cloud access config"
+  value       = join("", concat(module.iam_role_peering_acceptor.*.iam_role_arn, module.iam_role_peering_acceptor_azure_oidc.*.iam_role_arn, module.iam_role_peering_acceptor_google_oidc.*.arn))
+}
+

@@ -1,6 +1,7 @@
 data "http" "openid-configuration" {
   count = var.from_azure && var.provision_oidc_trust ? 1 : 0
-  url   = "${local.azure_oidc_issuer}.well-known/openid-configuration"
+
+  url = "${local.azure_oidc_issuer}.well-known/openid-configuration"
 
   lifecycle {
     precondition {
@@ -12,7 +13,8 @@ data "http" "openid-configuration" {
 
 data "tls_certificate" "jwks" {
   count = var.from_azure && var.provision_oidc_trust ? 1 : 0
-  url   = jsondecode(data.http.openid-configuration[0].response_body).jwks_uri
+
+  url = jsondecode(data.http.openid-configuration[0].response_body).jwks_uri
 }
 
 resource "aws_iam_openid_connect_provider" "wf-trust" {

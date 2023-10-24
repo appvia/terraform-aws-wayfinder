@@ -76,6 +76,12 @@ variable "enable_network_manager" {
   type        = bool
 }
 
+variable "enable_peering_acceptor" {
+  default     = true
+  description = "Whether to create the Peering Acceptor IAM Role"
+  type        = bool
+}
+
 variable "enable_cloud_info" {
   default     = false
   description = "Whether to create the Cloud Info IAM Role"
