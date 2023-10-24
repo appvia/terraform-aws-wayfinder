@@ -4,20 +4,15 @@
 This Terraform Module can be used to provision IAM Roles that Wayfinder assumes into, for creating resources within an AWS Account (VPC, EKS Cluster, Route53 DNS Zones, etc).
 
 **Notes:**
-* The IAM Role ARN (`var.wayfinder_iam_role_arn`) used by Wayfinder (via IAM Roles for Service Accounts) must be provided to update the IAM Role Trust Policy for any Roles created by this module.
-* The `var.instance_id` is optional for reference to the Wayfinder instance, if you are using multiple Wayfinder instances in the same AWS account.
-* The `var.workspace_id` is optional for reference to a Wayfinder workspace. This may be relevant if the same AWS Account is linked to multiple workspaces, and you want to attribute any Cloud actions to a specific workspace.
+* You must provide either:
+* The IAM Role ARN (`var.wayfinder_identity_aws_role_arn`) used by Wayfinder (via IAM Roles for Service Accounts) if you are running Wayfinder on AWS using IRSA, or using a credential-backed AWS IAM user.
+* The GCP service account email address and ID (`var.wayfinder_identity_gcp_service_account` and `var.wayfinder_identity_gcp_service_account_id`) used by Wayfinder (via GCP Workload Identity) if you are running Wayfinder on GCP.
+* The Azure managed identity client ID and tenant ID (`var.wayfinder_identity_azure_client_id` and `var.wayfinder_identity_azure_tenant_id`) used by Wayfinder (via AzureAD Workload Identity) if you are running Wayfinder on Azure.
+* `var.resource_suffix` is an optional suffix to use on created objects. We recommend using workspace key + stage if you wish to have multiple workspaces sharing the same AWS account, allowing independent roles to be provisioned for each.
 
 ## Deployment
 
 Please see the [examples](./examples) directory to see how to deploy this module.
-
-## Updating Docs
-
-The `terraform-docs` utility is used to generate this README. Follow the below steps to update:
-1. Make changes to the `.terraform-docs.yml` file
-2. Fetch the `terraform-docs` binary (https://terraform-docs.io/user-guide/installation/)
-3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
 
 ## Inputs
 
@@ -29,6 +24,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_enable_network_manager"></a> [enable\_network\_manager](#input\_enable\_network\_manager) | Whether to create the Network Manager IAM Role | `bool` | `true` | no |
 | <a name="input_provision_oidc_trust"></a> [provision\_oidc\_trust](#input\_provision\_oidc\_trust) | Provisions an AWS OIDC Provider reference for Azure tenant ID. Set to false if you are managing OIDC provider trusts elsewhere. | `bool` | `true` | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | Suffix to apply to all generated resources. We recommend using workspace key + stage. | `string` | `""` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources created. | `map(string)` | `{}` | no |
 | <a name="input_wayfinder_identity_aws_role_arn"></a> [wayfinder\_identity\_aws\_role\_arn](#input\_wayfinder\_identity\_aws\_role\_arn) | ARN of Wayfinder's identity to give access to. Populate when Wayfinder is running on AWS with IRSA, or with the user ARN when using a credential-based AWS identity. | `string` | `""` | no |
 | <a name="input_wayfinder_identity_azure_client_id"></a> [wayfinder\_identity\_azure\_client\_id](#input\_wayfinder\_identity\_azure\_client\_id) | Client ID of Wayfinder's Azure AD managed identity to give access to. Populate when Wayfinder is running on Azure with AzureAD Workload Identity. | `string` | `""` | no |
 | <a name="input_wayfinder_identity_azure_tenant_id"></a> [wayfinder\_identity\_azure\_tenant\_id](#input\_wayfinder\_identity\_azure\_tenant\_id) | Tenant ID of Wayfinder's Azure AD managed identity to give access to. Populate when Wayfinder is running on Azure with AzureAD Workload Identity. | `string` | `""` | no |
@@ -43,4 +39,11 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="output_cluster_manager_role_arn"></a> [cluster\_manager\_role\_arn](#output\_cluster\_manager\_role\_arn) | ARN of Cluster Manager IAM role to use as spec.permissions[].awsRole on the ClusterManager permission of your cloud access config |
 | <a name="output_dns_zone_manager_role_arn"></a> [dns\_zone\_manager\_role\_arn](#output\_dns\_zone\_manager\_role\_arn) | ARN of DNS Zone Manager IAM role to use as spec.permissions[].awsRole on the DNSZoneManager permission of your cloud access config |
 | <a name="output_network_manager_role_arn"></a> [network\_manager\_role\_arn](#output\_network\_manager\_role\_arn) | ARN of Network Manager IAM role to use as spec.permissions[].awsRole on the NetworkManager permission of your cloud access config |
+
+## Updating Docs
+
+The `terraform-docs` utility is used to generate this README. Follow the below steps to update:
+1. Make changes to the `.terraform-docs.yml` file
+2. Fetch the `terraform-docs` binary (https://terraform-docs.io/user-guide/installation/)
+3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
 <!-- END_TF_DOCS -->

@@ -1,5 +1,5 @@
 locals {
-  resource_suffix = var.resource_suffix
+  resource_suffix = var.resource_suffix != "" ? "-${var.resource_suffix}" : ""
 
   # an AWS IAM OIDC "provider" is NOT required when the trust is to google, nor when the user
   # tells us they're managing it themselves, only when provisioning for an Azure client + tenant ID

@@ -19,8 +19,9 @@ resource "aws_iam_openid_connect_provider" "wf-trust" {
   count = local.create_azure_trust && var.provision_oidc_trust ? 1 : 0
 
   client_id_list = [var.wayfinder_identity_azure_client_id]
+  url            = local.azure_oidc_issuer
+  tags           = var.tags
 
-  url = local.azure_oidc_issuer
   thumbprint_list = [
     # This should give us the certificate of the top intermediate CA in the certificate authority chain
     one(

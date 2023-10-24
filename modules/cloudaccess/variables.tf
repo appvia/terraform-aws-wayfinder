@@ -63,3 +63,9 @@ variable "enable_cloud_info" {
   description = "Whether to create the Cloud Info IAM Role"
   type        = bool
 }
+
+variable "tags" {
+  default     = {}
+  description = "A map of tags to add to all resources created."
+  type        = map(string)
+}

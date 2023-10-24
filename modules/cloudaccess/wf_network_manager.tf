@@ -10,6 +10,7 @@ module "iam_role_network_manager" {
   role_requires_mfa       = false
   custom_role_policy_arns = [module.iam_policy_network_manager[0].arn]
   trusted_role_arns       = [var.wayfinder_identity_aws_role_arn]
+  tags                    = var.tags
 }
 
 module "iam_role_network_manager_azure_oidc" {
@@ -24,12 +25,13 @@ module "iam_role_network_manager_azure_oidc" {
   role_policy_arns               = [module.iam_policy_network_manager[0].arn]
   provider_url                   = local.azure_oidc_issuer
   oidc_fully_qualified_audiences = [var.wayfinder_identity_azure_client_id]
+  tags                           = var.tags
 }
 
 module "iam_role_network_manager_google_oidc" {
   count = var.enable_network_manager && local.create_google_trust ? 1 : 0
 
-  source = "./iam-google-oidc-role"
+  source = "../iam-google-oidc-role"
 
   create                        = true
   name                          = "wf-NetworkManager-gcp${local.resource_suffix}"
@@ -38,6 +40,7 @@ module "iam_role_network_manager_google_oidc" {
   provider_url                  = "accounts.google.com"
   google_service_account_ids    = [var.wayfinder_identity_gcp_service_account_id]
   google_service_account_emails = [var.wayfinder_identity_gcp_service_account]
+  tags                          = var.tags
 }
 
 data "local_file" "wf_network_manager_policy" {
@@ -52,6 +55,6 @@ module "iam_policy_network_manager" {
 
   name        = "wf-NetworkManager${local.resource_suffix}"
   description = "Create and manage VPCs for EKS clusters"
-
-  policy = data.local_file.wf_network_manager_policy.content
+  policy      = data.local_file.wf_network_manager_policy.content
+  tags        = var.tags
 }
