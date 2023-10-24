@@ -1,5 +1,5 @@
 data "http" "openid-configuration" {
-  count = local.create_azure_trust && var.provision_oidc_trust? 1 : 0
+  count = local.create_azure_trust && var.provision_oidc_trust ? 1 : 0
   url   = "${local.azure_oidc_issuer}.well-known/openid-configuration"
 
   lifecycle {
@@ -16,7 +16,7 @@ data "tls_certificate" "jwks" {
 }
 
 resource "aws_iam_openid_connect_provider" "wf-trust" {
-  count = local.create_azure_trust && var.provision_oidc_trust? 1 : 0
+  count = local.create_azure_trust && var.provision_oidc_trust ? 1 : 0
 
   client_id_list = [var.wayfinder_identity_azure_client_id]
 
