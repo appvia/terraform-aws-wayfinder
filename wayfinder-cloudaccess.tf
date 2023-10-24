@@ -26,6 +26,7 @@ resource "kubectl_manifest" "wayfinder_aws_cloudinfo_cloudaccessconfig" {
 
   depends_on = [
     helm_release.wayfinder,
+    kubectl_manifest.wayfinder_cloud_identity_main,
   ]
 
   yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-cloudaccessconfig.yml.tpl", {
@@ -45,6 +46,7 @@ resource "kubectl_manifest" "wayfinder_aws_dnszonemanager_cloudaccessconfig" {
 
   depends_on = [
     helm_release.wayfinder,
+    kubectl_manifest.wayfinder_cloud_identity_main,
   ]
 
   yaml_body = templatefile("${path.module}/manifests/wayfinder-aws-cloudaccessconfig.yml.tpl", {
