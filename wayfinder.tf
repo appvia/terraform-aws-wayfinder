@@ -136,7 +136,7 @@ resource "helm_release" "wayfinder" {
 
   depends_on = [
     helm_release.certmanager,
-    helm_release.external-dns,
+    helm_release.external_dns,
     helm_release.ingress,
     kubectl_manifest.certmanager_clusterissuer,
     kubectl_manifest.storageclass_encrypted,
