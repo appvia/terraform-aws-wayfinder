@@ -4,6 +4,24 @@ variable "resource_suffix" {
   type        = string
 }
 
+variable "from_aws" {
+  default     = true
+  description = "Whether Wayfinder is running on AWS."
+  type        = bool
+}
+
+variable "from_azure" {
+  default     = false
+  description = "Whether Wayfinder is running on Azure."
+  type        = bool
+}
+
+variable "from_gcp" {
+  default     = false
+  description = "Whether Wayfinder is running on GCP."
+  type        = bool
+}
+
 variable "wayfinder_identity_aws_role_arn" {
   default     = ""
   description = "ARN of Wayfinder's identity to give access to. Populate when Wayfinder is running on AWS with IRSA, or with the user ARN when using a credential-based AWS identity."

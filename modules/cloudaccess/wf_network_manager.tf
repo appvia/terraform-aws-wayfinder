@@ -1,5 +1,5 @@
 module "iam_role_network_manager" {
-  count = var.enable_network_manager && (var.wayfinder_identity_aws_role_arn != "") ? 1 : 0
+  count = var.enable_network_manager && var.from_aws ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.17.0"
@@ -14,7 +14,7 @@ module "iam_role_network_manager" {
 }
 
 module "iam_role_network_manager_azure_oidc" {
-  count = var.enable_network_manager && local.create_azure_trust ? 1 : 0
+  count = var.enable_network_manager && var.from_azure ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "5.17.0"
@@ -29,7 +29,7 @@ module "iam_role_network_manager_azure_oidc" {
 }
 
 module "iam_role_network_manager_google_oidc" {
-  count = var.enable_network_manager && local.create_google_trust ? 1 : 0
+  count = var.enable_network_manager && var.from_gcp ? 1 : 0
 
   source = "../iam-google-oidc-role"
 
@@ -43,6 +43,7 @@ module "iam_role_network_manager_google_oidc" {
   tags                          = var.tags
 }
 
+// Use a file data source so it can be used in the calculation of the graph
 data "local_file" "wf_network_manager_policy" {
   filename = "${path.module}/wf_network_manager_policy.json"
 }
