@@ -1,4 +1,5 @@
 module "wayfinder_cloudaccess" {
+  count  = var.enable_wf_cloudaccess ? 1 : 0
   source = "./modules/cloudaccess"
 
   resource_suffix                 = var.wayfinder_instance_id
@@ -36,7 +37,7 @@ resource "kubectl_manifest" "wayfinder_aws_cloudinfo_cloudaccessconfig" {
     name        = "aws-cloudinfo"
     permission  = "CloudInfo"
     region      = data.aws_region.current.name
-    role_arn    = module.wayfinder_cloudaccess.cloud_info_role_arn
+    role_arn    = module.wayfinder_cloudaccess[0].cloud_info_role_arn
     type        = "CostEstimates"
   })
 }
@@ -56,7 +57,7 @@ resource "kubectl_manifest" "wayfinder_aws_dnszonemanager_cloudaccessconfig" {
     name        = "aws-dnsmanagement"
     permission  = "DNSZoneManager"
     region      = data.aws_region.current.name
-    role_arn    = module.wayfinder_cloudaccess.dns_zone_manager_role_arn
+    role_arn    = module.wayfinder_cloudaccess[0].dns_zone_manager_role_arn
     type        = "DNSZoneManagement"
   })
 }
