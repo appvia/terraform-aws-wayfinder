@@ -1,4 +1,4 @@
-name: Terraform Module Validation
+name: Terraform
 on:
   push:
     branches:
@@ -6,8 +6,9 @@ on:
   pull_request:
     branches:
     - main
+    - vnext
 
 jobs:
   terraform:
       uses: appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@main
-      name: Terraform Module Validation
+      name: Module Validation

@@ -14,7 +14,7 @@ module "externaldns_irsa_role" {
   }
 }
 
-resource "helm_release" "external-dns" {
+resource "helm_release" "external_dns" {
   count = var.enable_k8s_resources ? 1 : 0
 
   depends_on = [
@@ -25,9 +25,9 @@ resource "helm_release" "external-dns" {
   create_namespace = true
 
   name        = "external-dns"
-  repository  = "https://charts.bitnami.com/bitnami"
+  repository  = "https://kubernetes-sigs.github.io/external-dns"
   chart       = "external-dns"
-  version     = "6.18.0"
+  version     = "1.13.1"
   max_history = 5
 
   set {
@@ -38,10 +38,5 @@ resource "helm_release" "external-dns" {
   set {
     name  = "provider"
     value = "aws"
-  }
-
-  set {
-    name  = "aws.region"
-    value = data.aws_region.current.name
   }
 }

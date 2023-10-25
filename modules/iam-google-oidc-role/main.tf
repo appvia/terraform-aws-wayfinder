@@ -54,8 +54,7 @@ resource "aws_iam_role" "this" {
   max_session_duration  = var.max_session_duration
   permissions_boundary  = var.permissions_boundary_arn
   force_detach_policies = var.force_detach_policies
-
-  tags = var.tags
+  tags                  = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "custom" {

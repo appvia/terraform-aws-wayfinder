@@ -1,18 +1,18 @@
 apiVersion: cloudaccess.appvia.io/v2beta2
 kind: CloudAccessConfig
 metadata:
-  name: aws-dnsmanagement
+  name: ${name}
   namespace: ws-admin
 spec:
   cloud: aws
   aws:
     account: "${account_id}"
     defaultRegion: ${region}
-  description: Platform cloud metadata access, created by Wayfinder install
-  type: CostEstimates
+  description: ${description}
+  type: ${type}
   cloudIdentityRef:
     cloud: aws
     name: ${identity}
   permissions:
-  - permission: DNSZoneManager
-    awsRole: ${dns_zone_manager_role_arn}
+  - permission: ${permission}
+    awsRole: ${role_arn}

@@ -18,7 +18,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.25"
+  default     = "1.26"
 }
 
 variable "create_localadmin_user" {
