@@ -8,4 +8,6 @@ module "wayfinder_cloudaccess" {
   enable_dns_zone_manager                   = true
   enable_network_manager                    = true
   enable_cloud_info                         = false
+  from_aws                                  = false
+  from_gcp                                  = true
 }
