@@ -91,9 +91,21 @@ variable "enable_k8s_resources" {
 }
 
 variable "enable_wf_cloudaccess" {
-  description = "Whether to configure CloudIdentity and admin CloudAccessConfig resources in Wayfinder once installed (requires enable_k8s_resources)"
+  description = "Whether to configure CloudIdentity resource in Wayfinder for the configured AWS IRSA identity once installed (requires enable_k8s_resources)"
   type        = bool
   default     = true
+}
+
+variable "enable_wf_costestimates" {
+  description = "Whether to configure admin CloudAccessConfig for cost estimates in the account Wayfinder is installed in once installed (requires enable_k8s_resources and enable_wf_cloudaccess)"
+  type        = bool
+  default     = true
+}
+
+variable "enable_wf_dnszonemanager" {
+  description = "Whether to configure admin CloudAccessConfig for DNS zone management in the account Wayfinder is installed in once installed (requires enable_k8s_resources and enable_wf_cloudaccess)"
+  type        = bool
+  default     = false
 }
 
 variable "environment" {
@@ -196,7 +208,7 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.3.4"
+  default     = "v2.4.0"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
