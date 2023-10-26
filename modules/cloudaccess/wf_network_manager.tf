@@ -37,7 +37,6 @@ module "iam_role_network_manager_google_oidc" {
   name                          = "wf-NetworkManager-gcp${local.resource_suffix}"
   description                   = "Create and manage VPCs for EKS clusters"
   role_policy_arns              = [module.iam_policy_network_manager[0].arn]
-  provider_url                  = "accounts.google.com"
   google_service_account_ids    = [var.wayfinder_identity_gcp_service_account_id]
   google_service_account_emails = [var.wayfinder_identity_gcp_service_account]
   tags                          = var.tags

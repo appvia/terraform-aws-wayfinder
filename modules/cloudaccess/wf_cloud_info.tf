@@ -37,7 +37,6 @@ module "iam_role_cloud_info_google_oidc" {
   name                          = "wf-CloudInfo-gcp${local.resource_suffix}"
   description                   = "Retrieve pricing and instance type metadata"
   role_policy_arns              = [module.iam_policy_cloud_info[0].arn]
-  provider_url                  = "accounts.google.com"
   google_service_account_ids    = [var.wayfinder_identity_gcp_service_account_id]
   google_service_account_emails = [var.wayfinder_identity_gcp_service_account]
   tags                          = var.tags
