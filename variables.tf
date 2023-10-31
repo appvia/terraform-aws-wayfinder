@@ -208,29 +208,29 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.4.0"
+  default     = "v2.4.2"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string
-  default     = "v1.19.0-eksbuild.2"
+  default     = "v1.20.0-eksbuild.1"
 }
 
 variable "coredns_addon_version" {
   description = "CoreDNS Addon version to use."
   type        = string
-  default     = "v1.9.3-eksbuild.5"
+  default     = "v1.9.3-eksbuild.9"
 }
 
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.25.11-eksbuild.1"
+  default     = "v1.26.9-eksbuild.2"
 }
 
 variable "aws_vpc_cni_addon_version" {
   description = "AWS VPC CNI Addon version to use."
   type        = string
-  default     = "v1.12.6-eksbuild.2"
+  default     = "v1.13.4-eksbuild.1"
 }
