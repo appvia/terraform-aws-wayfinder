@@ -38,10 +38,10 @@ Please see the [examples](./examples) directory to see how to deploy this module
 
 | Name | Description |
 |------|-------------|
-| <a name="output_cloud_info_role_arn"></a> [cloud\_info\_role\_arn](#output\_cloud\_info\_role\_arn) | ARN of Cloud Info IAM role to use as spec.permissions[].awsRole on the CloudInfo permission of your cloud access config |
-| <a name="output_cluster_manager_role_arn"></a> [cluster\_manager\_role\_arn](#output\_cluster\_manager\_role\_arn) | ARN of Cluster Manager IAM role to use as spec.permissions[].awsRole on the ClusterManager permission of your cloud access config |
-| <a name="output_dns_zone_manager_role_arn"></a> [dns\_zone\_manager\_role\_arn](#output\_dns\_zone\_manager\_role\_arn) | ARN of DNS Zone Manager IAM role to use as spec.permissions[].awsRole on the DNSZoneManager permission of your cloud access config |
-| <a name="output_network_manager_role_arn"></a> [network\_manager\_role\_arn](#output\_network\_manager\_role\_arn) | ARN of Network Manager IAM role to use as spec.permissions[].awsRole on the NetworkManager permission of your cloud access config |
+| <a name="output_cloud_info_role_arns"></a> [cloud\_info\_role\_arns](#output\_cloud\_info\_role\_arns) | ARNs of Cloud Info IAM role to use for the CloudInfo spec.permissions[].awsRole in your CloudAccessConfig |
+| <a name="output_cluster_manager_role_arns"></a> [cluster\_manager\_role\_arns](#output\_cluster\_manager\_role\_arns) | ARNs of Cluster Manager IAM role to use for the ClusterManager spec.permissions[].awsRole in your CloudAccessConfig |
+| <a name="output_dns_zone_manager_role_arns"></a> [dns\_zone\_manager\_role\_arns](#output\_dns\_zone\_manager\_role\_arns) | ARNs of DNS Zone Manager IAM role to use for the DNSZoneManager spec.permissions[].awsRole in your CloudAccessConfig |
+| <a name="output_network_manager_role_arns"></a> [network\_manager\_role\_arns](#output\_network\_manager\_role\_arns) | ARNs of Network Manager IAM role to use for the NetworkManager spec.permissions[].awsRole in your CloudAccessConfig |
 
 ## Updating Docs
 
