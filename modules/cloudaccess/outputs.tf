@@ -20,7 +20,7 @@ locals {
   peering_acceptor_role_arns = {
     aws   = var.enable_peering_acceptor && var.from_aws ? module.iam_role_peering_acceptor[0].iam_role_arn : null
     azure = var.enable_peering_acceptor && var.from_azure ? module.iam_role_peering_acceptor_azure_oidc[0].iam_role_arn : null
-    gcp   = var.enable_peering_Acceptor && var.from_gcp ? module.iam_role_peering_acceptor_google_oidc[0].arn : null
+    gcp   = var.enable_peering_acceptor && var.from_gcp ? module.iam_role_peering_acceptor_google_oidc[0].arn : null
   }
 
   cloud_info_role_arns = {
