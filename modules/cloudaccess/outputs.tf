@@ -17,6 +17,12 @@ locals {
     gcp   = var.enable_network_manager && var.from_gcp ? module.iam_role_network_manager_google_oidc[0].arn : null
   }
 
+  peering_acceptor_role_arns = {
+    aws   = var.enable_peering_acceptor && var.from_aws ? module.iam_role_peering_acceptor[0].iam_role_arn : null
+    azure = var.enable_peering_acceptor && var.from_azure ? module.iam_role_peering_acceptor_azure_oidc[0].iam_role_arn : null
+    gcp   = var.enable_peering_acceptor && var.from_gcp ? module.iam_role_peering_acceptor_google_oidc[0].arn : null
+  }
+
   cloud_info_role_arns = {
     aws   = var.enable_cloud_info && var.from_aws ? module.iam_role_cloud_info[0].iam_role_arn : null
     azure = var.enable_cloud_info && var.from_azure ? module.iam_role_cloud_info_azure_oidc[0].iam_role_arn : null
@@ -43,3 +49,9 @@ output "cloud_info_role_arns" {
   description = "ARNs of Cloud Info IAM role to use for the CloudInfo spec.permissions[].awsRole in your CloudAccessConfig"
   value       = local.cloud_info_role_arns
 }
+
+output "peering_acceptor_role_arn" {
+  description = "ARN of Peering Acceptor IAM role to use as spec.permissions[].awsRole on the in your cloud access config"
+  value       = local.peering_acceptor_role_arns
+}
+
