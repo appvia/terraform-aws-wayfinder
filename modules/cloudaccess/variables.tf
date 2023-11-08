@@ -77,7 +77,7 @@ variable "enable_network_manager" {
 }
 
 variable "enable_peering_acceptor" {
-  default     = true
+  default     = false
   description = "Whether to create the Peering Acceptor IAM Role"
   type        = bool
 }
