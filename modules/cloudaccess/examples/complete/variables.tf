@@ -82,6 +82,12 @@ variable "enable_cloud_info" {
   type        = bool
 }
 
+variable "enable_peering_acceptor" {
+  default     = false
+  description = "Whether to create the Peering Acceptor IAM Role"
+  type        = bool
+}
+
 variable "tags" {
   default     = {}
   description = "A map of tags to add to all resources created."

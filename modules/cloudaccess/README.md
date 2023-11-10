@@ -22,6 +22,7 @@ Please see the [examples](./examples) directory to see how to deploy this module
 | <a name="input_enable_cluster_manager"></a> [enable\_cluster\_manager](#input\_enable\_cluster\_manager) | Whether to create the Cluster Manager IAM Role | `bool` | `false` | no |
 | <a name="input_enable_dns_zone_manager"></a> [enable\_dns\_zone\_manager](#input\_enable\_dns\_zone\_manager) | Whether to create the DNS Zone Manager IAM Role | `bool` | `false` | no |
 | <a name="input_enable_network_manager"></a> [enable\_network\_manager](#input\_enable\_network\_manager) | Whether to create the Network Manager IAM Role | `bool` | `false` | no |
+| <a name="input_enable_peering_acceptor"></a> [enable\_peering\_acceptor](#input\_enable\_peering\_acceptor) | Whether to create the Peering Acceptor IAM Role | `bool` | `false` | no |
 | <a name="input_from_aws"></a> [from\_aws](#input\_from\_aws) | Whether Wayfinder is running on AWS. | `bool` | `true` | no |
 | <a name="input_from_azure"></a> [from\_azure](#input\_from\_azure) | Whether Wayfinder is running on Azure. | `bool` | `false` | no |
 | <a name="input_from_gcp"></a> [from\_gcp](#input\_from\_gcp) | Whether Wayfinder is running on GCP. | `bool` | `false` | no |
@@ -42,6 +43,7 @@ Please see the [examples](./examples) directory to see how to deploy this module
 | <a name="output_cluster_manager_role_arns"></a> [cluster\_manager\_role\_arns](#output\_cluster\_manager\_role\_arns) | ARNs of Cluster Manager IAM role to use for the ClusterManager spec.permissions[].awsRole in your CloudAccessConfig |
 | <a name="output_dns_zone_manager_role_arns"></a> [dns\_zone\_manager\_role\_arns](#output\_dns\_zone\_manager\_role\_arns) | ARNs of DNS Zone Manager IAM role to use for the DNSZoneManager spec.permissions[].awsRole in your CloudAccessConfig |
 | <a name="output_network_manager_role_arns"></a> [network\_manager\_role\_arns](#output\_network\_manager\_role\_arns) | ARNs of Network Manager IAM role to use for the NetworkManager spec.permissions[].awsRole in your CloudAccessConfig |
+| <a name="output_peering_acceptor_role_arn"></a> [peering\_acceptor\_role\_arn](#output\_peering\_acceptor\_role\_arn) | ARN of Peering Acceptor IAM role to use as spec.permissions[].awsRole on the in your cloud access config |
 
 ## Updating Docs
 
