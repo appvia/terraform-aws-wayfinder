@@ -1,5 +1,5 @@
 module "iam_role_network_manager" {
-  count = var.create_network_manager_role ? 1 : 0
+  count = var.enable_network_manager && var.from_aws ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.17.0"
@@ -9,76 +9,52 @@ module "iam_role_network_manager" {
   role_description        = "Create and manage VPCs for EKS clusters"
   role_requires_mfa       = false
   custom_role_policy_arns = [module.iam_policy_network_manager[0].arn]
-  trusted_role_arns       = [var.wayfinder_iam_role_arn]
+  trusted_role_arns       = [var.wayfinder_identity_aws_role_arn]
+  tags                    = var.tags
+}
+
+module "iam_role_network_manager_azure_oidc" {
+  count = var.enable_network_manager && var.from_azure ? 1 : 0
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version = "5.17.0"
+
+  create_role                    = true
+  role_name                      = "wf-NetworkManager-azure${local.resource_suffix}"
+  role_description               = "Create and manage VPCs for EKS clusters"
+  role_policy_arns               = [module.iam_policy_network_manager[0].arn]
+  provider_url                   = local.azure_oidc_issuer
+  oidc_fully_qualified_audiences = [var.wayfinder_identity_azure_client_id]
+  tags                           = var.tags
+}
+
+module "iam_role_network_manager_google_oidc" {
+  count = var.enable_network_manager && var.from_gcp ? 1 : 0
+
+  source = "../iam-google-oidc-role"
+
+  create                        = true
+  name                          = "wf-NetworkManager-gcp${local.resource_suffix}"
+  description                   = "Create and manage VPCs for EKS clusters"
+  role_policy_arns              = [module.iam_policy_network_manager[0].arn]
+  google_service_account_ids    = [var.wayfinder_identity_gcp_service_account_id]
+  google_service_account_emails = [var.wayfinder_identity_gcp_service_account]
+  tags                          = var.tags
+}
+
+// Use a file data source so it can be used in the calculation of the graph
+data "local_file" "wf_network_manager_policy" {
+  filename = "${path.module}/wf_network_manager_policy.json"
 }
 
 module "iam_policy_network_manager" {
-  count = var.create_network_manager_role ? 1 : 0
+  count = var.enable_network_manager ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.17.0"
 
   name        = "wf-NetworkManager${local.resource_suffix}"
   description = "Create and manage VPCs for EKS clusters"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "ec2:AcceptTransitGatewayVpcAttachment",
-        "ec2:AcceptVpcPeeringConnection",
-        "ec2:AllocateAddress",
-        "ec2:AssociateRouteTable",
-        "ec2:AttachInternetGateway",
-        "ec2:AuthorizeSecurityGroupIngress",
-        "ec2:CreateInternetGateway",
-        "ec2:CreateNatGateway",
-        "ec2:CreateRoute",
-        "ec2:CreateRouteTable",
-        "ec2:CreateSecurityGroup",
-        "ec2:CreateSubnet",
-        "ec2:CreateTags",
-        "ec2:CreateTransitGatewayVpcAttachment",
-        "ec2:CreateVpc",
-        "ec2:CreateVpcPeeringConnection",
-        "ec2:DeleteInternetGateway",
-        "ec2:DeleteNatGateway",
-        "ec2:DeleteNetworkInterface",
-        "ec2:DeleteRoute",
-        "ec2:DeleteRouteTable",
-        "ec2:DeleteSecurityGroup",
-        "ec2:DeleteSubnet",
-        "ec2:DeleteTransitGatewayVpcAttachment",
-        "ec2:DeleteVpc",
-        "ec2:DeleteVpcPeeringConnection",
-        "ec2:DescribeAddresses",
-        "ec2:DescribeAvailabilityZones",
-        "ec2:DescribeInternetGateways",
-        "ec2:DescribeNatGateWays",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DescribeRouteTables",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeTransitGateways",
-        "ec2:DescribeTransitGatewayVpcAttachments",
-        "ec2:DescribeVpcPeeringConnections",
-        "ec2:DescribeVpcs",
-        "ec2:DetachInternetGateway",
-        "ec2:ModifyVpcAttribute",
-        "ec2:ReleaseAddress",
-        "ec2:RevokeSecurityGroupIngress",
-        "eks:DescribeCluster",
-        "elasticloadbalancing:DeleteLoadBalancer",
-        "elasticloadbalancing:DescribeLoadBalancers",
-        "elasticloadbalancing:DescribeTags",
-        "iam:CreateServiceLinkedRole"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+  policy      = data.local_file.wf_network_manager_policy.content
+  tags        = var.tags
 }

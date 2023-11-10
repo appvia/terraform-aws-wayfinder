@@ -1,5 +1,4 @@
 locals {
-  suffix_workspace_id = var.workspace_id != "" ? "-${var.workspace_id}" : ""
-  suffix_instance_id  = var.instance_id != "" ? "-${var.instance_id}" : ""
-  resource_suffix     = "${local.suffix_workspace_id}${local.suffix_instance_id}"
+  resource_suffix   = var.resource_suffix != "" ? "-${var.resource_suffix}" : ""
+  azure_oidc_issuer = var.wayfinder_identity_azure_tenant_id != "" ? "https://sts.windows.net/${var.wayfinder_identity_azure_tenant_id}/" : ""
 }

@@ -18,7 +18,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.25"
+  default     = "1.26"
 }
 
 variable "create_localadmin_user" {
@@ -88,6 +88,24 @@ variable "enable_k8s_resources" {
   description = "Whether to enable the creation of Kubernetes resources for Wayfinder (helm and kubectl manifest deployments)."
   type        = bool
   default     = true
+}
+
+variable "enable_wf_cloudaccess" {
+  description = "Whether to configure CloudIdentity resource in Wayfinder for the configured AWS IRSA identity once installed (requires enable_k8s_resources)"
+  type        = bool
+  default     = true
+}
+
+variable "enable_wf_costestimates" {
+  description = "Whether to configure admin CloudAccessConfig for cost estimates in the account Wayfinder is installed in once installed (requires enable_k8s_resources and enable_wf_cloudaccess)"
+  type        = bool
+  default     = true
+}
+
+variable "enable_wf_dnszonemanager" {
+  description = "Whether to configure admin CloudAccessConfig for DNS zone management in the account Wayfinder is installed in once installed (requires enable_k8s_resources and enable_wf_cloudaccess)"
+  type        = bool
+  default     = false
 }
 
 variable "environment" {
@@ -170,8 +188,8 @@ variable "wayfinder_instance_id" {
   type        = string
 
   validation {
-    condition     = can(regex("^[a-z0-9]{20}$", var.wayfinder_instance_id))
-    error_message = "The Wayfinder Instance ID must be alphanumeric and 20 characters long."
+    condition     = can(regex("^[a-z0-9]{10,20}$", var.wayfinder_instance_id))
+    error_message = "The Wayfinder Instance ID must be alphanumeric and 10-20 characters long."
   }
 }
 
@@ -190,29 +208,29 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.3.4"
+  default     = "v2.4.2"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string
-  default     = "v1.19.0-eksbuild.2"
+  default     = "v1.20.0-eksbuild.1"
 }
 
 variable "coredns_addon_version" {
   description = "CoreDNS Addon version to use."
   type        = string
-  default     = "v1.9.3-eksbuild.5"
+  default     = "v1.9.3-eksbuild.9"
 }
 
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.25.11-eksbuild.1"
+  default     = "v1.26.9-eksbuild.2"
 }
 
 variable "aws_vpc_cni_addon_version" {
   description = "AWS VPC CNI Addon version to use."
   type        = string
-  default     = "v1.12.6-eksbuild.2"
+  default     = "v1.13.4-eksbuild.1"
 }
