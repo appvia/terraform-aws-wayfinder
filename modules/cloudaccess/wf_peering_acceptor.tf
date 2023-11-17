@@ -34,7 +34,7 @@ module "iam_role_peering_acceptor_google_oidc" {
   create                        = true
   name                          = "wf-PeeringAcceptor-gcp${local.resource_suffix}"
   description                   = "Accept peering connections in aws"
-  role_policy_arns              = [module.iam_policy_cluster_manager[0].arn]
+  role_policy_arns              = [module.iam_policy_peering_acceptor[0].arn]
   google_service_account_ids    = [var.wayfinder_identity_gcp_service_account_id]
   google_service_account_emails = [var.wayfinder_identity_gcp_service_account]
 }
