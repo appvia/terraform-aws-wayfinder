@@ -18,7 +18,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.26"
+  default     = "1.27"
 }
 
 variable "create_localadmin_user" {
@@ -208,7 +208,7 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.4.6"
+  default     = "v2.5.1"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
