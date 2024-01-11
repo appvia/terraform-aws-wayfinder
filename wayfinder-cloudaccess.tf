@@ -36,7 +36,7 @@ resource "kubectl_manifest" "wayfinder_aws_cloudinfo_cloudaccessconfig" {
     permission  = "CloudInfo"
     region      = data.aws_region.current.name
     role_arn    = module.wayfinder_cloudaccess[0].cloud_info_role_arns.aws
-    type        = "CostEstimates"
+    type        = "CostsEstimates"
   })
 }
 
