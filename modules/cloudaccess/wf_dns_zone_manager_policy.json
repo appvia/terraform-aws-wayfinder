@@ -17,7 +17,8 @@
                 "route53:GetHostedZone",
                 "route53:ListHostedZones",
                 "route53:ListResourceRecordSets",
-                "route53:ListTagsForResource"
+                "route53:ListTagsForResource",
+                "ec2:DescribeVpcs"
             ],
             "Effect": "Allow",
             "Resource": "*"
@@ -38,6 +39,13 @@
                 "iam:TagRole",
                 "iam:UpdateAssumeRolePolicy",
                 "iam:UpdateRoleDescription"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "ec2:DescribeVpcs"
             ],
             "Effect": "Allow",
             "Resource": "*"
