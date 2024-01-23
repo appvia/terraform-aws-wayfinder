@@ -17,8 +17,7 @@
                 "route53:GetHostedZone",
                 "route53:ListHostedZones",
                 "route53:ListResourceRecordSets",
-                "route53:ListTagsForResource",
-                "ec2:DescribeVpcs"
+                "route53:ListTagsForResource"
             ],
             "Effect": "Allow",
             "Resource": "*"
