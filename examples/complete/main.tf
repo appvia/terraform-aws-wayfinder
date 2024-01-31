@@ -8,7 +8,7 @@ module "wayfinder" {
   dns_zone_arn              = data.aws_route53_zone.selected.arn
   environment               = var.environment
   kms_key_administrators    = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-  subnet_ids                = module.vpc.private_subnets
+  subnet_ids_by_az          = local.private_subnets_by_az
   tags                      = var.tags
   vpc_id                    = module.vpc.vpc_id
   wayfinder_domain_name_api = "api.${var.dns_zone_name}"
