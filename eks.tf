@@ -11,7 +11,7 @@ module "eks" {
   cluster_endpoint_public_access       = !var.disable_internet_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
   kms_key_administrators               = var.kms_key_administrators
-  subnet_ids                           = var.subnet_ids
+  subnet_ids                           = distinct(flatten(values(var.subnet_ids_by_az)))
   vpc_id                               = var.vpc_id
 
   cluster_addons = {
@@ -57,12 +57,15 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    compute = {
-      capacity_type  = var.eks_ng_capacity_type
-      instance_types = var.eks_ng_instance_types
-      desired_size   = var.eks_ng_desired_size
-      max_size       = 10
-      min_size       = var.eks_ng_minimum_size
+    for az, subnet_ids in var.subnet_ids_by_az : az => {
+      name                 = "compute-${az}"
+      capacity_type        = var.eks_ng_capacity_type
+      desired_size         = var.eks_ng_desired_size
+      instance_types       = var.eks_ng_instance_types
+      launch_template_name = "compute-${az}"
+      max_size             = var.eks_ng_maximum_size
+      min_size             = var.eks_ng_minimum_size
+      subnet_ids           = subnet_ids
     }
   }
 
