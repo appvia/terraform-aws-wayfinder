@@ -69,7 +69,7 @@ variable "eks_ng_capacity_type" {
 variable "eks_ng_desired_size" {
   description = "The desired size to use for the EKS managed node group."
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "eks_ng_instance_types" {
@@ -78,10 +78,16 @@ variable "eks_ng_instance_types" {
   default     = ["t3.xlarge"]
 }
 
+variable "eks_ng_maximum_size" {
+  description = "The maximum size to use for the EKS managed node group."
+  type        = number
+  default     = 10
+}
+
 variable "eks_ng_minimum_size" {
   description = "The minimum size to use for the EKS managed node group."
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "enable_k8s_resources" {
@@ -126,9 +132,10 @@ variable "node_security_group_additional_rules" {
   default     = {}
 }
 
-variable "subnet_ids" {
-  description = "A list of private Subnet IDs to launch the Wayfinder EKS Nodes onto."
-  type        = list(string)
+variable "subnet_ids_by_az" {
+  description = "A map of subnet IDs by availability zone."
+  type        = map(list(string))
+  default     = {}
 }
 
 variable "tags" {

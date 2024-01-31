@@ -17,9 +17,11 @@ module "vpc" {
 
   public_subnet_tags = merge({
     "kubernetes.io/role/elb" = 1
+    Tier                     = "Public"
   }, var.tags)
 
   private_subnet_tags = merge({
     "kubernetes.io/role/internal-elb" = 1
+    Tier                              = "Private"
   }, var.tags)
 }
