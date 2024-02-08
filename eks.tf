@@ -1,6 +1,6 @@
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "19.13.0"
+  version = "20.2.1"
 
   cluster_name    = local.name
   cluster_version = var.cluster_version
@@ -118,14 +118,19 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }, var.node_security_group_additional_rules)
+}
 
-  manage_aws_auth_configmap = true
+module "eks_auth" {
+  source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
+  version = "20.2.1"
+
   aws_auth_roles            = var.eks_aws_auth_roles
+  manage_aws_auth_configmap = true
 }
 
 module "irsa-ebs-csi-driver" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.17.0"
+  version = "5.34.0"
 
   role_name             = "${local.name}-ebs-csi-driver-irsa"
   attach_ebs_csi_policy = true
