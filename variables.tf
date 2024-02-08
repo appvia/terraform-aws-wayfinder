@@ -18,7 +18,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.27"
+  default     = "1.28"
 }
 
 variable "create_localadmin_user" {
@@ -215,29 +215,29 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.5.1"
+  default     = "v2.6.0"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string
-  default     = "v1.21.0-eksbuild.1"
+  default     = "v1.22.1-eksbuild.1"
 }
 
 variable "coredns_addon_version" {
   description = "CoreDNS Addon version to use."
   type        = string
-  default     = "v1.10.1-eksbuild.6"
+  default     = "v1.10.1-eksbuild.7"
 }
 
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.27.8-eksbuild.4"
+  default     = "v1.28.4-eksbuild.4"
 }
 
 variable "aws_vpc_cni_addon_version" {
   description = "AWS VPC CNI Addon version to use."
   type        = string
-  default     = "v1.14.1-eksbuild.1"
+  default     = "v1.15.5-eksbuild.1"
 }
