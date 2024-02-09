@@ -1,3 +1,27 @@
+access_entries = {
+  tf_plan = {
+    principal_arn = "arn:aws:iam::123456789012:role/tf-plan"
+    policy_associations = {
+      cluster_admin = {
+        policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+        access_scope = {
+          type = "cluster"
+        }
+      }
+    }
+  }
+  tf_apply = {
+    principal_arn = "arn:aws:iam::123456789012:role/tf-apply"
+    policy_associations = {
+      cluster_admin = {
+        policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+        access_scope = {
+          type = "cluster"
+        }
+      }
+    }
+  }
+}
 clusterissuer_email   = "example@appvia.io"
 dns_zone_name         = "wf.example.com"
 wayfinder_instance_id = "your-wayfinder-instance-id"

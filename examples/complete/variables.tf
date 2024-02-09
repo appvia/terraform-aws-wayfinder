@@ -1,3 +1,19 @@
+variable "access_entries" {
+  description = "Map of access entries to add to the cluster."
+  type = map(object({
+    kubernetes_groups = optional(list(string))
+    principal_arn     = string
+    policy_associations = optional(map(object({
+      policy_arn = string
+      access_scope = object({
+        namespaces = optional(list(string))
+        type       = string
+      })
+    })))
+  }))
+  default = {}
+}
+
 variable "aws_secretsmanager_name" {
   description = "The name of the AWS Secrets Manager secret to fetch, which contains IDP configuration."
   type        = string
@@ -64,11 +80,6 @@ variable "tags" {
   description = "Tags to apply to all resources."
   type        = map(any)
   default     = {}
-}
-
-variable "terraform_plan_role_arn" {
-  description = "The ARN of the IAM role used for Terraform plan operations."
-  type        = string
 }
 
 variable "vpc_cidr" {

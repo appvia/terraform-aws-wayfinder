@@ -1,3 +1,19 @@
+variable "access_entries" {
+  description = "Map of access entries to add to the cluster."
+  type = map(object({
+    kubernetes_groups = optional(list(string))
+    principal_arn     = string
+    policy_associations = optional(map(object({
+      policy_arn = string
+      access_scope = object({
+        namespaces = optional(list(string))
+        type       = string
+      })
+    })))
+  }))
+  default = {}
+}
+
 variable "availability_zones" {
   description = "List of availability zones to deploy into."
   type        = list(string)

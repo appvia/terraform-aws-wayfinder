@@ -34,6 +34,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_access_entries"></a> [access\_entries](#input\_access\_entries) | Map of access entries to add to the cluster. | <pre>map(object({<br>    kubernetes_groups = optional(list(string))<br>    principal_arn     = string<br>    policy_associations = optional(map(object({<br>      policy_arn = string<br>      access_scope = object({<br>        namespaces = optional(list(string))<br>        type       = string<br>      })<br>    })))<br>  }))</pre> | `{}` | no |
 | <a name="input_availability_zones"></a> [availability\_zones](#input\_availability\_zones) | List of availability zones to deploy into. | `list(string)` | <pre>[<br>  "eu-west-2a",<br>  "eu-west-2b",<br>  "eu-west-2c"<br>]</pre> | no |
 | <a name="input_aws_secretsmanager_name"></a> [aws\_secretsmanager\_name](#input\_aws\_secretsmanager\_name) | The name of the AWS Secrets Manager secret to fetch, which contains IDP configuration. | `string` | `"wayfinder-secrets"` | no |
 | <a name="input_clusterissuer_email"></a> [clusterissuer\_email](#input\_clusterissuer\_email) | The email address to use for the cert-manager cluster issuer. | `string` | n/a | yes |
@@ -44,7 +45,6 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment name we are provisioning. | `string` | `"production"` | no |
 | <a name="input_idp_provider"></a> [idp\_provider](#input\_idp\_provider) | The Identity Provider type to configure for Wayfinder (supported: generic, aad). | `string` | `"generic"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all resources. | `map(any)` | `{}` | no |
-| <a name="input_terraform_plan_role_arn"></a> [terraform\_plan\_role\_arn](#input\_terraform\_plan\_role\_arn) | The ARN of the IAM role used for Terraform plan operations. | `string` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | CIDR block for the Wayfinder VPC. | `string` | `"10.0.0.0/21"` | no |
 | <a name="input_vpc_private_subnets"></a> [vpc\_private\_subnets](#input\_vpc\_private\_subnets) | List of private subnets in the Wayfinder VPC. | `list(string)` | <pre>[<br>  "10.0.0.0/24",<br>  "10.0.1.0/24",<br>  "10.0.2.0/24"<br>]</pre> | no |
 | <a name="input_vpc_public_subnets"></a> [vpc\_public\_subnets](#input\_vpc\_public\_subnets) | List of public subnets in the Wayfinder VPC. | `list(string)` | <pre>[<br>  "10.0.3.0/24",<br>  "10.0.4.0/24",<br>  "10.0.5.0/24"<br>]</pre> | no |
