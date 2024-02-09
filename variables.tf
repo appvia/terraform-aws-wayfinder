@@ -1,3 +1,19 @@
+variable "access_entries" {
+  description = "Map of access entries to add to the cluster. This is required if you use a different IAM Role for Terraform Plan actions."
+  type = map(object({
+    kubernetes_groups = optional(list(string))
+    principal_arn     = string
+    policy_associations = optional(map(object({
+      policy_arn = string
+      access_scope = object({
+        namespaces = optional(list(string))
+        type       = string
+      })
+    })))
+  }))
+  default = {}
+}
+
 variable "clusterissuer_email" {
   description = "The email address to use for the cert-manager cluster issuer."
   type        = string
@@ -48,16 +64,6 @@ variable "ebs_csi_kms_cmk_ids" {
   description = "List of KMS CMKs to allow EBS CSI to manage encrypted volumes. This is required if EBS encryption is set at the account level with a default KMS CMK."
   type        = list(string)
   default     = []
-}
-
-variable "eks_aws_auth_roles" {
-  description = "List of IAM Role maps to add to the aws-auth configmap. This is required if you use a different IAM Role for Terraform Plan actions."
-  default     = []
-  type = list(object({
-    rolearn  = string
-    username = string
-    groups   = list(string)
-  }))
 }
 
 variable "eks_ng_capacity_type" {
