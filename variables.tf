@@ -221,7 +221,7 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.6.0"
+  default     = "v2.6.1"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
