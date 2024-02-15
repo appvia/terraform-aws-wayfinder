@@ -1,6 +1,7 @@
 module "wayfinder" {
   source = "../../"
 
+  access_entries            = var.access_entries
   clusterissuer_email       = var.clusterissuer_email
   create_localadmin_user    = var.create_localadmin_user
   disable_internet_access   = var.disable_internet_access
@@ -23,14 +24,6 @@ module "wayfinder" {
     serverUrl     = var.idp_provider == "generic" ? jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpServerUrl"] : ""
     azureTenantId = var.idp_provider == "aad" ? jsondecode(data.aws_secretsmanager_secret_version.wayfinder.secret_string)["idpAzureTenantId"] : ""
   }
-
-  eks_aws_auth_roles = [
-    {
-      rolearn  = var.terraform_plan_role_arn
-      username = "terraform-identity-plan"
-      groups   = ["system:masters"]
-    }
-  ]
 
   # cluster_security_group_additional_rules = {
   #   allow_access_from_vpn = {
