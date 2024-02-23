@@ -1,3 +1,19 @@
+variable "access_entries" {
+  description = "Map of access entries to add to the cluster. This is required if you use a different IAM Role for Terraform Plan actions."
+  type = map(object({
+    kubernetes_groups = optional(list(string))
+    principal_arn     = string
+    policy_associations = optional(map(object({
+      policy_arn = string
+      access_scope = object({
+        namespaces = optional(list(string))
+        type       = string
+      })
+    })))
+  }))
+  default = {}
+}
+
 variable "clusterissuer_email" {
   description = "The email address to use for the cert-manager cluster issuer."
   type        = string
@@ -18,7 +34,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.27"
+  default     = "1.28"
 }
 
 variable "create_localadmin_user" {
@@ -48,16 +64,6 @@ variable "ebs_csi_kms_cmk_ids" {
   description = "List of KMS CMKs to allow EBS CSI to manage encrypted volumes. This is required if EBS encryption is set at the account level with a default KMS CMK."
   type        = list(string)
   default     = []
-}
-
-variable "eks_aws_auth_roles" {
-  description = "List of IAM Role maps to add to the aws-auth configmap. This is required if you use a different IAM Role for Terraform Plan actions."
-  default     = []
-  type = list(object({
-    rolearn  = string
-    username = string
-    groups   = list(string)
-  }))
 }
 
 variable "eks_ng_capacity_type" {
@@ -215,29 +221,29 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.5.1"
+  default     = "v2.6.4"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string
-  default     = "v1.21.0-eksbuild.1"
+  default     = "v1.22.1-eksbuild.1"
 }
 
 variable "coredns_addon_version" {
   description = "CoreDNS Addon version to use."
   type        = string
-  default     = "v1.10.1-eksbuild.6"
+  default     = "v1.10.1-eksbuild.7"
 }
 
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.27.8-eksbuild.4"
+  default     = "v1.28.4-eksbuild.4"
 }
 
 variable "aws_vpc_cni_addon_version" {
   description = "AWS VPC CNI Addon version to use."
   type        = string
-  default     = "v1.14.1-eksbuild.1"
+  default     = "v1.15.5-eksbuild.1"
 }

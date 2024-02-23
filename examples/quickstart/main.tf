@@ -1,6 +1,7 @@
 module "wayfinder" {
   source = "../../"
 
+  access_entries            = var.access_entries
   clusterissuer_email       = var.clusterissuer_email
   create_localadmin_user    = true
   disable_internet_access   = var.disable_internet_access

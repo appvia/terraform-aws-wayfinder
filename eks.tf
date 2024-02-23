@@ -1,18 +1,21 @@
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "19.13.0"
+  version = "20.2.1"
 
   cluster_name    = local.name
   cluster_version = var.cluster_version
-  tags            = local.tags
 
-  cluster_enabled_log_types            = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
-  cluster_endpoint_private_access      = true
-  cluster_endpoint_public_access       = !var.disable_internet_access
-  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
-  kms_key_administrators               = var.kms_key_administrators
-  subnet_ids                           = distinct(flatten(values(var.subnet_ids_by_az)))
-  vpc_id                               = var.vpc_id
+  authentication_mode                      = "API_AND_CONFIG_MAP"
+  access_entries                           = var.access_entries
+  cluster_enabled_log_types                = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  cluster_endpoint_private_access          = true
+  cluster_endpoint_public_access           = !var.disable_internet_access
+  cluster_endpoint_public_access_cidrs     = var.cluster_endpoint_public_access_cidrs
+  enable_cluster_creator_admin_permissions = var.access_entries != {} ? false : true
+  kms_key_administrators                   = var.kms_key_administrators
+  subnet_ids                               = distinct(flatten(values(var.subnet_ids_by_az)))
+  tags                                     = local.tags
+  vpc_id                                   = var.vpc_id
 
   cluster_addons = {
     coredns = {
@@ -118,14 +121,11 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }, var.node_security_group_additional_rules)
-
-  manage_aws_auth_configmap = true
-  aws_auth_roles            = var.eks_aws_auth_roles
 }
 
 module "irsa-ebs-csi-driver" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.17.0"
+  version = "5.34.0"
 
   role_name             = "${local.name}-ebs-csi-driver-irsa"
   attach_ebs_csi_policy = true
