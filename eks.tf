@@ -43,20 +43,75 @@ module "eks" {
 
   eks_managed_node_group_defaults = {
     iam_role_attach_cni_policy = true
+    iam_role_additional_policies = {
+      AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    }
 
     autoscaling_group_tags = {
       "k8s.io/cluster-autoscaler/enabled" : true,
       "k8s.io/cluster-autoscaler/${local.name}" : "owned",
     }
-  }
 
-  self_managed_node_group_defaults = {
-    create_security_group = false
-    # enable discovery of autoscaling groups by cluster-autoscaler
-    autoscaling_group_tags = {
-      "k8s.io/cluster-autoscaler/enabled" : true,
-      "k8s.io/cluster-autoscaler/${local.name}" : "owned",
+    block_device_mappings = {
+      # Root volume
+      xvda = {
+        device_name = "/dev/xvda"
+        ebs = {
+          volume_type           = "gp3"
+          encrypted             = true
+          kms_key_id            = module.ebs_kms_key.key_arn
+          delete_on_termination = true
+        }
+      }
+      xvdb = {
+        device_name = "/dev/xvdb"
+        ebs = {
+          volume_size           = 24
+          volume_type           = "gp3"
+          iops                  = 3000
+          encrypted             = true
+          kms_key_id            = module.ebs_kms_key.key_arn
+          delete_on_termination = true
+        }
+      }
     }
+
+    pre_bootstrap_user_data = <<-EOT
+      # Wait for second volume to attach before trying to mount paths
+      TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+      EC2_INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -v http://169.254.169.254/latest/meta-data/instance-id)
+      DATA_STATE="unknown"
+      until [ "$${DATA_STATE}" == "attached" ]; do
+        DATA_STATE=$(aws ec2 describe-volumes \
+          --region ${data.aws_region.current.name} \
+          --filters \
+              Name=attachment.instance-id,Values=$${EC2_INSTANCE_ID} \
+              Name=attachment.device,Values=/dev/xvdb \
+          --query Volumes[].Attachments[].State \
+          --output text)
+        sleep 5
+      done
+
+      # Get the volume ID
+      VOLUME_ID=$(aws ec2 describe-volumes \
+        --region ${data.aws_region.current.name} \
+        --filters \
+            Name=attachment.instance-id,Values=$${EC2_INSTANCE_ID} \
+            Name=attachment.device,Values=/dev/xvdb \
+        --query Volumes[].Attachments[].VolumeId \
+        --output text | sed 's/-//')
+
+      # Mount the containerd directories to the 2nd volume
+      SECOND_VOL=$(lsblk -o NAME,SERIAL -d |awk -v id="$${VOLUME_ID}" '$2 ~ id {print $1}')
+      systemctl stop containerd
+      mkfs -t ext4 /dev/$${SECOND_VOL}
+      rm -rf /var/lib/containerd/*
+      rm -rf /run/containerd/*
+
+      mount /dev/$${SECOND_VOL} /var/lib/containerd/
+      mount /dev/$${SECOND_VOL} /run/containerd/
+      systemctl start containerd
+    EOT
   }
 
   eks_managed_node_groups = {
@@ -121,6 +176,20 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }, var.node_security_group_additional_rules)
+}
+
+module "ebs_kms_key" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "2.2.1"
+
+  aliases            = ["eks/${local.name}/ebs"]
+  description        = "Customer managed key to encrypt EKS managed node group volumes"
+  key_administrators = [data.aws_caller_identity.current.arn]
+  key_service_roles_for_autoscaling = [
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+    module.eks.cluster_iam_role_arn,
+  ]
+  tags = local.tags
 }
 
 module "irsa-ebs-csi-driver" {
