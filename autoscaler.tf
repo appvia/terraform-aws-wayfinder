@@ -29,7 +29,7 @@ resource "helm_release" "metrics_server" {
   name        = "metrics-server"
   repository  = "https://kubernetes-sigs.github.io/metrics-server"
   chart       = "metrics-server"
-  version     = "3.12.0"
+  version     = "3.12.1"
   max_history = 5
 }
 
@@ -47,7 +47,7 @@ resource "helm_release" "cluster_autoscaler" {
   name        = "autoscaler"
   repository  = "https://kubernetes.github.io/autoscaler"
   chart       = "cluster-autoscaler"
-  version     = "9.35.0"
+  version     = "9.36.0"
   max_history = 5
 
   set {
