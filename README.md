@@ -11,8 +11,8 @@ To run this module, you will need the following:
 3. A public Route53 DNS Zone: This module will create DNS records for the Wayfinder API and UI endpoints, and performs a DNS01 challenge via the LetsEncrypt Issuer for valid domain certificates.
 4. Existing VPC and Subnets: This module will deploy an EKS Cluster and so requires an existing VPC with outbound internet connectivity. Public ingress is not required, both EKS and Wayfinder ingress can be configured with an internal endpoint.
 5. Network Resource Tags:
-    1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
-    2. Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
+      1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
+      2. Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
 
 ## Deployment
 
@@ -34,10 +34,10 @@ The Authorized Redirect URI for the IDP Application should be set to: `https://$
 
 ```hcl
 wayfinder_idp_details = {
-  type         = "generic"
-  clientId     = "IDP-APP-CLIENT-ID"
-  clientSecret = "IDP-APP-CLIENT-SECRET"
-  serverUrl    = "https://example.okta.com" # Or "https://example.auth0.com/"
+    type         = "generic"
+    clientId     = "IDP-APP-CLIENT-ID"
+    clientSecret = "IDP-APP-CLIENT-SECRET"
+    serverUrl    = "https://example.okta.com" # Or "https://example.auth0.com/"
 }
 ```
 
@@ -45,10 +45,10 @@ wayfinder_idp_details = {
 
 ```hcl
 wayfinder_idp_details = {
-  type          = "aad"
-  clientId      = "IDP-APP-CLIENT-ID"
-  clientSecret  = "IDP-APP-CLIENT-SECRET"
-  azureTenantId = "12345678-1234-1234-1234-123456789012"
+    type          = "aad"
+    clientId      = "IDP-APP-CLIENT-ID"
+    clientSecret  = "IDP-APP-CLIENT-SECRET"
+    azureTenantId = "12345678-1234-1234-1234-123456789012"
 }
 ```
 

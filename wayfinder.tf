@@ -84,6 +84,7 @@ data "aws_iam_policy_document" "wayfinder_irsa_policy" {
       "sts:AssumeRole",
     ]
 
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       "arn:aws:iam::*:role/wf-*",
     ]

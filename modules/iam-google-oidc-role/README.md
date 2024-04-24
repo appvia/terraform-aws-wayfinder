@@ -102,19 +102,19 @@ The defaults provided by the module are suitable for testing with any Google ser
 
 ```hcl
 module "iam_google_oidc_role" {
-source    = "terraform-aws-modules/iam/aws//modules/iam-google-oidc-role"
+  source    = "terraform-aws-modules/iam/aws//modules/iam-google-oidc-role"
 
-# This should be updated to suit your organization, repository, references/branches, etc.
-google_service_account_ids = ["123456789101112131415"]
-google_service_account_emails = ["aws-role-access@project-acme.iam.gserviceaccount.com"]
+  # This should be updated to suit your organization, repository, references/branches, etc.
+  google_service_account_ids = ["123456789101112131415"]
+  google_service_account_emails = ["aws-role-access@project-acme.iam.gserviceaccount.com"]
 
-policies = {
-S3ReadOnly = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
-}
+  policies = {
+    S3ReadOnly = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+  }
 
-tags = {
-Environment = "test"
-}
+  tags = {
+    Environment = "test"
+  }
 }
 ```
 

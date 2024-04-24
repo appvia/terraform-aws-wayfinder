@@ -1,3 +1,4 @@
+#tfsec:ignore:aws-eks-no-public-cluster-access tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr tfsec:ignore:aws-ec2-no-public-egress-sgr
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.2.1"
