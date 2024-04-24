@@ -7,7 +7,7 @@ metadata:
 parameters:
   encrypted: "true"
   fsType: ext4
-  type: gp2
+  type: ${type}
 provisioner: ebs.csi.aws.com
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer

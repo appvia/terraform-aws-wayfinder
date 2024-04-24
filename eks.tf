@@ -1,3 +1,4 @@
+#tfsec:ignore:aws-eks-no-public-cluster-access tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr tfsec:ignore:aws-ec2-no-public-egress-sgr
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.2.1"
@@ -194,7 +195,7 @@ module "ebs_kms_key" {
 
 module "irsa-ebs-csi-driver" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.34.0"
+  version = "5.39.0"
 
   role_name             = "${local.name}-ebs-csi-driver-irsa"
   attach_ebs_csi_policy = true

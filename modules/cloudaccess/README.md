@@ -5,9 +5,9 @@ This Terraform Module can be used to provision IAM Roles that Wayfinder assumes 
 
 **Notes:**
 * You must provide either:
-* The IAM Role ARN (`var.wayfinder_identity_aws_role_arn`) used by Wayfinder (via IAM Roles for Service Accounts) if you are running Wayfinder on AWS using IRSA, or using a credential-backed AWS IAM user.
-* The GCP service account email address and ID (`var.wayfinder_identity_gcp_service_account` and `var.wayfinder_identity_gcp_service_account_id`) used by Wayfinder (via GCP Workload Identity) if you are running Wayfinder on GCP.
-* The Azure managed identity client ID and tenant ID (`var.wayfinder_identity_azure_client_id` and `var.wayfinder_identity_azure_tenant_id`) used by Wayfinder (via AzureAD Workload Identity) if you are running Wayfinder on Azure.
+  * The IAM Role ARN (`var.wayfinder_identity_aws_role_arn`) used by Wayfinder (via IAM Roles for Service Accounts) if you are running Wayfinder on AWS using IRSA, or using a credential-backed AWS IAM user.
+  * The GCP service account email address and ID (`var.wayfinder_identity_gcp_service_account` and `var.wayfinder_identity_gcp_service_account_id`) used by Wayfinder (via GCP Workload Identity) if you are running Wayfinder on GCP.
+  * The Azure managed identity client ID and tenant ID (`var.wayfinder_identity_azure_client_id` and `var.wayfinder_identity_azure_tenant_id`) used by Wayfinder (via AzureAD Workload Identity) if you are running Wayfinder on Azure.
 * `var.resource_suffix` is an optional suffix to use on created objects. We recommend using workspace key + stage if you wish to have multiple workspaces sharing the same AWS account, allowing independent roles to be provisioned for each.
 
 ## Deployment

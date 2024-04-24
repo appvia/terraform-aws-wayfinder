@@ -66,6 +66,12 @@ variable "ebs_csi_kms_cmk_ids" {
   default     = []
 }
 
+variable "eks_encrypted_sc_type" {
+  description = "The storage class type to use for the EKS encrypted storage class."
+  type        = string
+  default     = "gp3"
+}
+
 variable "eks_ng_capacity_type" {
   description = "The capacity type to use for the EKS managed node group."
   type        = string

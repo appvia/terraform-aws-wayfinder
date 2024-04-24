@@ -11,8 +11,8 @@ To run this module, you will need the following:
 3. A public Route53 DNS Zone: This module will create DNS records for the Wayfinder API and UI endpoints, and performs a DNS01 challenge via the LetsEncrypt Issuer for valid domain certificates.
 4. Existing VPC and Subnets: This module will deploy an EKS Cluster and so requires an existing VPC with outbound internet connectivity. Public ingress is not required, both EKS and Wayfinder ingress can be configured with an internal endpoint.
 5. Network Resource Tags:
-    1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
-    2. Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
+      1. Public Subnets should have the tag `"kubernetes.io/role/elb" = 1`
+      2. Private Subnets should have the tag `"kubernetes.io/role/internal-elb" = 1`
 
 ## Deployment
 
@@ -34,10 +34,10 @@ The Authorized Redirect URI for the IDP Application should be set to: `https://$
 
 ```hcl
 wayfinder_idp_details = {
-  type         = "generic"
-  clientId     = "IDP-APP-CLIENT-ID"
-  clientSecret = "IDP-APP-CLIENT-SECRET"
-  serverUrl    = "https://example.okta.com" # Or "https://example.auth0.com/"
+    type         = "generic"
+    clientId     = "IDP-APP-CLIENT-ID"
+    clientSecret = "IDP-APP-CLIENT-SECRET"
+    serverUrl    = "https://example.okta.com" # Or "https://example.auth0.com/"
 }
 ```
 
@@ -45,10 +45,10 @@ wayfinder_idp_details = {
 
 ```hcl
 wayfinder_idp_details = {
-  type          = "aad"
-  clientId      = "IDP-APP-CLIENT-ID"
-  clientSecret  = "IDP-APP-CLIENT-SECRET"
-  azureTenantId = "12345678-1234-1234-1234-123456789012"
+    type          = "aad"
+    clientId      = "IDP-APP-CLIENT-ID"
+    clientSecret  = "IDP-APP-CLIENT-SECRET"
+    azureTenantId = "12345678-1234-1234-1234-123456789012"
 }
 ```
 
@@ -76,6 +76,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_disable_local_login"></a> [disable\_local\_login](#input\_disable\_local\_login) | Whether to disable local login for Wayfinder. Note: An IDP must be configured within Wayfinder, otherwise you will not be able to log in. | `bool` | `false` | no |
 | <a name="input_dns_zone_arn"></a> [dns\_zone\_arn](#input\_dns\_zone\_arn) | The AWS Route53 DNS Zone ARN to use (e.g. arn:aws:route53:::hostedzone/ABCDEFG1234567). | `string` | n/a | yes |
 | <a name="input_ebs_csi_kms_cmk_ids"></a> [ebs\_csi\_kms\_cmk\_ids](#input\_ebs\_csi\_kms\_cmk\_ids) | List of KMS CMKs to allow EBS CSI to manage encrypted volumes. This is required if EBS encryption is set at the account level with a default KMS CMK. | `list(string)` | `[]` | no |
+| <a name="input_eks_encrypted_sc_type"></a> [eks\_encrypted\_sc\_type](#input\_eks\_encrypted\_sc\_type) | The storage class type to use for the EKS encrypted storage class. | `string` | `"gp3"` | no |
 | <a name="input_eks_ng_capacity_type"></a> [eks\_ng\_capacity\_type](#input\_eks\_ng\_capacity\_type) | The capacity type to use for the EKS managed node group. | `string` | `"ON_DEMAND"` | no |
 | <a name="input_eks_ng_desired_size"></a> [eks\_ng\_desired\_size](#input\_eks\_ng\_desired\_size) | The desired size to use for the EKS managed node group. | `number` | `1` | no |
 | <a name="input_eks_ng_instance_types"></a> [eks\_ng\_instance\_types](#input\_eks\_ng\_instance\_types) | The instance types to use for the EKS managed node group. | `list(string)` | <pre>[<br>  "t3.xlarge"<br>]</pre> | no |

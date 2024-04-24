@@ -2,7 +2,7 @@ module "iam_role_cloud_info" {
   count = var.enable_cloud_info && var.from_aws ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.34.0"
+  version = "5.39.0"
 
   create_role             = true
   role_name               = "wf-CloudInfo${local.resource_suffix}"
@@ -17,7 +17,7 @@ module "iam_role_cloud_info_azure_oidc" {
   count = var.enable_cloud_info && var.from_azure ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.34.0"
+  version = "5.39.0"
 
   create_role                    = true
   role_name                      = "wf-CloudInfo-azure${local.resource_suffix}"
@@ -51,7 +51,7 @@ module "iam_policy_cloud_info" {
   count = var.enable_cloud_info ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.34.0"
+  version = "5.39.0"
 
   name        = "wf-CloudInfo${local.resource_suffix}"
   description = "Retrieve pricing and instance type metadata"
