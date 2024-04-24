@@ -88,4 +88,14 @@ resource "helm_release" "ingress" {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-nlb-target-type"
     value = "instance"
   }
+
+  set {
+    name  = "controller.config.use-proxy-protocol"
+    value = "true"
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-proxy-protocol"
+    value = "*"
+  }
 }
