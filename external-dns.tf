@@ -1,6 +1,6 @@
 module "externaldns_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.34.0"
+  version = "5.39.0"
 
   attach_external_dns_policy = true
   role_name                  = "${local.name}-external-dns"
@@ -19,6 +19,7 @@ resource "helm_release" "external_dns" {
 
   depends_on = [
     module.eks,
+    helm_release.load_balancer_controller,
   ]
 
   namespace        = "external-dns"

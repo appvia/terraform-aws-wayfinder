@@ -1,6 +1,6 @@
 module "autoscaler_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.34.0"
+  version = "5.39.0"
 
   attach_cluster_autoscaler_policy = true
   cluster_autoscaler_cluster_ids   = [module.eks.cluster_name]
@@ -20,6 +20,7 @@ resource "helm_release" "metrics_server" {
 
   depends_on = [
     module.eks,
+    helm_release.load_balancer_controller,
   ]
 
   namespace        = "kube-system"
@@ -37,6 +38,7 @@ resource "helm_release" "cluster_autoscaler" {
 
   depends_on = [
     module.eks,
+    helm_release.load_balancer_controller,
   ]
 
   namespace        = "kube-system"

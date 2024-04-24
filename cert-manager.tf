@@ -1,6 +1,6 @@
 module "certmanager_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.34.0"
+  version = "5.39.0"
 
   attach_cert_manager_policy    = true
   cert_manager_hosted_zone_arns = [var.dns_zone_arn]
@@ -20,6 +20,7 @@ resource "helm_release" "certmanager" {
 
   depends_on = [
     module.eks,
+    helm_release.load_balancer_controller,
   ]
 
   namespace        = "cert-manager"
