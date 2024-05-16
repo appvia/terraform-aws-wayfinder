@@ -25,6 +25,7 @@ resource "helm_release" "load_balancer_controller" {
 
   depends_on = [
     module.eks,
+    module.load_balancer_controller_irsa_role
   ]
 
   namespace        = "kube-system"
@@ -67,8 +68,6 @@ resource "helm_release" "ingress" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
   version    = "4.10.0"
-  # increase this to allow for ALB deleteing
-  timeout     = 600
   max_history = 5
 
   set {
