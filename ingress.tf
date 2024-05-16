@@ -63,10 +63,12 @@ resource "helm_release" "ingress" {
   namespace        = "ingress-nginx"
   create_namespace = true
 
-  name        = "ingress-nginx"
-  repository  = "https://kubernetes.github.io/ingress-nginx"
-  chart       = "ingress-nginx"
-  version     = "4.10.0"
+  name       = "ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  version    = "4.10.0"
+  # increase this to allow for ALB deleteing
+  timeout     = 600
   max_history = 5
 
   set {
