@@ -34,7 +34,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.28"
+  default     = "1.29"
 }
 
 variable "create_localadmin_user" {
@@ -105,7 +105,7 @@ variable "eks_ng_minimum_size" {
 variable "eks_ng_schedules" {
   description = "A map of autoscaling schedules to use for the EKS managed node group."
   type        = map(any)
-  default     = null
+  default     = {}
 }
 
 variable "enable_k8s_resources" {
@@ -245,13 +245,13 @@ variable "aws_ebs_csi_driver_addon_version" {
 variable "coredns_addon_version" {
   description = "CoreDNS Addon version to use."
   type        = string
-  default     = "v1.10.1-eksbuild.11"
+  default     = "v1.11.1-eksbuild.9"
 }
 
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.28.8-eksbuild.2"
+  default     = "v1.29.3-eksbuild.2"
 }
 
 variable "aws_vpc_cni_addon_version" {
