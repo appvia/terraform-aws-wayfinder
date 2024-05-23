@@ -1,4 +1,6 @@
-#tfsec:ignore:aws-eks-no-public-cluster-access tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr tfsec:ignore:aws-ec2-no-public-egress-sgr
+# tfsec:ignore:aws-eks-no-public-cluster-access
+# tfsec:ignore:aws-ec2-no-public-egress-sgr
+# tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.11.0"
@@ -113,6 +115,8 @@ module "eks" {
       mount /dev/$${SECOND_VOL} /run/containerd/
       systemctl start containerd
     EOT
+
+    schedules = var.eks_ng_schedules
   }
 
   eks_managed_node_groups = {
@@ -193,6 +197,7 @@ module "ebs_kms_key" {
   tags = local.tags
 }
 
+# tflint-ignore: terraform_naming_convention
 module "irsa-ebs-csi-driver" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.39.1"

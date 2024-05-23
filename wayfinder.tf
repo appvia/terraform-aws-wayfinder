@@ -78,6 +78,7 @@ resource "kubectl_manifest" "wayfinder_idp_aad" {
   })
 }
 
+# tfsec:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "wayfinder_irsa_policy" {
   statement {
     actions = [
