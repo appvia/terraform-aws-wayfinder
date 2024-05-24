@@ -34,7 +34,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.28"
+  default     = "1.29"
 }
 
 variable "create_localadmin_user" {
@@ -66,6 +66,12 @@ variable "ebs_csi_kms_cmk_ids" {
   default     = []
 }
 
+variable "eks_encrypted_sc_type" {
+  description = "The storage class type to use for the EKS encrypted storage class."
+  type        = string
+  default     = "gp3"
+}
+
 variable "eks_ng_capacity_type" {
   description = "The capacity type to use for the EKS managed node group."
   type        = string
@@ -94,6 +100,12 @@ variable "eks_ng_minimum_size" {
   description = "The minimum size to use for the EKS managed node group."
   type        = number
   default     = 1
+}
+
+variable "eks_ng_schedules" {
+  description = "A map of autoscaling schedules to use for the EKS managed node group."
+  type        = map(any)
+  default     = {}
 }
 
 variable "enable_k8s_resources" {
@@ -221,29 +233,29 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.6.5"
+  default     = "v2.7.1"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string
-  default     = "v1.28.0-eksbuild.1"
+  default     = "v1.29.1-eksbuild.1"
 }
 
 variable "coredns_addon_version" {
   description = "CoreDNS Addon version to use."
   type        = string
-  default     = "v1.10.1-eksbuild.7"
+  default     = "v1.11.1-eksbuild.9"
 }
 
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.28.6-eksbuild.2"
+  default     = "v1.29.3-eksbuild.2"
 }
 
 variable "aws_vpc_cni_addon_version" {
   description = "AWS VPC CNI Addon version to use."
   type        = string
-  default     = "v1.16.4-eksbuild.2"
+  default     = "v1.17.1-eksbuild.1"
 }

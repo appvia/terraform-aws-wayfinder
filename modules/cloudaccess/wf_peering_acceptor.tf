@@ -2,7 +2,7 @@ module "iam_role_peering_acceptor" {
   count = var.enable_peering_acceptor && var.from_aws ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.34.0"
+  version = "5.39.1"
 
   create_role             = true
   role_name               = "wf-PeeringAcceptor${local.resource_suffix}"
@@ -16,7 +16,7 @@ module "iam_role_peering_acceptor_azure_oidc" {
   count = var.enable_peering_acceptor && var.from_azure ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.34.0"
+  version = "5.39.1"
 
   create_role                    = true
   role_name                      = "wf-PeeringAcceptor-azure${local.resource_suffix}"
@@ -48,7 +48,7 @@ module "iam_policy_peering_acceptor" {
   count = var.enable_peering_acceptor ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.34.0"
+  version = "5.39.1"
 
   name        = "wf-PeeringAcceptor${local.resource_suffix}"
   description = "Accept peering connections in aws"

@@ -2,7 +2,7 @@ module "iam_role_cluster_manager" {
   count = var.enable_cluster_manager && var.from_aws ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.34.0"
+  version = "5.39.1"
 
   create_role             = true
   role_name               = "wf-ClusterManager${local.resource_suffix}"
@@ -17,7 +17,7 @@ module "iam_role_cluster_manager_azure_oidc" {
   count = var.enable_cluster_manager && var.from_azure ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.34.0"
+  version = "5.39.1"
 
   create_role                    = true
   role_name                      = "wf-ClusterManager-azure${local.resource_suffix}"
@@ -51,7 +51,7 @@ module "iam_policy_cluster_manager" {
   count = var.enable_cluster_manager ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.34.0"
+  version = "5.39.1"
 
   name        = "wf-ClusterManager${local.resource_suffix}"
   description = "Create and manage EKS Kubernetes clusters"

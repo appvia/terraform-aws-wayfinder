@@ -18,7 +18,8 @@ resource "kubectl_manifest" "storageclass_encrypted" {
   ]
 
   yaml_body = templatefile("${path.module}/manifests/storageclass-encrypted.yml.tpl", {
-    name = "gp2-encrypted"
+    name = "${var.eks_encrypted_sc_type}-encrypted"
+    type = var.eks_encrypted_sc_type
   })
 }
 
@@ -77,12 +78,14 @@ resource "kubectl_manifest" "wayfinder_idp_aad" {
   })
 }
 
+# tfsec:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "wayfinder_irsa_policy" {
   statement {
     actions = [
       "sts:AssumeRole",
     ]
 
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       "arn:aws:iam::*:role/wf-*",
     ]
@@ -108,7 +111,7 @@ resource "aws_iam_policy" "wayfinder_irsa_policy" {
 
 module "wayfinder_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.34.0"
+  version = "5.39.1"
 
   role_name = "${local.name}-irsa"
   tags      = local.tags
@@ -138,6 +141,7 @@ resource "helm_release" "wayfinder" {
     helm_release.certmanager,
     helm_release.external_dns,
     helm_release.ingress,
+    helm_release.load_balancer_controller,
     kubectl_manifest.certmanager_clusterissuer,
     kubectl_manifest.storageclass_encrypted,
     kubectl_manifest.wayfinder_idp_aad,
@@ -161,7 +165,7 @@ resource "helm_release" "wayfinder" {
       api_hostname                  = var.wayfinder_domain_name_api
       disable_local_login           = var.wayfinder_idp_details["type"] == "none" ? false : var.disable_local_login
       enable_localadmin_user        = var.create_localadmin_user
-      storage_class                 = "gp2-encrypted"
+      storage_class                 = "${var.eks_encrypted_sc_type}-encrypted"
       ui_hostname                   = var.wayfinder_domain_name_ui
       wayfinder_iam_identity        = module.wayfinder_irsa_role.iam_role_arn
       wayfinder_instance_identifier = var.wayfinder_instance_id
