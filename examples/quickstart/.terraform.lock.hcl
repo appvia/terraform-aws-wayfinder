@@ -103,7 +103,7 @@ provider "registry.terraform.io/hashicorp/http" {
 
 provider "registry.terraform.io/hashicorp/kubernetes" {
   version     = "2.23.0"
-  constraints = ">= 2.10.0, >= 2.23.0, ~> 2.23.0"
+  constraints = "~> 2.23.0"
   hashes = [
     "h1:arTzD0XG/DswGCAx9JEttkSKe9RyyFW9W7UWcXF13dU=",
     "zh:10488a12525ed674359585f83e3ee5e74818b5c98e033798351678b21b2f7d89",
