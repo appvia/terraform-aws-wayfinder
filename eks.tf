@@ -40,7 +40,7 @@ module "eks" {
       addon_version               = var.aws_ebs_csi_driver_addon_version
       resolve_conflicts_on_create = "OVERWRITE"
       resolve_conflicts_on_update = "OVERWRITE"
-      service_account_role_arn    = module.irsa-ebs-csi-driver.iam_role_arn
+      service_account_role_arn    = module.irsa_ebs_csi_driver.iam_role_arn
     }
   }
 
@@ -197,8 +197,14 @@ module "ebs_kms_key" {
   tags = local.tags
 }
 
+moved {
+  from = module.irsa-ebs-csi-driver
+  to   = module.irsa_ebs_csi_driver
+}
+
 # tflint-ignore: terraform_naming_convention
-module "irsa-ebs-csi-driver" {
+#trivy:ignore:AVD-AWS-0057
+module "irsa_ebs_csi_driver" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.39.1"
 
