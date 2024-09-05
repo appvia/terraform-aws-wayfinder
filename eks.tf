@@ -8,7 +8,7 @@ module "eks" {
   cluster_name    = local.name
   cluster_version = var.cluster_version
 
-  authentication_mode                      = "API_AND_CONFIG_MAP"
+  authentication_mode                      = "API"
   access_entries                           = var.access_entries
   cluster_enabled_log_types                = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cluster_endpoint_private_access          = true
