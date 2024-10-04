@@ -1,7 +1,7 @@
 #trivy:ignore:AVD-AWS-0057
 module "load_balancer_controller_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.39.1"
+  version = "5.45.0"
 
   attach_load_balancer_controller_policy = true
   role_name                              = "${local.name}-load-balancer-controller"
@@ -35,7 +35,7 @@ resource "helm_release" "load_balancer_controller" {
   name        = "aws-load-balancer-controller"
   repository  = "https://aws.github.io/eks-charts"
   chart       = "aws-load-balancer-controller"
-  version     = "1.8.0"
+  version     = "1.8.4"
   max_history = 5
 
   set {
@@ -68,7 +68,7 @@ resource "helm_release" "ingress" {
   name        = "ingress-nginx"
   repository  = "https://kubernetes.github.io/ingress-nginx"
   chart       = "ingress-nginx"
-  version     = "4.10.1"
+  version     = "4.11.2"
   max_history = 5
 
   set {

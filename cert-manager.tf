@@ -1,6 +1,6 @@
 module "certmanager_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.39.1"
+  version = "5.45.0"
 
   attach_cert_manager_policy    = true
   cert_manager_hosted_zone_arns = [var.dns_zone_arn]
@@ -29,7 +29,7 @@ resource "helm_release" "certmanager" {
   name        = "cert-manager"
   repository  = "https://charts.jetstack.io"
   chart       = "cert-manager"
-  version     = "1.14.5"
+  version     = "1.16.0"
   max_history = 5
 
   set {
