@@ -19,6 +19,12 @@ variable "clusterissuer_email" {
   type        = string
 }
 
+variable "cluster_enabled_log_types" {
+  description = "List of log types to enable for the EKS cluster."
+  type        = list(string)
+  default     = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+}
+
 variable "cluster_endpoint_public_access_cidrs" {
   description = "List of CIDR blocks which can access the Amazon EKS API server endpoint."
   type        = list(string)

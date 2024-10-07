@@ -10,7 +10,7 @@ module "eks" {
 
   authentication_mode                      = "API"
   access_entries                           = var.access_entries
-  cluster_enabled_log_types                = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  cluster_enabled_log_types                = var.cluster_enabled_log_types
   cluster_endpoint_private_access          = true
   cluster_endpoint_public_access           = !var.disable_internet_access
   cluster_endpoint_public_access_cidrs     = var.cluster_endpoint_public_access_cidrs
