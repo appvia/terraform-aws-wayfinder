@@ -173,6 +173,18 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "wayfinder_custom_logo_collapsed_url" {
+  description = "The URL of a transparent custom logo to use in the UI when side navigation is collapsed. Recommended dimensions of 44px width by 48px height. Defaults to 'wayfinder_custom_logo_url' if not specified."
+  type        = string
+  default     = ""
+}
+
+variable "wayfinder_custom_logo_url" {
+  description = "The URL of a transparent custom logo to use in the UI. Recommended dimensions of 172px width by 48px height."
+  type        = string
+  default     = ""
+}
+
 variable "wayfinder_domain_name_api" {
   description = "The domain name to use for the Wayfinder API (e.g. api.wayfinder.example.com)."
   type        = string
@@ -245,7 +257,7 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.9.2"
+  default     = "v2.9.3"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {

@@ -101,6 +101,8 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_subnet_ids_by_az"></a> [subnet\_ids\_by\_az](#input\_subnet\_ids\_by\_az) | A map of subnet IDs by availability zone. | `map(list(string))` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources created. | `map(string)` | `{}` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The VPC ID for the Wayfinder EKS Cluster to be built within. | `string` | n/a | yes |
+| <a name="input_wayfinder_custom_logo_collapsed_url"></a> [wayfinder\_custom\_logo\_collapsed\_url](#input\_wayfinder\_custom\_logo\_collapsed\_url) | The URL of a transparent custom logo to use in the UI when side navigation is collapsed. Recommended dimensions of 44px width by 48px height. Defaults to 'wayfinder\_custom\_logo\_url' if not specified. | `string` | `""` | no |
+| <a name="input_wayfinder_custom_logo_url"></a> [wayfinder\_custom\_logo\_url](#input\_wayfinder\_custom\_logo\_url) | The URL of a transparent custom logo to use in the UI. Recommended dimensions of 172px width by 48px height. | `string` | `""` | no |
 | <a name="input_wayfinder_domain_name_api"></a> [wayfinder\_domain\_name\_api](#input\_wayfinder\_domain\_name\_api) | The domain name to use for the Wayfinder API (e.g. api.wayfinder.example.com). | `string` | n/a | yes |
 | <a name="input_wayfinder_domain_name_ui"></a> [wayfinder\_domain\_name\_ui](#input\_wayfinder\_domain\_name\_ui) | The domain name to use for the Wayfinder UI (e.g. portal.wayfinder.example.com). | `string` | n/a | yes |
 | <a name="input_wayfinder_idp_details"></a> [wayfinder\_idp\_details](#input\_wayfinder\_idp\_details) | The IDP details to use for Wayfinder to enable SSO. | <pre>object({<br/>    type          = string<br/>    clientId      = optional(string)<br/>    clientSecret  = optional(string)<br/>    serverUrl     = optional(string)<br/>    azureTenantId = optional(string)<br/>  })</pre> | <pre>{<br/>  "azureTenantId": "",<br/>  "clientId": null,<br/>  "clientSecret": null,<br/>  "serverUrl": "",<br/>  "type": "none"<br/>}</pre> | no |
@@ -108,7 +110,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_wayfinder_licence_key"></a> [wayfinder\_licence\_key](#input\_wayfinder\_licence\_key) | The licence key to use for Wayfinder. | `string` | n/a | yes |
 | <a name="input_wayfinder_no_defaults"></a> [wayfinder\_no\_defaults](#input\_wayfinder\_no\_defaults) | Set to true to stop Wayfinder from applying compiled-in defaults (e.g. default roles, cluster plans, etc). | `bool` | `true` | no |
 | <a name="input_wayfinder_release_channel"></a> [wayfinder\_release\_channel](#input\_wayfinder\_release\_channel) | The release channel to use for Wayfinder. | `string` | `"wayfinder-releases"` | no |
-| <a name="input_wayfinder_version"></a> [wayfinder\_version](#input\_wayfinder\_version) | The version to use for Wayfinder. | `string` | `"v2.9.2"` | no |
+| <a name="input_wayfinder_version"></a> [wayfinder\_version](#input\_wayfinder\_version) | The version to use for Wayfinder. | `string` | `"v2.9.3"` | no |
 
 ## Outputs
 
