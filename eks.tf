@@ -3,14 +3,14 @@
 # tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "20.11.1"
+  version = "20.24.3"
 
   cluster_name    = local.name
   cluster_version = var.cluster_version
 
   authentication_mode                      = "API"
   access_entries                           = var.access_entries
-  cluster_enabled_log_types                = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  cluster_enabled_log_types                = var.cluster_enabled_log_types
   cluster_endpoint_private_access          = true
   cluster_endpoint_public_access           = !var.disable_internet_access
   cluster_endpoint_public_access_cidrs     = var.cluster_endpoint_public_access_cidrs
@@ -185,7 +185,7 @@ module "eks" {
 
 module "ebs_kms_key" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.0.0"
+  version = "3.1.0"
 
   aliases            = ["eks/${local.name}/ebs"]
   description        = "Customer managed key to encrypt EKS managed node group volumes"
@@ -206,7 +206,7 @@ moved {
 #trivy:ignore:AVD-AWS-0057
 module "irsa_ebs_csi_driver" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.39.1"
+  version = "5.45.0"
 
   role_name             = "${local.name}-ebs-csi-driver-irsa"
   attach_ebs_csi_policy = true

@@ -1,7 +1,7 @@
 #trivy:ignore:AVD-AWS-0057
 module "externaldns_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.39.1"
+  version = "5.45.0"
 
   attach_external_dns_policy = true
   role_name                  = "${local.name}-external-dns"
@@ -29,7 +29,7 @@ resource "helm_release" "external_dns" {
   name        = "external-dns"
   repository  = "https://kubernetes-sigs.github.io/external-dns"
   chart       = "external-dns"
-  version     = "1.14.4"
+  version     = "1.15.0"
   max_history = 5
 
   set {

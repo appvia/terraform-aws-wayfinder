@@ -1,3 +1,7 @@
+resource "aws_iam_service_linked_role" "autoscaling" {
+  aws_service_name = "autoscaling.amazonaws.com"
+}
+
 module "wayfinder" {
   source = "../../"
 
@@ -27,7 +31,7 @@ module "wayfinder" {
 
   # cluster_security_group_additional_rules = {
   #   allow_access_from_vpn = {
-  #     description = "Allow access to the Wayfinder API from within My Organisation's internal network"
+  #     description = "Allow access to the Wayfinder API from within My Organisations internal network"
   #     protocol    = "tcp"
   #     from_port   = 443
   #     to_port     = 443

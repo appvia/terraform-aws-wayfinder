@@ -111,7 +111,7 @@ resource "aws_iam_policy" "wayfinder_irsa_policy" {
 
 module "wayfinder_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.39.1"
+  version = "5.45.0"
 
   role_name = "${local.name}-irsa"
   tags      = local.tags
@@ -163,6 +163,8 @@ resource "helm_release" "wayfinder" {
   values = [
     templatefile("${path.module}/manifests/wayfinder-values.yml.tpl", {
       api_hostname                  = var.wayfinder_domain_name_api
+      custom_logo_url               = var.wayfinder_custom_logo_url
+      custom_logo_collapsed_url     = var.wayfinder_custom_logo_collapsed_url
       disable_local_login           = var.wayfinder_idp_details["type"] == "none" ? false : var.disable_local_login
       enable_localadmin_user        = var.create_localadmin_user
       no_defaults                   = var.wayfinder_no_defaults
