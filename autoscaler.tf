@@ -1,7 +1,7 @@
 #trivy:ignore:AVD-AWS-0057
 module "autoscaler_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.39.1"
+  version = "5.45.0"
 
   attach_cluster_autoscaler_policy = true
   cluster_autoscaler_cluster_ids   = [module.eks.cluster_name]
@@ -48,7 +48,7 @@ resource "helm_release" "cluster_autoscaler" {
   name        = "autoscaler"
   repository  = "https://kubernetes.github.io/autoscaler"
   chart       = "cluster-autoscaler"
-  version     = "9.37.0"
+  version     = "9.43.0"
   max_history = 5
 
   set {

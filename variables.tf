@@ -19,6 +19,12 @@ variable "clusterissuer_email" {
   type        = string
 }
 
+variable "cluster_enabled_log_types" {
+  description = "List of log types to enable for the EKS cluster."
+  type        = list(string)
+  default     = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+}
+
 variable "cluster_endpoint_public_access_cidrs" {
   description = "List of CIDR blocks which can access the Amazon EKS API server endpoint."
   type        = list(string)
@@ -167,6 +173,18 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "wayfinder_custom_logo_collapsed_url" {
+  description = "The URL of a transparent custom logo to use in the UI when side navigation is collapsed. Recommended dimensions of 44px width by 48px height. Defaults to 'wayfinder_custom_logo_url' if not specified."
+  type        = string
+  default     = ""
+}
+
+variable "wayfinder_custom_logo_url" {
+  description = "The URL of a transparent custom logo to use in the UI. Recommended dimensions of 172px width by 48px height."
+  type        = string
+  default     = ""
+}
+
 variable "wayfinder_domain_name_api" {
   description = "The domain name to use for the Wayfinder API (e.g. api.wayfinder.example.com)."
   type        = string
@@ -239,29 +257,29 @@ variable "wayfinder_release_channel" {
 variable "wayfinder_version" {
   description = "The version to use for Wayfinder."
   type        = string
-  default     = "v2.8.7"
+  default     = "v2.9.3"
 }
 
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string
-  default     = "v1.30.0-eksbuild.1"
+  default     = "v1.31.0-eksbuild.1"
 }
 
 variable "coredns_addon_version" {
   description = "CoreDNS Addon version to use."
   type        = string
-  default     = "v1.11.1-eksbuild.11"
+  default     = "v1.11.3-eksbuild.1"
 }
 
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.30.3-eksbuild.2"
+  default     = "v1.30.3-eksbuild.9"
 }
 
 variable "aws_vpc_cni_addon_version" {
   description = "AWS VPC CNI Addon version to use."
   type        = string
-  default     = "v1.18.3-eksbuild.1"
+  default     = "v1.18.5-eksbuild.1"
 }

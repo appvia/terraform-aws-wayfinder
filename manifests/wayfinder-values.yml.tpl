@@ -23,6 +23,8 @@ mysql:
     storageClass: "${storage_class}"
 noDefaults: ${no_defaults}
 ui:
+  customLogoURL: "${custom_logo_url}"
+  customLogoCollapsedURL: "${custom_logo_collapsed_url}"
   enabled: true
   endpoint:
     url: "https://${ui_hostname}"
