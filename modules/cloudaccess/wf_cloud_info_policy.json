@@ -22,7 +22,8 @@
                 "ec2:DescribeRegions",
                 "ec2:DescribeAvailabilityZones",
                 "ec2:DescribeImages",
-                "ec2:DescribeSpotPriceHistory"
+                "ec2:DescribeSpotPriceHistory",
+                "ec2:DescribeInstanceTypes"
             ],
             "Effect": "Allow",
             "Resource": [
