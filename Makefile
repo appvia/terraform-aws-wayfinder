@@ -1,6 +1,4 @@
 #
-# Copyright (C) 2024  Appvia Ltd <info@appvia.io>
-#  
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -14,15 +12,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-AUTHOR_EMAIL=info@appvia.io
-
-.PHONY: all security lint format documentation documentation-examples validate-all validate validate-examples init
+.PHONY: all security lint format documentation documentation-examples validate-all validate validate-examples init examples tests
 
 default: all
 
 all: 
 	$(MAKE) init
 	$(MAKE) validate
+	$(MAKE) tests
 	$(MAKE) lint
 	$(MAKE) security
 	$(MAKE) format
@@ -30,6 +27,7 @@ all:
 
 examples:
 	$(MAKE) validate-examples
+	$(MAKE) tests
 	$(MAKE) lint-examples
 	$(MAKE) lint
 	$(MAKE) security
@@ -44,13 +42,30 @@ documentation:
 
 documentation-modules:
 	@echo "--> Generating documentation for modules"
-	@if [ -d modules ]; then \
-		find modules -type d -mindepth 1 -maxdepth 1 -exec terraform-docs markdown table --output-file README.md --output-mode inject {} \; ; \
-	fi
+	@find . -type d -regex '.*/modules/[a-zA-Z\-_$$]*' -not -path '*.terraform*' | while read -r dir; do \
+		echo "--> Generating documentation for $$dir"; \
+		terraform-docs markdown table --output-file README.md --output-mode inject $$dir; \
+	done;
 
 documentation-examples:
 	@echo "--> Generating documentation examples"
-	@find examples -type d -mindepth 1 -maxdepth 1 -exec terraform-docs markdown table --output-file README.md --output-mode inject {} \;
+	@find . -type d -path '*/examples/*' -not -path '*.terraform*'| while read -r dir; do \
+		echo "--> Generating documentation for $$dir"; \
+		terraform-docs markdown table --output-file README.md --output-mode inject $$dir; \
+	done;
+
+upgrade-terraform-providers:
+	@printf "%s Upgrading Terraform providers for %-24s" "-->" "."
+	@terraform init -upgrade >/dev/null && echo "[OK]" || echo "[FAILED]"
+	@$(MAKE) upgrade-terraform-example-providers
+
+upgrade-terraform-example-providers:
+	@if [ -d examples ]; then \
+		find examples -type d -mindepth 1 -maxdepth 1 | while read -r dir; do \
+			printf "%s Upgrading Terraform providers for %-24s" "-->" "$$dir"; \
+			terraform -chdir=$$dir init -upgrade >/dev/null && echo "[OK]" || echo "[FAILED]"; \
+		done; \
+	fi
 
 init: 
 	@echo "--> Running terraform init"
@@ -58,27 +73,27 @@ init:
 
 security: 
 	@echo "--> Running Security checks"
-	@tfsec .
+	@trivy config .
 	$(MAKE) security-modules
 	$(MAKE) security-examples
 
 security-modules:
 	@echo "--> Running Security checks on modules"
-	@if [ -d modules ]; then \
-		find modules -type d -mindepth 1 -maxdepth 1 | while read -r dir; do \
-			echo "--> Validating $$dir"; \
-			tfsec $$dir; \
-		done; \
-	fi
+	@find . -type d -regex '.*/modules/[a-zA-Z\-_$$]*' -not -path '*.terraform*' | while read -r dir; do \
+		echo "--> Validating $$dir"; \
+		trivy config  --format table --exit-code  1 --severity  CRITICAL,HIGH --ignorefile .trivyignore $$dir; \
+	done; 
 
 security-examples:
 	@echo "--> Running Security checks on examples"
-	@if [ -d examples ]; then \
-		find examples -type d -mindepth 1 -maxdepth 1 | while read -r dir; do \
-			echo "--> Validating $$dir"; \
-			tfsec $$dir; \
-		done; \
-	fi
+	@find . -type d -path '*/examples/*' -not -path '*.terraform*'| while read -r dir; do \
+		echo "--> Validating $$dir"; \
+		trivy config  --format table --exit-code  1 --severity  CRITICAL,HIGH --ignorefile .trivyignore $$dir; \
+	done;
+
+tests: 
+	@echo "--> Running Terraform Tests" 
+	@terraform test
 
 validate:
 	@echo "--> Running terraform validate"
@@ -86,26 +101,28 @@ validate:
 	@terraform validate
 	$(MAKE) validate-modules
 	$(MAKE) validate-examples
+	$(MAKE) validate-commits
 
 validate-modules:
 	@echo "--> Running terraform validate on modules"
-	@if [ -d modules ]; then \
-		find modules -type d -mindepth 1 -maxdepth 1 | while read -r dir; do \
-			echo "--> Validating $$dir"; \
-			terraform -chdir=$$dir init -backend=false; \
-			terraform -chdir=$$dir validate; \
-		done; \
-	fi
+	@find . -type d -regex '.*/modules/[a-zA-Z\-_$$]*' -not -path '*.terraform*' | while read -r dir; do \
+		echo "--> Validating Module $$dir"; \
+		terraform -chdir=$$dir init -backend=false; \
+		terraform -chdir=$$dir validate; \
+	done;
 
 validate-examples:
 	@echo "--> Running terraform validate on examples"
-	@if [ -d examples ]; then \
-		find examples -type d -mindepth 1 -maxdepth 1 | while read -r dir; do \
-			echo "--> Validating $$dir"; \
-			terraform -chdir=$$dir init -backend=false; \
-			terraform -chdir=$$dir validate; \
-		done; \
-	fi
+	@find . -type d -path '*/examples/*' -not -path '*.terraform*'| while read -r dir; do \
+		echo "--> Validating $$dir"; \
+		terraform -chdir=$$dir init -backend=false; \
+		terraform -chdir=$$dir validate; \
+	done; 
+
+validate-commits:
+	@echo "--> Running commitlint against the main branch"
+	@command -v commitlint >/dev/null 2>&1 || { echo "commitlint is not installed. Please install it by running 'npm install -g commitlint'"; exit 1; }
+	@git log --pretty=format:"%s" origin/main..HEAD | commitlint --from=origin/main
 
 lint:
 	@echo "--> Running tflint"
@@ -116,23 +133,19 @@ lint:
 
 lint-modules:
 	@echo "--> Running tflint on modules"
-	@if [ -d modules ]; then \
-		find modules -type d -mindepth 1 -maxdepth 1 | while read -r dir; do \
-			echo "--> Linting $$dir"; \
-			tflint --chdir=$$dir --init; \
-			tflint --chdir=$$dir -f compact; \
-		done; \
-	fi
+	@find . -type d -regex '.*/modules/[a-zA-Z\-_$$]*' -not -path '*.terraform*' | while read -r dir; do \
+		echo "--> Linting $$dir"; \
+		tflint --chdir=$$dir --init; \
+		tflint --chdir=$$dir -f compact; \
+	done;
 
 lint-examples:
 	@echo "--> Running tflint on examples"
-	@if [ -d examples ]; then \
-		find examples -type d -mindepth 1 -maxdepth 1 | while read -r dir; do \
-			echo "--> Linting $$dir"; \
-			tflint --chdir=$$dir --init; \
-			tflint --chdir=$$dir -f compact; \
-		done; \
-	fi
+	@find . -type d -path '*/examples/*' -not -path '*.terraform*'| while read -r dir; do \
+		echo "--> Linting $$dir"; \
+		tflint --chdir=$$dir --init; \
+		tflint --chdir=$$dir -f compact; \
+	done; 
 
 format: 
 	@echo "--> Running terraform fmt"
