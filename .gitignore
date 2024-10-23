@@ -31,3 +31,6 @@ terraform.rc
 
 # Other
 .DS_Store
+
+# Meld
+*.orig
