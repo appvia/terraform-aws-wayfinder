@@ -44,6 +44,16 @@ resource "helm_release" "load_balancer_controller" {
   }
 
   set {
+    name  = "createIngressClassResource"
+    value = "false"
+  }
+
+  set {
+    name  = "ingressClassParams.create"
+    value = "false"
+  }
+
+  set {
     name  = "serviceAccount.name"
     value = "aws-load-balancer-controller"
   }
