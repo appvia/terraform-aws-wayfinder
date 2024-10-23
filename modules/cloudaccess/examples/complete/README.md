@@ -1,15 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-## Requirements
-
-No requirements.
-
 ## Providers
 
 No providers.
-
-## Resources
-
-No resources.
 
 ## Inputs
 

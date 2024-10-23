@@ -71,16 +71,6 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
 
 <!-- BEGIN_TF_DOCS -->
-## Requirements
-
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.34 |
-| <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.9.0 |
-| <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 2.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5 |
-
 ## Providers
 
 | Name | Version |
@@ -89,14 +79,6 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="provider_helm"></a> [helm](#provider\_helm) | >= 2.9.0 |
 | <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | >= 2.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
-
-## Resources
-
-| Name | Type |
-|------|------|
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.wayfinder_irsa_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
