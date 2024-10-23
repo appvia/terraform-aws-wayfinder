@@ -1,36 +1,7 @@
-# Terraform Module: Cloud Access for Wayfinder on AWS
-
-This Terraform Module can be used to provision IAM Roles that Wayfinder assumes into, for creating resources within an AWS Account (VPC, EKS Cluster, Route53 DNS Zones, etc).
-
-**Notes:**
-
-- You must provide either:
-  - The IAM Role ARN (`var.wayfinder_identity_aws_role_arn`) used by Wayfinder (via IAM Roles for Service Accounts) if you are running Wayfinder on AWS using IRSA, or using a credential-backed AWS IAM user.
-  - The GCP service account email address and ID (`var.wayfinder_identity_gcp_service_account` and `var.wayfinder_identity_gcp_service_account_id`) used by Wayfinder (via GCP Workload Identity) if you are running Wayfinder on GCP.
-  - The Azure managed identity client ID and tenant ID (`var.wayfinder_identity_azure_client_id` and `var.wayfinder_identity_azure_tenant_id`) used by Wayfinder (via AzureAD Workload Identity) if you are running Wayfinder on Azure.
-- `var.resource_suffix` is an optional suffix to use on created objects. We recommend using workspace key + stage if you wish to have multiple workspaces sharing the same AWS account, allowing independent roles to be provisioned for each.
-
-## Deployment
-
-Please see the [examples](./examples) directory to see how to deploy this module.
-
-## Updating Docs
-
-The `terraform-docs` utility is used to generate this README. Follow the below steps to update:
-
-1. Make changes to the `.terraform-docs.yml` file
-2. Fetch the `terraform-docs` binary (https://terraform-docs.io/user-guide/installation/)
-3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
-
 <!-- BEGIN_TF_DOCS -->
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.62 |
-| <a name="provider_http"></a> [http](#provider\_http) | >= 3.4 |
-| <a name="provider_local"></a> [local](#provider\_local) | >= 2.4 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
+No providers.
 
 ## Inputs
 
@@ -57,10 +28,5 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 
 | Name | Description |
 |------|-------------|
-| <a name="output_cloud_info_role_arns"></a> [cloud\_info\_role\_arns](#output\_cloud\_info\_role\_arns) | ARNs of Cloud Info IAM role to use for the CloudInfo spec.permissions[].awsRole in your CloudAccessConfig |
-| <a name="output_cluster_manager_role_arns"></a> [cluster\_manager\_role\_arns](#output\_cluster\_manager\_role\_arns) | ARNs of Cluster Manager IAM role to use for the ClusterManager spec.permissions[].awsRole in your CloudAccessConfig |
-| <a name="output_dns_zone_manager_role_arns"></a> [dns\_zone\_manager\_role\_arns](#output\_dns\_zone\_manager\_role\_arns) | ARNs of DNS Zone Manager IAM role to use for the DNSZoneManager spec.permissions[].awsRole in your CloudAccessConfig |
-| <a name="output_network_manager_role_arns"></a> [network\_manager\_role\_arns](#output\_network\_manager\_role\_arns) | ARNs of Network Manager IAM role to use for the NetworkManager spec.permissions[].awsRole in your CloudAccessConfig |
-| <a name="output_peering_acceptor_role_arn"></a> [peering\_acceptor\_role\_arn](#output\_peering\_acceptor\_role\_arn) | ARN of Peering Acceptor IAM role to use as spec.permissions[].awsRole on the in your cloud access config |
+| <a name="output_cloudaccess"></a> [cloudaccess](#output\_cloudaccess) | n/a |
 <!-- END_TF_DOCS -->
-

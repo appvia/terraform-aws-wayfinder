@@ -1,18 +1,18 @@
 plugin "aws" {
   enabled = true
-  version = "0.30.0"
+  version = "0.34.0"
   source  = "github.com/terraform-linters/tflint-ruleset-aws"
 }
 
 plugin "terraform" {
-    enabled = true
-    version = "0.7.0"
-    source  = "github.com/terraform-linters/tflint-ruleset-terraform"
+  enabled = true
+  version = "0.9.1"
+  source  = "github.com/terraform-linters/tflint-ruleset-terraform"
 }
 
 config {
   call_module_type = "local"
-  force  = false
+  force            = false
 }
 
 rule "terraform_required_providers" {
