@@ -23,14 +23,62 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
 
 <!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.62 |
+| <a name="requirement_http"></a> [http](#requirement\_http) | >= 3.4 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | >= 2.4 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 3.0 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.62 |
-| <a name="provider_http"></a> [http](#provider\_http) | >= 3.4 |
-| <a name="provider_local"></a> [local](#provider\_local) | >= 2.4 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.51.1 |
+| <a name="provider_http"></a> [http](#provider\_http) | 3.4.2 |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.5.1 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.5 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_iam_policy_cloud_info"></a> [iam\_policy\_cloud\_info](#module\_iam\_policy\_cloud\_info) | terraform-aws-modules/iam/aws//modules/iam-policy | 5.45.0 |
+| <a name="module_iam_policy_cluster_manager"></a> [iam\_policy\_cluster\_manager](#module\_iam\_policy\_cluster\_manager) | terraform-aws-modules/iam/aws//modules/iam-policy | 5.45.0 |
+| <a name="module_iam_policy_dns_zone_manager"></a> [iam\_policy\_dns\_zone\_manager](#module\_iam\_policy\_dns\_zone\_manager) | terraform-aws-modules/iam/aws//modules/iam-policy | 5.45.0 |
+| <a name="module_iam_policy_network_manager"></a> [iam\_policy\_network\_manager](#module\_iam\_policy\_network\_manager) | terraform-aws-modules/iam/aws//modules/iam-policy | 5.45.0 |
+| <a name="module_iam_policy_peering_acceptor"></a> [iam\_policy\_peering\_acceptor](#module\_iam\_policy\_peering\_acceptor) | terraform-aws-modules/iam/aws//modules/iam-policy | 5.45.0 |
+| <a name="module_iam_role_cloud_info"></a> [iam\_role\_cloud\_info](#module\_iam\_role\_cloud\_info) | terraform-aws-modules/iam/aws//modules/iam-assumable-role | 5.45.0 |
+| <a name="module_iam_role_cloud_info_azure_oidc"></a> [iam\_role\_cloud\_info\_azure\_oidc](#module\_iam\_role\_cloud\_info\_azure\_oidc) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.45.0 |
+| <a name="module_iam_role_cloud_info_google_oidc"></a> [iam\_role\_cloud\_info\_google\_oidc](#module\_iam\_role\_cloud\_info\_google\_oidc) | ../iam-google-oidc-role | n/a |
+| <a name="module_iam_role_cluster_manager"></a> [iam\_role\_cluster\_manager](#module\_iam\_role\_cluster\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role | 5.45.0 |
+| <a name="module_iam_role_cluster_manager_azure_oidc"></a> [iam\_role\_cluster\_manager\_azure\_oidc](#module\_iam\_role\_cluster\_manager\_azure\_oidc) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.45.0 |
+| <a name="module_iam_role_cluster_manager_google_oidc"></a> [iam\_role\_cluster\_manager\_google\_oidc](#module\_iam\_role\_cluster\_manager\_google\_oidc) | ../iam-google-oidc-role | n/a |
+| <a name="module_iam_role_dns_zone_manager"></a> [iam\_role\_dns\_zone\_manager](#module\_iam\_role\_dns\_zone\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role | 5.45.0 |
+| <a name="module_iam_role_dns_zone_manager_azure_oidc"></a> [iam\_role\_dns\_zone\_manager\_azure\_oidc](#module\_iam\_role\_dns\_zone\_manager\_azure\_oidc) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.45.0 |
+| <a name="module_iam_role_dns_zone_manager_google_oidc"></a> [iam\_role\_dns\_zone\_manager\_google\_oidc](#module\_iam\_role\_dns\_zone\_manager\_google\_oidc) | ../iam-google-oidc-role | n/a |
+| <a name="module_iam_role_network_manager"></a> [iam\_role\_network\_manager](#module\_iam\_role\_network\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role | 5.45.0 |
+| <a name="module_iam_role_network_manager_azure_oidc"></a> [iam\_role\_network\_manager\_azure\_oidc](#module\_iam\_role\_network\_manager\_azure\_oidc) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.45.0 |
+| <a name="module_iam_role_network_manager_google_oidc"></a> [iam\_role\_network\_manager\_google\_oidc](#module\_iam\_role\_network\_manager\_google\_oidc) | ../iam-google-oidc-role | n/a |
+| <a name="module_iam_role_peering_acceptor"></a> [iam\_role\_peering\_acceptor](#module\_iam\_role\_peering\_acceptor) | terraform-aws-modules/iam/aws//modules/iam-assumable-role | 5.45.0 |
+| <a name="module_iam_role_peering_acceptor_azure_oidc"></a> [iam\_role\_peering\_acceptor\_azure\_oidc](#module\_iam\_role\_peering\_acceptor\_azure\_oidc) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.45.0 |
+| <a name="module_iam_role_peering_acceptor_google_oidc"></a> [iam\_role\_peering\_acceptor\_google\_oidc](#module\_iam\_role\_peering\_acceptor\_google\_oidc) | ../iam-google-oidc-role | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_iam_openid_connect_provider.wf-trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
+| [http_http.openid-configuration](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
+| [local_file.wf_cloud_info_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file) | data source |
+| [local_file.wf_cluster_manager_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file) | data source |
+| [local_file.wf_dns_zone_manager_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file) | data source |
+| [local_file.wf_network_manager_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file) | data source |
+| [local_file.wf_peering_acceptor_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file) | data source |
+| [tls_certificate.jwks](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/data-sources/certificate) | data source |
 
 ## Inputs
 
