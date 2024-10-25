@@ -1,7 +1,7 @@
 #trivy:ignore:AVD-AWS-0057
 module "load_balancer_controller_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.45.0"
+  version = "5.47.1"
 
   attach_load_balancer_controller_policy = true
   role_name                              = "${local.name}-load-balancer-controller"
