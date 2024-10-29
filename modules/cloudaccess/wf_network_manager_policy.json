@@ -52,6 +52,7 @@
                 "ec2:ModifyVpcAttribute",
                 "ec2:ReleaseAddress",
                 "ec2:RevokeSecurityGroupIngress",
+                "ec2:RevokeSecurityGroupEgress",
                 "eks:DescribeCluster",
                 "elasticloadbalancing:DeleteLoadBalancer",
                 "elasticloadbalancing:DescribeLoadBalancers",
