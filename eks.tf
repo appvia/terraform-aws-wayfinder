@@ -3,7 +3,7 @@
 # tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "20.24.3"
+  version = "20.31.6"
 
   cluster_name    = local.name
   cluster_version = var.cluster_version
