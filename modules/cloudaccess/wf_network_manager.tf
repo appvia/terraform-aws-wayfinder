@@ -2,7 +2,7 @@ module "iam_role_network_manager" {
   count = var.enable_network_manager && var.from_aws ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.45.0"
+  version = "5.52.2"
 
   create_role             = true
   role_name               = "wf-NetworkManager${local.resource_suffix}"
@@ -17,7 +17,7 @@ module "iam_role_network_manager_azure_oidc" {
   count = var.enable_network_manager && var.from_azure ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.45.0"
+  version = "5.52.2"
 
   create_role                    = true
   role_name                      = "wf-NetworkManager-azure${local.resource_suffix}"
@@ -51,7 +51,7 @@ module "iam_policy_network_manager" {
   count = var.enable_network_manager ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.45.0"
+  version = "5.52.2"
 
   name        = "wf-NetworkManager${local.resource_suffix}"
   description = "Create and manage VPCs for EKS clusters"
