@@ -14,11 +14,11 @@ permissions:
 
 jobs:
   root-module-validation:
-    uses: appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@main
+    uses: appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@composite-actions
     name: Root Module Validation
 
   cloudaccess-module-validation:
-    uses: appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@main
+    uses: appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@composite-actions
     name: Cloud Access Module Validation
     with:
       working-directory: modules/cloudaccess
