@@ -28,6 +28,12 @@ locals {
     azure = var.enable_cloud_info && var.from_azure ? module.iam_role_cloud_info_azure_oidc[0].iam_role_arn : null
     gcp   = var.enable_cloud_info && var.from_gcp ? module.iam_role_cloud_info_google_oidc[0].arn : null
   }
+
+  cloud_resource_provisioning_role_arns = {
+    aws   = var.enable_cloud_resource_provisioning && var.from_aws ? module.iam_role_cloud_resource_provisioning[0].iam_role_arn : null
+    azure = var.enable_cloud_resource_provisioning && var.from_azure ? module.iam_role_cloud_resource_provisioning_azure_oidc[0].iam_role_arn : null
+    gcp   = var.enable_cloud_resource_provisioning && var.from_gcp ? module.iam_role_cloud_resource_provisioning_google_oidc[0].arn : null
+  }
 }
 
 output "cluster_manager_role_arns" {
@@ -45,13 +51,18 @@ output "network_manager_role_arns" {
   value       = local.network_manager_role_arns
 }
 
+output "cloud_resource_provisioning_role_arn" {
+  description = "ARNs of Cloud Resource IAM role to use for CloudResourceProvisioning spec.permission[].awsRole in your CloudAccessConfig"
+  value       = local.cloud_resource_provisioning_role_arns
+}
+
 output "cloud_info_role_arns" {
   description = "ARNs of Cloud Info IAM role to use for the CloudInfo spec.permissions[].awsRole in your CloudAccessConfig"
   value       = local.cloud_info_role_arns
 }
 
 output "peering_acceptor_role_arn" {
-  description = "ARN of Peering Acceptor IAM role to use as spec.permissions[].awsRole on the in your cloud access config"
+  description = "ARN of Peering Acceptor IAM role to use as spec.permissions[].awsRole in your cloud access config"
   value       = local.peering_acceptor_role_arns
 }
 

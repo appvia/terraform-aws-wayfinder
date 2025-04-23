@@ -88,6 +88,12 @@ variable "enable_cloud_info" {
   type        = bool
 }
 
+variable "enable_cloud_resource_provisioning" {
+  default     = false
+  description = "Whether to create the Cloud Resource Provisioning IAM Role"
+  type        = bool
+}
+
 variable "tags" {
   default     = {}
   description = "A map of tags to add to all resources created."

@@ -88,6 +88,12 @@ variable "enable_peering_acceptor" {
   type        = bool
 }
 
+variable "enable_cloud_resource_provisioning" {
+  default     = false
+  description = "Wether to create the Cloud Resaource provisioning IAM Role"
+  type        = bool
+}
+
 variable "tags" {
   default     = {}
   description = "A map of tags to add to all resources created."

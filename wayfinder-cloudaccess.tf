@@ -2,11 +2,14 @@ module "wayfinder_cloudaccess" {
   count  = var.enable_wf_cloudaccess && (var.enable_wf_dnszonemanager || var.enable_wf_costestimates) ? 1 : 0
   source = "./modules/cloudaccess"
 
-  resource_suffix                 = var.wayfinder_instance_id
-  wayfinder_identity_aws_role_arn = module.wayfinder_irsa_role.iam_role_arn
-  enable_dns_zone_manager         = var.enable_wf_dnszonemanager
-  enable_cloud_info               = var.enable_wf_costestimates
-  tags                            = local.tags
+  resource_suffix                    = var.wayfinder_instance_id
+  wayfinder_identity_aws_role_arn    = module.wayfinder_irsa_role.iam_role_arn
+  enable_dns_zone_manager            = var.enable_wf_dnszonemanager
+  enable_cloud_resource_provisioning = var.enable_cloud_resource_provisioning
+  enable_cloud_info                  = var.enable_wf_costestimates
+  enable_peering_acceptor            = var.enable_peering_acceptor
+
+  tags = local.tags
 }
 
 resource "kubectl_manifest" "wayfinder_cloud_identity_main" {
