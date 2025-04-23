@@ -283,3 +283,15 @@ variable "aws_vpc_cni_addon_version" {
   type        = string
   default     = "v1.18.5-eksbuild.1"
 }
+
+variable "enable_cloud_resource_provisioning" {
+  description = "Whether to enable cloud resource provisioning for Wayfinder."
+  type        = bool
+  default     = false
+}
+
+variable "enable_peering_acceptor" {
+  description = "Whether to enable the peering acceptor for Wayfinder."
+  type        = bool
+  default     = false
+}

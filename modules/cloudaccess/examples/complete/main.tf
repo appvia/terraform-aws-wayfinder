@@ -1,14 +1,15 @@
 module "wayfinder_cloudaccess" {
-  source = "github.com/appvia/terraform-aws-wayfinder//modules/cloudaccess"
+  source = "../.."
 
   resource_suffix = var.resource_suffix
   tags            = var.tags
 
-  enable_cluster_manager  = var.enable_cluster_manager
-  enable_dns_zone_manager = var.enable_dns_zone_manager
-  enable_network_manager  = var.enable_network_manager
-  enable_cloud_info       = var.enable_cloud_info
-  enable_peering_acceptor = var.enable_peering_acceptor
+  enable_cluster_manager             = var.enable_cluster_manager
+  enable_dns_zone_manager            = var.enable_dns_zone_manager
+  enable_network_manager             = var.enable_network_manager
+  enable_cloud_info                  = var.enable_cloud_info
+  enable_cloud_resource_provisioning = var.enable_cloud_resource_provisioning
+  enable_peering_acceptor            = var.enable_peering_acceptor
 
   from_aws   = var.from_aws
   from_azure = var.from_azure

@@ -1,8 +1,10 @@
 # Resource suffix is optional, specify this if you need to keep role definitions unique amongst
 # multiple workspaces using the same AWS Account.
-resource_suffix                 = ""
-enable_cluster_manager          = true
-enable_dns_zone_manager         = true
-enable_network_manager          = true
-enable_cloud_info               = false
+resource_suffix                    = ""
+enable_cluster_manager             = true
+enable_dns_zone_manager            = true
+enable_network_manager             = true
+enable_cloud_resource_provisioning = true
+enable_cloud_info                  = false
+enable_peering_acceptor = false
 wayfinder_identity_aws_role_arn = "arn:aws:iam::123456789012:role/wf-cloudidentity-aws"
