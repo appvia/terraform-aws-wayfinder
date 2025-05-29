@@ -51,7 +51,7 @@ output "network_manager_role_arns" {
   value       = local.network_manager_role_arns
 }
 
-output "cloud_resource_provisioning_role_arn" {
+output "cloud_resource_provisioning_role_arns" {
   description = "ARNs of Cloud Resource IAM role to use for CloudResourceProvisioning spec.permission[].awsRole in your CloudAccessConfig"
   value       = local.cloud_resource_provisioning_role_arns
 }
@@ -61,8 +61,8 @@ output "cloud_info_role_arns" {
   value       = local.cloud_info_role_arns
 }
 
-output "peering_acceptor_role_arn" {
-  description = "ARN of Peering Acceptor IAM role to use as spec.permissions[].awsRole in your cloud access config"
+output "peering_acceptor_role_arns" {
+  description = "ARNs of Peering Acceptor IAM role to use as spec.permissions[].awsRole in your cloud access config"
   value       = local.peering_acceptor_role_arns
 }
 
