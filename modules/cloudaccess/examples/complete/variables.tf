@@ -4,6 +4,12 @@ variable "resource_suffix" {
   type        = string
 }
 
+variable "role_name" {
+  default     = "wayfinder"
+  description = "Name to use for the generated role, will have resource_suffix appended"
+  type        = string
+}
+
 variable "from_aws" {
   default     = true
   description = "Whether Wayfinder is running on AWS."
@@ -58,39 +64,33 @@ variable "provision_oidc_trust" {
   type        = bool
 }
 
-variable "enable_cluster_manager" {
+variable "enable_cluster_manager_permissions" {
   default     = false
-  description = "Whether to create the Cluster Manager IAM Role"
+  description = "Whether to grant Cluster Manager permissions to the generated IAM Role"
   type        = bool
 }
 
-variable "enable_dns_zone_manager" {
+variable "enable_dns_zone_manager_permissions" {
   default     = false
-  description = "Whether to create the DNS Zone Manager IAM Role"
+  description = "Whether to grant DNS Zone Manager permissions to the generated IAM Role"
   type        = bool
 }
 
-variable "enable_network_manager" {
+variable "enable_network_manager_permissions" {
   default     = false
-  description = "Whether to create the Network Manager IAM Role"
+  description = "Whether to grant Network Manager permissions to the generated IAM Role"
   type        = bool
 }
 
-variable "enable_cloud_info" {
+variable "enable_peering_acceptor_permissions" {
   default     = false
-  description = "Whether to create the Cloud Info IAM Role"
+  description = "Whether to grant Peering Acceptor permissions to the generated IAM Role"
   type        = bool
 }
 
-variable "enable_peering_acceptor" {
+variable "enable_cloud_info_permissions" {
   default     = false
-  description = "Whether to create the Peering Acceptor IAM Role"
-  type        = bool
-}
-
-variable "enable_cloud_resource_provisioning" {
-  default     = false
-  description = "Wether to create the Cloud Resaource provisioning IAM Role"
+  description = "Whether to grant Cloud Info permissions to the generated IAM Role"
   type        = bool
 }
 
@@ -98,4 +98,16 @@ variable "tags" {
   default     = {}
   description = "A map of tags to add to all resources created."
   type        = map(string)
+}
+
+variable "custom_policy_arns" {
+  default     = []
+  description = "List of custom IAM policy ARNs to attach to the role in addition to the built-in policies."
+  type        = list(string)
+}
+
+variable "custom_policy_documents" {
+  default     = []
+  description = "List of custom IAM policy documents in JSON format. Each policy will be created as a separate IAM policy resource with an auto-generated name."
+  type        = list(string)
 }

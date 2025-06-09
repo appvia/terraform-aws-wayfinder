@@ -2,14 +2,14 @@ module "wayfinder_cloudaccess" {
   source = "github.com/appvia/terraform-aws-wayfinder//modules/cloudaccess?ref=v3"
 
   resource_suffix = var.resource_suffix
-  tags            = var.tags
+  role_name      = var.role_name
+  tags           = var.tags
 
-  enable_cluster_manager             = var.enable_cluster_manager
-  enable_dns_zone_manager            = var.enable_dns_zone_manager
-  enable_network_manager             = var.enable_network_manager
-  enable_cloud_info                  = var.enable_cloud_info
-  enable_cloud_resource_provisioning = var.enable_cloud_resource_provisioning
-  enable_peering_acceptor            = var.enable_peering_acceptor
+  enable_cluster_manager_permissions  = var.enable_cluster_manager_permissions
+  enable_dns_zone_manager_permissions = var.enable_dns_zone_manager_permissions
+  enable_network_manager_permissions  = var.enable_network_manager_permissions
+  enable_cloud_info_permissions      = var.enable_cloud_info_permissions
+  enable_peering_acceptor_permissions = var.enable_peering_acceptor_permissions
 
   from_aws   = var.from_aws
   from_azure = var.from_azure
@@ -21,4 +21,7 @@ module "wayfinder_cloudaccess" {
   wayfinder_identity_aws_role_arn           = var.wayfinder_identity_aws_role_arn
   wayfinder_identity_gcp_service_account    = var.wayfinder_identity_gcp_service_account
   wayfinder_identity_gcp_service_account_id = var.wayfinder_identity_gcp_service_account_id
+
+  custom_policy_arns      = var.custom_policy_arns
+  custom_policy_documents = [for file in var.custom_policy_documents : file(file)]
 }
