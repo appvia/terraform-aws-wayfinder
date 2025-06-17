@@ -1,13 +1,30 @@
 # Resource suffix is optional, specify this if you need to keep role definitions unique amongst
 # multiple workspaces using the same AWS Account.
-resource_suffix                    = ""
-enable_cluster_manager             = true
-enable_dns_zone_manager            = true
-enable_network_manager             = true
-enable_cloud_resource_provisioning = true
-enable_cloud_info                  = false
-enable_peering_acceptor = false
-from_aws                           = false
-from_azure                         = true
+resource_suffix = ""
+role_name      = "wayfinder"
+
+# Enable built-in policies
+enable_cluster_manager_permissions  = true
+enable_dns_zone_manager_permissions = true
+enable_network_manager_permissions  = true
+enable_cloud_info_permissions      = false
+enable_peering_acceptor_permissions = false
+
+# Cloud provider configuration
+from_aws   = false
+from_azure = true
+
+# Wayfinder identity configuration
 wayfinder_identity_azure_client_id = "87654321-dcba-10fe-abcd-012345678901"
 wayfinder_identity_azure_tenant_id = "12345678-abcd-ef01-dcba-012345678901"
+
+# Example of using existing policy ARNs
+custom_policy_arns = [
+  "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+]
+
+# Example of using custom policy documents from files
+custom_policy_documents = [
+  "policies/dynamodb-access.json",
+  "policies/kms-access.json"
+]
