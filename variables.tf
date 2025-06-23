@@ -260,6 +260,12 @@ variable "wayfinder_version" {
   default     = "v2.9.7"
 }
 
+variable "wayfinder_auditdb_pvc_size" {
+  description = "The size of the PVC provisioned for Wayfinder's audit database if an in-cluster DB is used."
+  type        = string
+  default     = "10Gi"
+}
+
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string

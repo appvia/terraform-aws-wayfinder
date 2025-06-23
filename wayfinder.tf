@@ -167,6 +167,7 @@ resource "helm_release" "wayfinder" {
       custom_logo_collapsed_url     = var.wayfinder_custom_logo_collapsed_url
       disable_local_login           = var.wayfinder_idp_details["type"] == "none" ? false : var.disable_local_login
       enable_localadmin_user        = var.create_localadmin_user
+      auditdb_pvc_size              = var.wayfinder_auditdb_pvc_size
       no_defaults                   = var.wayfinder_no_defaults
       storage_class                 = "${var.eks_encrypted_sc_type}-encrypted"
       ui_hostname                   = var.wayfinder_domain_name_ui

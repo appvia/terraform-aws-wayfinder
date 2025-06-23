@@ -21,6 +21,7 @@ enableLocalAdminUser: ${enable_localadmin_user}
 mysql:
   pvc:
     storageClass: "${storage_class}"
+    size: "${auditdb_pvc_size}"
 noDefaults: ${no_defaults}
 ui:
   customLogoURL: "${custom_logo_url}"
