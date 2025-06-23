@@ -8,6 +8,7 @@ parameters:
   encrypted: "true"
   fsType: ext4
   type: ${type}
+allowVolumeExpansion: true
 provisioner: ebs.csi.aws.com
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
