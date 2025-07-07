@@ -185,7 +185,7 @@ module "eks" {
 
 module "ebs_kms_key" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.0"
+  version = "4.0.0"
 
   aliases            = ["eks/${local.name}/ebs"]
   description        = "Customer managed key to encrypt EKS managed node group volumes"
