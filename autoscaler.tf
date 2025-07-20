@@ -48,7 +48,7 @@ resource "helm_release" "cluster_autoscaler" {
   name        = "autoscaler"
   repository  = "https://kubernetes.github.io/autoscaler"
   chart       = "cluster-autoscaler"
-  version     = "9.43.0"
+  version     = "9.48.0"
   max_history = 5
 
   set {
