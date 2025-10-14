@@ -3,7 +3,7 @@
 # tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "21.3.1"
+  version = "21.3.2"
 
   name               = local.name
   kubernetes_version = var.cluster_version
