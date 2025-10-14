@@ -35,7 +35,7 @@ resource "helm_release" "load_balancer_controller" {
   name        = "aws-load-balancer-controller"
   repository  = "https://aws.github.io/eks-charts"
   chart       = "aws-load-balancer-controller"
-  version     = "1.8.4"
+  version     = "1.14.0"
   max_history = 5
 
   set = [
@@ -58,6 +58,14 @@ resource "helm_release" "load_balancer_controller" {
     {
       name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
       value = module.load_balancer_controller_irsa_role.iam_role_arn
+    },
+    {
+      name  = "vpcId"
+      value = var.vpc_id
+    },
+    {
+      name  = "region"
+      value = data.aws_region.current.name
     }
   ]
 }
