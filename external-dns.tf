@@ -32,13 +32,14 @@ resource "helm_release" "external_dns" {
   version     = "1.15.0"
   max_history = 5
 
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.externaldns_irsa_role.iam_role_arn
-  }
-
-  set {
-    name  = "provider"
-    value = "aws"
-  }
+  set = [
+    {
+      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = module.externaldns_irsa_role.iam_role_arn
+    },
+    {
+      name  = "provider"
+      value = "aws"
+    }
+  ]
 }

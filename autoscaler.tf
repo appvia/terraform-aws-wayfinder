@@ -51,24 +51,26 @@ resource "helm_release" "cluster_autoscaler" {
   version     = "9.43.0"
   max_history = 5
 
-  set {
-    name  = "awsRegion"
-    value = data.aws_region.current.name
-  }
-  set {
-    name  = "autoDiscovery.clusterName"
-    value = local.name
-  }
-  set {
-    name  = "cloudProvider"
-    value = "aws"
-  }
-  set {
-    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.autoscaler_irsa_role.iam_role_arn
-  }
-  set {
-    name  = "rbac.serviceAccount.name"
-    value = "autoscaler"
-  }
+  set = [
+    {
+      name  = "awsRegion"
+      value = data.aws_region.current.name
+    },
+    {
+      name  = "autoDiscovery.clusterName"
+      value = local.name
+    },
+    {
+      name  = "cloudProvider"
+      value = "aws"
+    },
+    {
+      name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = module.autoscaler_irsa_role.iam_role_arn
+    },
+    {
+      name  = "rbac.serviceAccount.name"
+      value = "autoscaler"
+    }
+  ]
 }

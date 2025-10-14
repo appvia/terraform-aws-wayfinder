@@ -108,12 +108,6 @@ variable "eks_ng_minimum_size" {
   default     = 1
 }
 
-variable "eks_ng_schedules" {
-  description = "A map of autoscaling schedules to use for the EKS managed node group."
-  type        = map(any)
-  default     = {}
-}
-
 variable "enable_k8s_resources" {
   description = "Whether to enable the creation of Kubernetes resources for Wayfinder (helm and kubectl manifest deployments)."
   type        = bool

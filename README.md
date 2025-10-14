@@ -75,7 +75,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.34 |
-| <a name="provider_helm"></a> [helm](#provider\_helm) | >= 2.9.0 |
+| <a name="provider_helm"></a> [helm](#provider\_helm) | >= 3.0.0 |
 | <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | >= 2.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
 
@@ -108,7 +108,6 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_eks_ng_instance_types"></a> [eks\_ng\_instance\_types](#input\_eks\_ng\_instance\_types) | The instance types to use for the EKS managed node group. | `list(string)` | <pre>[<br/>  "t3.xlarge"<br/>]</pre> | no |
 | <a name="input_eks_ng_maximum_size"></a> [eks\_ng\_maximum\_size](#input\_eks\_ng\_maximum\_size) | The maximum size to use for the EKS managed node group. | `number` | `10` | no |
 | <a name="input_eks_ng_minimum_size"></a> [eks\_ng\_minimum\_size](#input\_eks\_ng\_minimum\_size) | The minimum size to use for the EKS managed node group. | `number` | `1` | no |
-| <a name="input_eks_ng_schedules"></a> [eks\_ng\_schedules](#input\_eks\_ng\_schedules) | A map of autoscaling schedules to use for the EKS managed node group. | `map(any)` | `{}` | no |
 | <a name="input_enable_k8s_resources"></a> [enable\_k8s\_resources](#input\_enable\_k8s\_resources) | Whether to enable the creation of Kubernetes resources for Wayfinder (helm and kubectl manifest deployments). | `bool` | `true` | no |
 | <a name="input_enable_wf_cloudaccess"></a> [enable\_wf\_cloudaccess](#input\_enable\_wf\_cloudaccess) | Whether to configure CloudIdentity resource in Wayfinder for the configured AWS IRSA identity once installed (requires enable\_k8s\_resources) | `bool` | `true` | no |
 | <a name="input_enable_wf_costestimates"></a> [enable\_wf\_costestimates](#input\_enable\_wf\_costestimates) | Whether to configure admin CloudAccessConfig for cost estimates in the account Wayfinder is installed in once installed (requires enable\_k8s\_resources and enable\_wf\_cloudaccess) | `bool` | `true` | no |
