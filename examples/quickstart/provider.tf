@@ -1,11 +1,11 @@
 provider "aws" {}
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     cluster_ca_certificate = base64decode(module.wayfinder.cluster_certificate_authority_data)
     host                   = module.wayfinder.cluster_endpoint
 
-    exec {
+    exec = {
       api_version = "client.authentication.k8s.io/v1beta1"
       args        = ["eks", "get-token", "--cluster-name", module.wayfinder.cluster_name]
       command     = "aws"

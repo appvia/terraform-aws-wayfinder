@@ -32,30 +32,28 @@ resource "helm_release" "certmanager" {
   version     = "1.16.0"
   max_history = 5
 
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
-
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.certmanager_irsa_role.iam_role_arn
-  }
-
-  set {
-    name  = "ingressShim.defaultIssuerName"
-    value = "letsencrypt-prod"
-  }
-
-  set {
-    name  = "ingressShim.defaultIssuerKind"
-    value = "ClusterIssuer"
-  }
-
-  set {
-    name  = "ingressShim.defaultIssuerGroup"
-    value = "cert-manager.io"
-  }
+  set = [
+    {
+      name  = "installCRDs"
+      value = "true"
+    },
+    {
+      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = module.certmanager_irsa_role.iam_role_arn
+    },
+    {
+      name  = "ingressShim.defaultIssuerName"
+      value = "letsencrypt-prod"
+    },
+    {
+      name  = "ingressShim.defaultIssuerKind"
+      value = "ClusterIssuer"
+    },
+    {
+      name  = "ingressShim.defaultIssuerGroup"
+      value = "cert-manager.io"
+    }
+  ]
 }
 
 resource "kubectl_manifest" "certmanager_clusterissuer" {

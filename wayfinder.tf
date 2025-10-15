@@ -176,13 +176,14 @@ resource "helm_release" "wayfinder" {
     })
   ]
 
-  set_sensitive {
-    name  = "licenseKey"
-    value = var.wayfinder_licence_key
-  }
-
-  set_sensitive {
-    name  = "localAdminPassword"
-    value = var.create_localadmin_user ? random_password.wayfinder_localadmin[0].result : ""
-  }
+  set_sensitive = [
+    {
+      name  = "licenseKey"
+      value = var.wayfinder_licence_key
+    },
+    {
+      name  = "localAdminPassword"
+      value = var.create_localadmin_user ? random_password.wayfinder_localadmin[0].result : ""
+    }
+  ]
 }

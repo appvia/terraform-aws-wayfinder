@@ -35,33 +35,39 @@ resource "helm_release" "load_balancer_controller" {
   name        = "aws-load-balancer-controller"
   repository  = "https://aws.github.io/eks-charts"
   chart       = "aws-load-balancer-controller"
-  version     = "1.8.4"
+  version     = "1.14.0"
   max_history = 5
 
-  set {
-    name  = "clusterName"
-    value = local.name
-  }
-
-  set {
-    name  = "createIngressClassResource"
-    value = "false"
-  }
-
-  set {
-    name  = "ingressClassParams.create"
-    value = "false"
-  }
-
-  set {
-    name  = "serviceAccount.name"
-    value = "aws-load-balancer-controller"
-  }
-
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.load_balancer_controller_irsa_role.iam_role_arn
-  }
+  set = [
+    {
+      name  = "clusterName"
+      value = local.name
+    },
+    {
+      name  = "createIngressClassResource"
+      value = "false"
+    },
+    {
+      name  = "ingressClassParams.create"
+      value = "false"
+    },
+    {
+      name  = "serviceAccount.name"
+      value = "aws-load-balancer-controller"
+    },
+    {
+      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = module.load_balancer_controller_irsa_role.iam_role_arn
+    },
+    {
+      name  = "vpcId"
+      value = var.vpc_id
+    },
+    {
+      name  = "region"
+      value = data.aws_region.current.name
+    }
+  ]
 }
 
 resource "helm_release" "ingress" {
@@ -81,33 +87,30 @@ resource "helm_release" "ingress" {
   version     = "4.11.5"
   max_history = 5
 
-  set {
-    name  = "defaultBackend.service.type"
-    value = "LoadBalancer"
-  }
-
-  set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-scheme"
-    value = var.disable_internet_access ? "internal" : "internet-facing"
-  }
-
-  set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
-    value = "external"
-  }
-
-  set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-nlb-target-type"
-    value = "instance"
-  }
-
-  set {
-    name  = "controller.config.use-proxy-protocol"
-    value = "true"
-  }
-
-  set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-proxy-protocol"
-    value = "*"
-  }
+  set = [
+    {
+      name  = "defaultBackend.service.type"
+      value = "LoadBalancer"
+    },
+    {
+      name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-scheme"
+      value = var.disable_internet_access ? "internal" : "internet-facing"
+    },
+    {
+      name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
+      value = "external"
+    },
+    {
+      name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-nlb-target-type"
+      value = "instance"
+    },
+    {
+      name  = "controller.config.use-proxy-protocol"
+      value = "true"
+    },
+    {
+      name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-proxy-protocol"
+      value = "*"
+    }
+  ]
 }

@@ -3,24 +3,24 @@
 # tfsec:ignore:aws-eks-no-public-cluster-access-to-cidr
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "20.24.3"
+  version = "21.3.2"
 
-  cluster_name    = local.name
-  cluster_version = var.cluster_version
+  name               = local.name
+  kubernetes_version = var.cluster_version
 
   authentication_mode                      = "API"
   access_entries                           = var.access_entries
-  cluster_enabled_log_types                = var.cluster_enabled_log_types
-  cluster_endpoint_private_access          = true
-  cluster_endpoint_public_access           = !var.disable_internet_access
-  cluster_endpoint_public_access_cidrs     = var.cluster_endpoint_public_access_cidrs
+  enabled_log_types                        = var.cluster_enabled_log_types
+  endpoint_private_access                  = true
+  endpoint_public_access                   = !var.disable_internet_access
+  endpoint_public_access_cidrs             = var.cluster_endpoint_public_access_cidrs
   enable_cluster_creator_admin_permissions = var.access_entries != {} ? false : true
   kms_key_administrators                   = var.kms_key_administrators
   subnet_ids                               = distinct(flatten(values(var.subnet_ids_by_az)))
   tags                                     = local.tags
   vpc_id                                   = var.vpc_id
 
-  cluster_addons = {
+  addons = {
     coredns = {
       addon_version               = var.coredns_addon_version
       resolve_conflicts_on_create = "OVERWRITE"
@@ -44,79 +44,85 @@ module "eks" {
     }
   }
 
-  eks_managed_node_group_defaults = {
-    iam_role_attach_cni_policy = true
-    iam_role_additional_policies = {
-      AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-    }
+  self_managed_node_groups = {
+    default = {
+      iam_role_attach_cni_policy = true
+      iam_role_additional_policies = {
+        AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      }
 
-    autoscaling_group_tags = {
-      "k8s.io/cluster-autoscaler/enabled" : true,
-      "k8s.io/cluster-autoscaler/${local.name}" : "owned",
-    }
+      autoscaling_group_tags = {
+        "k8s.io/cluster-autoscaler/enabled" : "true",
+        "k8s.io/cluster-autoscaler/${local.name}" : "owned",
+      }
 
-    block_device_mappings = {
-      # Root volume
-      xvda = {
-        device_name = "/dev/xvda"
-        ebs = {
-          volume_type           = "gp3"
-          encrypted             = true
-          kms_key_id            = module.ebs_kms_key.key_arn
-          delete_on_termination = true
+      block_device_mappings = {
+        # Root volume
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_type           = "gp3"
+            encrypted             = true
+            kms_key_id            = module.ebs_kms_key.key_arn
+            delete_on_termination = true
+          }
+        }
+        xvdb = {
+          device_name = "/dev/xvdb"
+          ebs = {
+            volume_size           = 24
+            volume_type           = "gp3"
+            iops                  = 3000
+            encrypted             = true
+            kms_key_id            = module.ebs_kms_key.key_arn
+            delete_on_termination = true
+          }
         }
       }
-      xvdb = {
-        device_name = "/dev/xvdb"
-        ebs = {
-          volume_size           = 24
-          volume_type           = "gp3"
-          iops                  = 3000
-          encrypted             = true
-          kms_key_id            = module.ebs_kms_key.key_arn
-          delete_on_termination = true
-        }
-      }
-    }
 
-    pre_bootstrap_user_data = <<-EOT
-      # Wait for second volume to attach before trying to mount paths
-      TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-      EC2_INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -v http://169.254.169.254/latest/meta-data/instance-id)
-      DATA_STATE="unknown"
-      until [ "$${DATA_STATE}" == "attached" ]; do
-        DATA_STATE=$(aws ec2 describe-volumes \
+      metadata_options = {
+        http_endpoint               = "enabled"
+        http_put_response_hop_limit = 2
+        http_tokens                 = "required"
+      }
+
+      pre_bootstrap_user_data = <<-EOT
+        # Wait for second volume to attach before trying to mount paths
+        TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+        EC2_INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -v http://169.254.169.254/latest/meta-data/instance-id)
+        DATA_STATE="unknown"
+        until [ "$${DATA_STATE}" == "attached" ]; do
+          DATA_STATE=$(aws ec2 describe-volumes \
+            --region ${data.aws_region.current.name} \
+            --filters \
+                Name=attachment.instance-id,Values=$${EC2_INSTANCE_ID} \
+                Name=attachment.device,Values=/dev/xvdb \
+            --query Volumes[].Attachments[].State \
+            --output text)
+          sleep 5
+        done
+
+        # Get the volume ID
+        VOLUME_ID=$(aws ec2 describe-volumes \
           --region ${data.aws_region.current.name} \
           --filters \
               Name=attachment.instance-id,Values=$${EC2_INSTANCE_ID} \
               Name=attachment.device,Values=/dev/xvdb \
-          --query Volumes[].Attachments[].State \
-          --output text)
-        sleep 5
-      done
+          --query Volumes[].Attachments[].VolumeId \
+          --output text | sed 's/-//')
 
-      # Get the volume ID
-      VOLUME_ID=$(aws ec2 describe-volumes \
-        --region ${data.aws_region.current.name} \
-        --filters \
-            Name=attachment.instance-id,Values=$${EC2_INSTANCE_ID} \
-            Name=attachment.device,Values=/dev/xvdb \
-        --query Volumes[].Attachments[].VolumeId \
-        --output text | sed 's/-//')
+        # Mount the containerd directories to the 2nd volume
+        SECOND_VOL=$(lsblk -o NAME,SERIAL -d |awk -v id="$${VOLUME_ID}" '$2 ~ id {print $1}')
+        systemctl stop containerd
+        mkfs -t ext4 /dev/$${SECOND_VOL}
+        rm -rf /var/lib/containerd/*
+        rm -rf /run/containerd/*
 
-      # Mount the containerd directories to the 2nd volume
-      SECOND_VOL=$(lsblk -o NAME,SERIAL -d |awk -v id="$${VOLUME_ID}" '$2 ~ id {print $1}')
-      systemctl stop containerd
-      mkfs -t ext4 /dev/$${SECOND_VOL}
-      rm -rf /var/lib/containerd/*
-      rm -rf /run/containerd/*
-
-      mount /dev/$${SECOND_VOL} /var/lib/containerd/
-      mount /dev/$${SECOND_VOL} /run/containerd/
-      systemctl start containerd
-    EOT
-
-    schedules = var.eks_ng_schedules
+        mount /dev/$${SECOND_VOL} /var/lib/containerd/
+        mount /dev/$${SECOND_VOL} /run/containerd/
+        systemctl start containerd
+      EOT
+    }
   }
 
   eks_managed_node_groups = {
@@ -129,13 +135,19 @@ module "eks" {
       max_size             = var.eks_ng_maximum_size
       min_size             = var.eks_ng_minimum_size
       subnet_ids           = subnet_ids
+
+      metadata_options = {
+        http_endpoint               = "enabled"
+        http_put_response_hop_limit = 2
+        http_tokens                 = "required"
+      }
     }
   }
 
   #
   # Security Groups Rules
   #
-  cluster_security_group_additional_rules = merge({
+  security_group_additional_rules = merge({
     egress_nodes_ephemeral_ports_tcp = {
       description                = "To node 1025-65535"
       protocol                   = "tcp"

@@ -75,7 +75,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.34 |
-| <a name="provider_helm"></a> [helm](#provider\_helm) | >= 2.9.0 |
+| <a name="provider_helm"></a> [helm](#provider\_helm) | >= 3.0.0 |
 | <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | >= 2.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
 
@@ -91,12 +91,12 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_wayfinder_instance_id"></a> [wayfinder\_instance\_id](#input\_wayfinder\_instance\_id) | The instance ID to use for Wayfinder. | `string` | n/a | yes |
 | <a name="input_wayfinder_licence_key"></a> [wayfinder\_licence\_key](#input\_wayfinder\_licence\_key) | The licence key to use for Wayfinder. | `string` | n/a | yes |
 | <a name="input_access_entries"></a> [access\_entries](#input\_access\_entries) | Map of access entries to add to the cluster. This is required if you use a different IAM Role for Terraform Plan actions. | <pre>map(object({<br/>    kubernetes_groups = optional(list(string))<br/>    principal_arn     = string<br/>    policy_associations = optional(map(object({<br/>      policy_arn = string<br/>      access_scope = object({<br/>        namespaces = optional(list(string))<br/>        type       = string<br/>      })<br/>    })))<br/>  }))</pre> | `{}` | no |
-| <a name="input_aws_ebs_csi_driver_addon_version"></a> [aws\_ebs\_csi\_driver\_addon\_version](#input\_aws\_ebs\_csi\_driver\_addon\_version) | The version to use for the AWS EBS CSI driver. | `string` | `"v1.31.0-eksbuild.1"` | no |
+| <a name="input_aws_ebs_csi_driver_addon_version"></a> [aws\_ebs\_csi\_driver\_addon\_version](#input\_aws\_ebs\_csi\_driver\_addon\_version) | The version to use for the AWS EBS CSI driver. | `string` | `"v1.49.0-eksbuild.1"` | no |
 | <a name="input_aws_vpc_cni_addon_version"></a> [aws\_vpc\_cni\_addon\_version](#input\_aws\_vpc\_cni\_addon\_version) | AWS VPC CNI Addon version to use. | `string` | `"v1.19.5-eksbuild.3"` | no |
 | <a name="input_cluster_enabled_log_types"></a> [cluster\_enabled\_log\_types](#input\_cluster\_enabled\_log\_types) | List of log types to enable for the EKS cluster. | `list(string)` | <pre>[<br/>  "api",<br/>  "audit",<br/>  "authenticator",<br/>  "controllerManager",<br/>  "scheduler"<br/>]</pre> | no |
 | <a name="input_cluster_endpoint_public_access_cidrs"></a> [cluster\_endpoint\_public\_access\_cidrs](#input\_cluster\_endpoint\_public\_access\_cidrs) | List of CIDR blocks which can access the Amazon EKS API server endpoint. | `list(string)` | <pre>[<br/>  "0.0.0.0/0"<br/>]</pre> | no |
 | <a name="input_cluster_security_group_additional_rules"></a> [cluster\_security\_group\_additional\_rules](#input\_cluster\_security\_group\_additional\_rules) | List of additional security group rules to add to the cluster security group created. Set `source_node_security_group = true` inside rules to set the `node_security_group` as source. | `any` | `{}` | no |
-| <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | The Kubernetes version to use for the EKS cluster. | `string` | `"1.31"` | no |
+| <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | The Kubernetes version to use for the EKS cluster. | `string` | `"1.32"` | no |
 | <a name="input_coredns_addon_version"></a> [coredns\_addon\_version](#input\_coredns\_addon\_version) | CoreDNS Addon version to use. | `string` | `"v1.11.4-eksbuild.14"` | no |
 | <a name="input_create_localadmin_user"></a> [create\_localadmin\_user](#input\_create\_localadmin\_user) | Whether to create a localadmin user for access to the Wayfinder Portal and API. | `bool` | `true` | no |
 | <a name="input_disable_internet_access"></a> [disable\_internet\_access](#input\_disable\_internet\_access) | Whether to disable internet access for EKS and the Wayfinder ingress controller. | `bool` | `false` | no |
@@ -108,14 +108,13 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_eks_ng_instance_types"></a> [eks\_ng\_instance\_types](#input\_eks\_ng\_instance\_types) | The instance types to use for the EKS managed node group. | `list(string)` | <pre>[<br/>  "t3.xlarge"<br/>]</pre> | no |
 | <a name="input_eks_ng_maximum_size"></a> [eks\_ng\_maximum\_size](#input\_eks\_ng\_maximum\_size) | The maximum size to use for the EKS managed node group. | `number` | `10` | no |
 | <a name="input_eks_ng_minimum_size"></a> [eks\_ng\_minimum\_size](#input\_eks\_ng\_minimum\_size) | The minimum size to use for the EKS managed node group. | `number` | `1` | no |
-| <a name="input_eks_ng_schedules"></a> [eks\_ng\_schedules](#input\_eks\_ng\_schedules) | A map of autoscaling schedules to use for the EKS managed node group. | `map(any)` | `{}` | no |
 | <a name="input_enable_k8s_resources"></a> [enable\_k8s\_resources](#input\_enable\_k8s\_resources) | Whether to enable the creation of Kubernetes resources for Wayfinder (helm and kubectl manifest deployments). | `bool` | `true` | no |
 | <a name="input_enable_wf_cloudaccess"></a> [enable\_wf\_cloudaccess](#input\_enable\_wf\_cloudaccess) | Whether to configure CloudIdentity resource in Wayfinder for the configured AWS IRSA identity once installed (requires enable\_k8s\_resources) | `bool` | `true` | no |
 | <a name="input_enable_wf_costestimates"></a> [enable\_wf\_costestimates](#input\_enable\_wf\_costestimates) | Whether to configure admin CloudAccessConfig for cost estimates in the account Wayfinder is installed in once installed (requires enable\_k8s\_resources and enable\_wf\_cloudaccess) | `bool` | `true` | no |
 | <a name="input_enable_wf_dnszonemanager"></a> [enable\_wf\_dnszonemanager](#input\_enable\_wf\_dnszonemanager) | Whether to configure admin CloudAccessConfig for DNS zone management in the account Wayfinder is installed in once installed (requires enable\_k8s\_resources and enable\_wf\_cloudaccess) | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment name we are provisioning. | `string` | `"production"` | no |
 | <a name="input_kms_key_administrators"></a> [kms\_key\_administrators](#input\_kms\_key\_administrators) | A list of IAM ARNs for EKS key administrators. If no value is provided, the current caller identity is used to ensure at least one key admin is available. | `list(string)` | `[]` | no |
-| <a name="input_kube_proxy_addon_version"></a> [kube\_proxy\_addon\_version](#input\_kube\_proxy\_addon\_version) | Kube Proxy Addon version to use. | `string` | `"v1.31.7-eksbuild.7"` | no |
+| <a name="input_kube_proxy_addon_version"></a> [kube\_proxy\_addon\_version](#input\_kube\_proxy\_addon\_version) | Kube Proxy Addon version to use. | `string` | `"v1.32.6-eksbuild.12"` | no |
 | <a name="input_node_security_group_additional_rules"></a> [node\_security\_group\_additional\_rules](#input\_node\_security\_group\_additional\_rules) | List of additional security group rules to add to the node security group created. Set `source_cluster_security_group = true` inside rules to set the `cluster_security_group` as source. | `any` | `{}` | no |
 | <a name="input_subnet_ids_by_az"></a> [subnet\_ids\_by\_az](#input\_subnet\_ids\_by\_az) | A map of subnet IDs by availability zone. | `map(list(string))` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources created. | `map(string)` | `{}` | no |
@@ -125,7 +124,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_wayfinder_idp_details"></a> [wayfinder\_idp\_details](#input\_wayfinder\_idp\_details) | The IDP details to use for Wayfinder to enable SSO. | <pre>object({<br/>    type          = string<br/>    clientId      = optional(string)<br/>    clientSecret  = optional(string)<br/>    serverUrl     = optional(string)<br/>    azureTenantId = optional(string)<br/>  })</pre> | <pre>{<br/>  "azureTenantId": "",<br/>  "clientId": null,<br/>  "clientSecret": null,<br/>  "serverUrl": "",<br/>  "type": "none"<br/>}</pre> | no |
 | <a name="input_wayfinder_no_defaults"></a> [wayfinder\_no\_defaults](#input\_wayfinder\_no\_defaults) | Set to true to stop Wayfinder from applying compiled-in defaults (e.g. default roles, cluster plans, etc). | `bool` | `true` | no |
 | <a name="input_wayfinder_release_channel"></a> [wayfinder\_release\_channel](#input\_wayfinder\_release\_channel) | The release channel to use for Wayfinder. | `string` | `"wayfinder-releases"` | no |
-| <a name="input_wayfinder_version"></a> [wayfinder\_version](#input\_wayfinder\_version) | The version to use for Wayfinder. | `string` | `"v2.9.7"` | no |
+| <a name="input_wayfinder_version"></a> [wayfinder\_version](#input\_wayfinder\_version) | The version to use for Wayfinder. | `string` | `"v2.10.1"` | no |
 
 ## Outputs
 
