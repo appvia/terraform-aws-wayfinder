@@ -135,6 +135,12 @@ module "eks" {
       max_size             = var.eks_ng_maximum_size
       min_size             = var.eks_ng_minimum_size
       subnet_ids           = subnet_ids
+
+      metadata_options = {
+        http_endpoint               = "enabled"
+        http_put_response_hop_limit = 2
+        http_tokens                 = "required"
+      }
     }
   }
 
