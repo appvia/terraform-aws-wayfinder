@@ -35,7 +35,7 @@ resource "helm_release" "load_balancer_controller" {
   name        = "aws-load-balancer-controller"
   repository  = "https://aws.github.io/eks-charts"
   chart       = "aws-load-balancer-controller"
-  version     = "1.14.0"
+  version     = "1.17.1"
   max_history = 5
 
   set = [
