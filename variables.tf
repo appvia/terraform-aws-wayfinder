@@ -40,7 +40,7 @@ variable "cluster_security_group_additional_rules" {
 variable "cluster_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default     = "1.33"
+  default     = "1.34"
 }
 
 variable "create_localadmin_user" {
@@ -263,7 +263,7 @@ variable "wayfinder_auditdb_pvc_size" {
 variable "aws_ebs_csi_driver_addon_version" {
   description = "The version to use for the AWS EBS CSI driver."
   type        = string
-  default     = "v1.49.0-eksbuild.1"
+  default     = "v1.59.0-eksbuild.1"
 }
 
 variable "coredns_addon_version" {
@@ -275,7 +275,7 @@ variable "coredns_addon_version" {
 variable "kube_proxy_addon_version" {
   description = "Kube Proxy Addon version to use."
   type        = string
-  default     = "v1.33.10-eksbuild.5"
+  default     = "v1.34.6-eksbuild.5"
 }
 
 variable "aws_vpc_cni_addon_version" {
