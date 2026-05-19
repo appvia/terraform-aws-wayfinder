@@ -33,6 +33,7 @@ module "eks" {
     }
     vpc-cni = {
       addon_version               = var.aws_vpc_cni_addon_version
+      before_compute              = true
       resolve_conflicts_on_create = "OVERWRITE"
       resolve_conflicts_on_update = "OVERWRITE"
     }
@@ -218,7 +219,7 @@ moved {
 #trivy:ignore:AVD-AWS-0057
 module "irsa_ebs_csi_driver" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.45.0"
+  version = "5.60.0"
 
   role_name             = "${local.name}-ebs-csi-driver-irsa"
   attach_ebs_csi_policy = true
